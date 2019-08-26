@@ -20,4 +20,4 @@
 * 位运算
 
 ### 智力题
-* [牛客网](blob/master/notes/牛客网-智力题)
+* [牛客网](https://github.com/loversgzl/Temp/blob/master/notes/牛客网-智力题.md)
