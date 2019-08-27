@@ -1,7 +1,7 @@
 | 算法 | 网络 | 操作系统 | 数据库 | Python | JAVA | Go | C++ |
 |------|------|-----------|---------|---------|-------|------|------|
 | <a href="#算法"><img src="/pics/Algorithm.png" align="center"></a> | <a href="#网络"><img src="/pics/Internet.png" align="center"></a> | <a href="#操作系统"><img src="/pics/System.png" align="center"></a> | <a href="#数据库"><img src="/pics/DataBase.png" align="center"></a> | <a href="#Python"><img src="/pics/python.png" align="center"></a> | <a href="#JAVA"><img src="/pics/java.png" align="center"></a> | <a href="#Go"><img src="/pics/go.png" align="center"></a> | <a href="#C++"><img src="/pics/C++.png"></a> |
-
+***
 
 ### 智力题
 * [牛客网](https://github.com/loversgzl/Temp/blob/master/notes/牛客网-智力题.md)
