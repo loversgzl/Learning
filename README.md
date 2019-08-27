@@ -8,7 +8,7 @@
 ***
 
 ### 网络
-* 计算机网络基础练习题
+* [计算机网络基础练习题](https://github.com/loversgzl/Temp/blob/master/notes/计算机网络目录.md)
 * 天勤考研网络练习题
 * 图解TCP/IP
 * HTTP权威指南
