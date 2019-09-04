@@ -4,11 +4,11 @@
 ***
 
 ### 智力题
-* [牛客网](https://github.com/loversgzl/Temp/blob/master/notes/牛客网-智力题.md)
+* [牛客网](/notes/牛客网-智力题.md)
 ***
 
 ### 网络
-* [计算机网络基础练习题](https://github.com/loversgzl/Temp/blob/master/notes/计算机网络目录.md)
+* [计算机网络基础练习题](/notes/计算机网络目录.md)
 * 天勤考研网络练习题
 * 图解TCP/IP
 * HTTP权威指南
