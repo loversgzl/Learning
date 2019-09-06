@@ -76,13 +76,13 @@ public:
 protected:
     int width;
     int height;
-};//不要忘记这个冒号
+};//不要忘记这个分号
 
 class Rectangle : public Shape{//公有继承，一定记住加 public，俗称-派生类-子类
 public:
     Rectangle(int a=0,b=0):Shape(a,b){} //调用父类的构造函数，因为不能继承嘛。
     int getArea(){return width *　height;}
-};//不要忘记这个冒号
+};//不要忘记这个分号
 ```
 
 * **继承**：继承默认是 private 继承，但一般用 public 继承，下面介绍原因，支持多继承逗号隔开。一个派生类不能继承基类中的 **构造函数、析构函数、构造函数、重载运算符、友元函数**。
@@ -97,9 +97,9 @@ public:
   
   ****
   
-* **问**：private 继承和 public，protected 继承有区别么？
+* **问：private 继承和 public，protected 继承有区别么？**
   
-* **答**：访问父类成员，要看父类成员的访问修饰符，继承父类成员要看是什么继承，这些成员在子类中的修饰符如何，public 继承不变；private 继承都变 private；protected 继承 private 不变；由此可以得出，继承从宽到紧，private>protected>public，默认private，即只能继承的类自己访问和拥有，不可传播。
+* **答**：访问父类成员，要看父类成员的访问修饰符，继承父类成员要看是什么继承，这些成员在子类中的修饰符如何，public 继承不变；protected 继承 private 不变，其余都是 protected；private 继承都变 private；由此可以得出，继承从宽到紧，private > protected > public，默认 private，即继承的类只能自己访问和拥有，不可传播。
   
   ****
   
@@ -122,6 +122,5 @@ public:
   };
   ```
 
-  ****
 
   
