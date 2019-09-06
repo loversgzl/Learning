@@ -53,9 +53,10 @@
 ***
 <a name="C++"></a>
 ### C++
-* 基础语法
-* STL
-* 设计模式
+* [基础语法](/notes/CPP-基础语法.md)
+* [面向对象](/notes/CPP-面向对象.md)
+* [STL](/notes/CPP-STL.md)
+* [设计模式](/notes/CPP-设计模式.md)
 ***
 ### 智力题
 * [牛客网](/notes/牛客网-智力题.md)
