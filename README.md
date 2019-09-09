@@ -1,30 +1,21 @@
-| 算法 | 网络 | 操作系统 | 数据库 | Python | JAVA | Go | C++ |
+| 算法 | 网络 | 操作系统 | 数据库 | Python3 | JAVA | Go | C++ |
 |------|------|-----------|---------|---------|-------|------|------|
 | <a href="#算法"><img src="/pics/Algorithm.png" align="center"></a> | <a href="#网络"><img src="/pics/Internet.png" align="center"></a> | <a href="#操作系统"><img src="/pics/System.png" align="center"></a> | <a href="#数据库"><img src="/pics/DataBase.png" align="center"></a> | <a href="#Python"><img src="/pics/python.png" align="center"></a> | <a href="#JAVA"><img src="/pics/java.png" align="center"></a> | <a href="#Go"><img src="/pics/go.png" align="center"></a> | <a href="#C++"><img src="/pics/C++.png"></a> |
 ***
 <a name="算法"></a>
 
 ### 算法
-参考Leetcode、剑指offer、
-* 动态规划
-* 贪心算法
-* 回溯法
-* 分治
-* 数学
-* 链表
-* 栈和队列
-* 字符串
-* 数组
-* 树
-* 查找
-* 排列组合
-* [排序算法和练习](/notes/排序目录.md)
-* 位运算
+参考Leetcode、剑指offer
+[Python3 版本](/notes/Python/Python-算法目录.md)
+[Go 版本](/notes/Go/Go-算法目录.md)
+[CPP 版本](/notes/CPP/CPP-算法目录.md)
+[JAVA 版本](/notes/JAVA/JAVA-算法目录.md)
+
 ****
 <a name="网络"></a>
 
 ### 网络
-* [计算机网络基础练习题](/notes/计算机网络目录.md)
+* [计算机网络基础练习题](/notes/计算机网络/计算机网络目录.md)
 * 天勤考研网络练习题
 * 图解TCP/IP
 * HTTP权威指南
@@ -36,11 +27,14 @@
 ### 数据库
 ***
 <a name="Python"></a>
-### Python
-* 基础语法
+### Python3
+* [基础语法](notes/Python/Python-基础语法.md)
+* [常用数据类型 列表、字典、集合](notes/Python/Python-列表-字典-集合.md)
+* [常用函数](notes/Python/Python-常用函数.md)
 * 设计模式
 ***
 <a name="Go"></a>
+
 ### Go
 * 基础语法
 * 设计模式
@@ -53,10 +47,10 @@
 ***
 <a name="C++"></a>
 ### C++
-* [基础语法](/notes/CPP-基础语法.md)
-* [面向对象](/notes/CPP-面向对象.md)
-* [STL](/notes/CPP-STL.md)
-* [设计模式](/notes/CPP-设计模式.md)
+* [基础语法](/notes/CPP/CPP-基础语法.md)
+* [面向对象](/notes/CPP/CPP-面向对象.md)
+* [STL](/notes/CPP/CPP-STL.md)
+* [设计模式](/notes/CPP/CPP-设计模式.md)
 ***
 ### 智力题
 * [牛客网](/notes/牛客网-智力题.md)
