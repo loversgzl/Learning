@@ -72,7 +72,7 @@ binary = lambda x: '' if x == 0 else binary(x/2) + str(x%2)
 bin(10) #转为二进制，python 中二进制表示0b1010
 oct(10) #转为八进制, 0o12
 hex(10) #转为十六进制，0xa
-int('10', 2); int('10', 8); int('10', 16); #将字符串以二、八、十六进制进行转换，返回 2，8，16
+int('10', 2); int('10', 8); int('10', 16 ); #将字符串以二、八、十六进制进行转换，返回 2，8，16
 #将某个字符串转为相应的值，还是需要使用 int
 num = int(bin(0b1010)[2:]) #直接转换为数字 1010
 ```
@@ -122,7 +122,7 @@ res = list(itertools.combinations(li,num)) #转为列表 [(1, 2), (1, 3), (2, 3)
 
 import random
 print(random.randint(a,b)) # 返回 [a,b]
-print(random.random(a,b)) # 返回 [0.0,1.0)
+print(random.random()) # 返回 [0.0,1.0)
 
 import time
 time.localtime() # 字典形式年月日时分秒，可以单独取出
