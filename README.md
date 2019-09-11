@@ -24,6 +24,7 @@
 ### 操作系统
 ***
 <a name="数据库"></a>
+
 ### 数据库
 ***
 <a name="Python"></a>
@@ -31,7 +32,8 @@
 * [基础语法](notes/Python/Python-基础语法.md)
 * [常用数据类型 列表、字典、集合](notes/Python/Python-列表-字典-集合.md)
 * [常用函数](notes/Python/Python-常用函数.md)
-* 设计模式
+* [面试基础知识](notes/Python/Python-面试问题.md)
+* [设计模式](notes/Python/Python-设计模式.md)
 ***
 <a name="Go"></a>
 
@@ -40,6 +42,7 @@
 * 设计模式
 ***
 <a name="JAVA"></a>
+
 ### JAVA
 * 基础语法
 * Spring
