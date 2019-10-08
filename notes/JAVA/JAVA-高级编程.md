@@ -17,10 +17,37 @@ public class test {
     }
 }
 ```
-### 命名
-**类名**：驼峰命名法，所有单词首字母大写
-**方法名**：第一个单词小写，其余单词首字母大写
-**源文件名**：源文件名必须和类名相同，文件名的后缀为.java。（如果文件名和类名不相同则会导致编译错误）。
+[参考博客](https://blog.csdn.net/Neuf_Soleil/article/details/80962686)
+### JavaEE 主要技术
+JavaEE 号称有十三种核心技术。它们分别是：JDBC、JNDI、EJB、RMI、Servlet、JSP、XML、JMS、Java IDL、JTS、JTA、JavaMail和JAF。
+一般来讲，初学者应该遵循路径 Servlet -> JSP -> Spring -> 组合框架
+
+### 框架
+**组合框架**
+**SSH**：Structs + Spring + Hibernate
+**SSM**：Spring + SpringMVC + MyBatis（先学习这种）
+
+**Spring**
+Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
+**SpringMVC**
+**MyBatis**
+
+**Spring Security**
+**Spring Boot**
+
+
+### JAVA 项目练习
+JAVA EE 方向
+**Servlet**
+
+**JSP**
+全称（Java Server Pages）是一种动态网页开发技术。它使用 JSP 标签在 HTML 网页中插入 Java代码。标签通常以<%开头以%>结束。与 JavaScript 相比：虽然 JavaScript 可以在客户端动态生成HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。
+
+**Swing**
+* Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI）器件如：文本框，按钮，分隔窗格和表。
+**五子棋**：1.掌握 JavaGUI 界面设计、2.掌握鼠标事件的监听（MouseListener，MouseMotionListener）
+
+
 
 
 ### JAVA 基本数据类型

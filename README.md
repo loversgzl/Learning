@@ -44,21 +44,22 @@
 <a name="JAVA"></a>
 
 ### JAVA
-* [基础语法](/notes/JAVA/JAVA-基础语法.md)
-* [面向对象](/notes/JAVA/JAVA-面向对象.md)
-* [设计模式](/notes/JAVA/JAVA-设计模式.md)
-* [算法目录](/notes/JAVA/JAVA-算法目录.md)
-* Spring
+* [基础语法](notes/JAVA/JAVA-基础语法.md)
+* [高级编程](notes/JAVA/JAVA-高级编程.md)
+* [面向对象](notes/JAVA/JAVA-面向对象.md)
+* [设计模式](notes/JAVA/JAVA-设计模式.md)
+* [算法目录](notes/JAVA/JAVA-算法目录.md)
+
 ***
 <a name="C++"></a>
 ### C++
-* [基础语法](/notes/CPP/CPP-基础语法.md)
-* [面向对象](/notes/CPP/CPP-面向对象.md)
-* [STL](/notes/CPP/CPP-STL.md)
-* [设计模式](/notes/CPP/CPP-设计模式.md)
+* [基础语法](notes/CPP/CPP-基础语法.md)
+* [面向对象](notes/CPP/CPP-面向对象.md)
+* [STL](notes/CPP/CPP-STL.md)
+* [设计模式](notes/CPP/CPP-设计模式.md)
 ***
 ### 智力题
-* [牛客网](/notes/牛客网-智力题.md)
+* [牛客网](notes/牛客网-智力题.md)
 ***
 ### 排版
 版面格式很大部分参考了 [CyC2018](https://cyc2018.github.io/CS-Notes)，因为自己排版有很大问题嘛，这个项目的排版很棒，内容也很突出，有兴趣的可以了解一下。
