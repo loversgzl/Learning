@@ -44,9 +44,11 @@
 <a name="JAVA"></a>
 
 ### JAVA
-* 基础语法
+* [基础语法](/notes/JAVA/JAVA-基础语法.md)
+* [面向对象](/notes/JAVA/JAVA-面向对象.md)
+* [设计模式](/notes/JAVA/JAVA-设计模式.md)
+* [算法目录](/notes/JAVA/JAVA-算法目录.md)
 * Spring
-* 设计模式
 ***
 <a name="C++"></a>
 ### C++
