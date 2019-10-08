@@ -7,7 +7,7 @@
 
 **import**：在 Java 中，如果给出一个完整的限定名，包括包名、类名，那么 Java 编译器就可以很容易地定位到源代码或者类。Import 语句就是用来提供一个合理的路径，使得编译器可以找到某个类。如果源文件包含 import 语句，那么应该放在 package 语句和类定义之间。
 
-**详解：比如说有一个 .java 的文件，这个文件里面有很多类，要是由若干个上述的文件，在文件的第一行有 package 包名 语句，如果 Package 语句相同，就是相同的包，不同就是不同的包。
+**接口（interface）**：除非实现接口的类是抽象类，否则该类要定义接口中的所有方法。接口不能用于实例化对象，这是肯定的，都是抽象类嘛；接口没有构造方法；**接口中的方法必须是抽象方法，这是和抽象类重要的区别之一；接口不能包含成员变量（除了static和final），不要觉得可以像继承父类那样使用接口；**接口不应叫被继承，而应叫被实现；可被多重继承。
 
 
 
@@ -34,7 +34,7 @@ private static void addInstance(){ //构造一个私有的静态函数
 public static final int BOXWIDTH = 10; //声明一个常量，不可变，默认关键字是 default
 ```
 
-**abstract 修饰符**：用来创建抽象类和抽象方法。抽象类不能用来实例化对象，声明抽象类的唯一目的是为了将来对该类进行扩充。如果一个类包含抽象方法，那么该类一定要声明为抽象类。抽象方法是一种没有任何实现的方法，该方法的的具体实现由子类提供。任何继承抽象类的子类必须实现父类的所有抽象方法，除非该子类也是抽象类。
+**abstract 修饰符**：用来创建抽象类和抽象方法。抽象类不能用来实例化对象，声明抽象类的唯一目的是为了将来对该类进行扩充。**如果一个类包含抽象方法，那么该类一定要声明为抽象类**。抽象方法是一种没有任何实现的方法，该方法的的具体实现由子类提供。**任何继承抽象类的子类必须实现父类的所有抽象方法**，除非该子类也是抽象类。抽象类中也可以包含已经实现的方法，这是和接口的一个重要区别。抽象类中的抽象方法要加 abstract 关键字声明，但是接口中可以省略。
 ```java
 abstract class Caravan{ //抽象类
 	private double price;
@@ -50,10 +50,56 @@ public synchronized void showDetails(){}
 ```
 
 
-**继承（extends）**
+**继承（extends 或者 implements）**
+类继承是用 extends，而接口是用 implements，**虽然只能继承一个类，但是接口可以多继承**。
+继承是 JAVA 面向对象编程技术的一块基石，因为它允许创建分等级层次的类。继承可以理解为一个对象从另一个对象获取属性的过程。在 JAVA 中，类的继承是单一继承，也就是说，一个子类只能拥有一个父类。B 是 A 的子类，B 的实例拥有 A 所有的成员变量，但对于 private 的成员变量 B 却没有访问权限，这保障了 A 的封装性。
+
 * 父类中声明为 public 的方法在子类中也必须为 public。
 * 父类中声明为 protected 的方法在子类中要么声明为 protected，要么声明为 public。不能声明为private。
 * 父类中声明为 private 的方法，不能够被继承。
+
+**instanceof 判断是否是继承关系**
+
+```java
+System.out.println(dog instanceof Animal); //左边是子类 右边是父类
+```
+
+**重写（Override）与 重载（Overload）**
+
+1. 子类方法的访问权限必须大于或等于父类方法的访问权限。如果父类的一个方法被声明为 public，那么在子类中重写该方法就不能声明为 protected。
+2. 声明为final的方法不能被重写。声明为 static 的方法不能被重写，但是能够被再次声明。
+3. 重写 的函数名和参数必须相同，而重载 函数名 相同，但是 参数 或者 返回值 必须有一个不同。
+4.  @Override ：不写也可以，但是写了有如下好处，1-可以当注释用，方便阅读；2-编译器可以给你验证 @Override下面的方法名是否是你 **父类** 中所有的，如果没有则报错。例如，你如果没写 @Override，而你下面的方法名又写错了，这时你的编译器是可以编译通过的，因为编译器以为这个方法是你的子类中自己增加的方法。
+
+```java
+class Animal {//注意默认是 default，public 只能有一个，且必须与文件名相同
+	private int i; //私有成员不能被继承
+    @Override //不写也可以，但是写了有上面介绍的好处
+	public void move(){
+		System.out.println("动物可以移动");
+	}
+	public void move(int x){//重载了 move 方法
+		System.out.println("动物移动了 " + x + " 米");
+	}
+}
+
+class Dog extends Animal{ 
+    @Override
+	public void move(){
+		super.move(); //调用父类方法，使用 super 关键字
+		System.out.println("小狗可以跑");
+	}
+}
+
+public class test{
+	public static void main(String args[]){
+		Animal a = new Animal();
+		Animal b = new Dog();
+		a.move(); //调用父类函数
+		b.move(); //调用子类函数
+	}
+}
+```
 
 
 
