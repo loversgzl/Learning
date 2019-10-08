@@ -11,7 +11,6 @@
 **JAVA 注释类似 C++，这里就不单独介绍了**
 
 **第一个 JAVA 程序**
-
 ```java
 import java.util.Scanner; //引入 JAVA 包
 public class test {
@@ -43,40 +42,12 @@ String st = "this is a line"; //双引号
 
 **常量和数组**
 ```java
-//常量
 final double PI = 3.1415927; //关键字 final 通常常量全部大写
-
-//数组-常规数组
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 int[] numbers = new int[10]; //默认值为 0
-for(int i=0; i<names.length; i++){//长度为 length，注意和动态 size 的区分。
-    System.out.println(names[i]);
-}
-for(String name : names){ //迭代
-    System.out.println(name);
-}
 
-
-//动态数组
 import java.util.Arrays //类能方便地操作数组，它提供的所有方法都是静态的。
 //包含 fill：给数组赋值，sort：对数组排序，equals：比较数组，binarySearch：查找数组元素
-import java.util.ArrayList;
-import java.util.List;
-/* List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 
-因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指
-向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 */
-//增
-List<List<Integer>> triangle = new ArrayList<List<Integer>>(); //构造二维数组，长度不固定
-triangle.add(new ArrayList<>()); //添加一个数组元素
-triangle.get(0).add(1); //给第一个数组添加一个元素
-
-//改
-triangle.get(0).set(0,99); //修改第一个数字的第一个值为 99
-
-//查
-triangle.get(0).get(0); //获取第一个数组的第一个值
-triangle.size(); //动态数组的大小，注意和静态数组长度的区分
-
 ```
 
 
@@ -96,24 +67,11 @@ public class FreshJuiceTest {
 }
 ```
 
-
+**条件语句**
 **JAVA 增强 for 循环**：Java5引入了一种主要用于数组的增强型for循环。
-
-**switch 语句**：switch 语句中的变量类型只能为 byte、short、int 或者 char。当变量的值与 case语句的值相等时，那么 case 语句之后的语句开始执行，直到 break 语句出现才会跳出 switch 语句。
-
 ```java
 for(int x : numbers){
 	System.out.prin(x)
-}
-
-switch(10){//只能是常量或者一个字符
-	case 10:
-	System.out.println("输出 10");
-	case 11: //这里也会执行
-	System.out.println("输出 11");
-	break; //遇到 break 才会跳出
-	default: //前面没有跳出，执行完这里也会跳出
-	System.out.println("输出 default");
 }
 ```
 
@@ -124,24 +82,7 @@ switch(10){//只能是常量或者一个字符
 
 **输入输出**
 ```java
-//输入
-import java.util.Scanner;
-Scanner scan = new Scanner(System.in);
-if(scan.hasNext()){//只读取一次，遇到空格结束
-	String str1 = scan.next();
-	System.out.println("输入为：" + str1);
-}
-
-if(scan.hasNextLine()){//可以读取一行，遇到换行符结束
-	String str2 = scan.nextLine();
-	System.out.println("输入为：" + str2);
-} 
-
-
-
-System.out.println(); //输出带换行
-System.out.print(); //输出不带换行
-System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进制，%s 字符串
+System.out.println() //输出带换行
 ```
 
 **Number 和 Math 类**
@@ -150,17 +91,6 @@ System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进
 **Character 类**
 
 
-**JAVA 常用包**
-
-```java
-//java.util 包
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Hashtable;
-
-//java.lang 包
-import java.lang.Math;
-```
 
 
 
