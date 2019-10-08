@@ -25,11 +25,11 @@ print(keyword.kwlist)
 
 **基本数据类型**
 
-* 基本数据类型：数字、字符串（str）、列表（list）、元组（tuple）、集合（set）、字典（dict），字符串和元组不可更改，具体可参考[我的博客](https://blog.csdn.net/qq_29611345/article/details/99693298)。
+* 基本数据类型：数字、字符串（str）、列表（list）、元组（tuple）、集合（set）、字典（dict），前三个类型不可更改，具体可参考[我的博客](https://blog.csdn.net/qq_29611345/article/details/99693298)。
 * Python中的变量不需要声明，每个变量在使用前都必须赋值，变量赋值以后该变量才会被创建。
 
 ```python
-# / 表示浮点数除法，// 表示整数除法，所以 Python 的单行注释是 # 吧。
+# / 表示浮点数除法，// 表示整数除法，所以 Python 的单行注释是 # 。
 z = x / y 
 
 #使用 type（val） 函数查看变量类型。
@@ -84,6 +84,27 @@ def area(width, height):
     return width * height
 ```
 
+* **编程常用语法**
+```python
+#输入一串数据，空格分隔，转换为整数如： 1 2 3 4 5
+li = list(map(int, input().split())) #split 默认以空格分隔，输入默认是字符串
+li = [int(x) for x in input().split()] #这种也可以，效果相同
+#li = [1,2,3,4,5]
 
+import collections
+counter = dict(collections.Counter(string)) #将字符串 string 统计成 字典 {字符：数量},需要转换
+counter.most_common() #输出：[('a', 3), ('b', 2), ('c', 1)] 按值从大到小 返回 dic 中的对 
 
-[参考W3Cschool](https://www.w3cschool.cn/python/python-intro.html)
+```
+
+**文件输入输出流**
+```python
+import os
+os.chdir('F:')
+with open('test.txt') as test:
+	count = 0
+	for ch in test.read():
+		if ch.isupper():#统计大写字母
+			count += 1
+	print(count)
+```

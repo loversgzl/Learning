@@ -44,15 +44,17 @@ all(li) #迭代器中所有的判断项返回都是真，结果才为真
 
 
 
-* **Python 中内置的四种函数，map、zip、filter 返回值都是一个可迭代对象，reduce 需要加库文件**
+* **Python 中内置的四种函数，map、zip、filter 返回值都是一个 可迭代对象（一个地址），reduce 需要加库文件**
 
 ```python
 # map(func, li) 函数的用法：将函数作用于列表中的每个值
-li = map( lambda x:x*x，[1,2,3]); li = list(li) #返回一个可迭代的对象，需用 list 转换 [1,4,9]
+li = map(lambda x:x*x，[1,2,3]); li = list(li) #返回一个可迭代的对象，需用 list 转换 [1,4,9]
+li = map(list, map(lambda x:x*x，[1,2,3])) #可两个函数一起使用，和上式效果相同
 li = map(int,input().split()) #对输入的值进行类型转换
 
 # zip(li,li) 函数的用法：将两个参数的值一一对应成元组，返回一个可迭代对象
 tup = list(zip([1,2,3],[4,5,6])) #返回：需用 list 转换，得到一系列元组 [(1, 4), (2, 5), (3, 6)]
+tup = list(map(list, zip([1,2,3],[4,5,6])))#可以再使用map函数，对里面的元组进行转换
 
 # filter(func, li)函数的用法：和 map 函数类似，不过只有返回 True 的值会被保留
 li = list(filter(lambda x:x%2,range(10))) #返回：需用 list 转换，得到 [1, 3, 5, 7, 9]
@@ -82,8 +84,8 @@ num = int(bin(0b1010)[2:]) #直接转换为数字 1010
 * **sorted 函数**
 
 ```python
-sorted(li) # 返回排序后的列表，但原列表不变。
-li.sort() # 返回 None，li 递增排序
+sorted(li, key=None, reverse=False) # 返回排序后的列表，但原列表不变。
+li.sort(key=None, reverse=False) # 返回 None，li 递增排序，默认递增排序
 
 # key 关键字一般需要传入一个函数
 sorted("This is a test string from Andrew".split(), key=str.lower)
@@ -98,8 +100,6 @@ from functools import cmp_to_key
 li.sort(key=cmp_to_key(lambda s1,s2:s1+s2 if s2+s1<s1+s2 else s2+s1))
 ''.join(li)
 ```
-
-
 
 
 * **assert 断言的使用**
@@ -131,8 +131,6 @@ time.sleep(x) # 程序阻塞 x 秒
 ```
 [记录程序时间的三种方法：参考博客](https://www.jb51.net/article/118699.htm)
 
-
-
 ****
 
 
@@ -150,3 +148,34 @@ reversed(li) # 返回可迭代对象，原列表不变
 
 ```
 
+### 面试题能力测试
+* **面：用 Python 实现统计一篇英文文章内每个单词的出现频率，并返回出现频率最高的前 10 个单词及其出现次数，并解答以下问题？（标点符号可忽略）**
+```python
+import collections
+dic = collections.Counter(article)
+dic.most_common()[:11] 
+```
+* **面：用两种方法去空格**
+```python
+li = s.split() #默认是空格
+s = ''.join(li)
+
+s = s.replace(' ','')
+```
+
+* **面：一行代码实现对列表 a 中的偶数位置的元素进行加 3 后求和**
+```python
+a = [1,2,3,4,5]
+b = [a[i]+3 for i in range(len(a)) if i%2==0] + 
+[a[i] for i in range(len(a)) if i%2==1]
+```
+
+* **面：[[1,2],[3,4],[5,6]]一行代码展开该列表，得出[1,2,3,4,5,6]**
+```python
+li = [i for x in li for i in x]
+```
+
+* **面：请列出你会的任意一种统计图（条形图、折线图等）绘制的开源库，第三方也行**
+```python
+pychart、matplotlib
+```

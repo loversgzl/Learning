@@ -1,4 +1,4 @@
-# Python-常用数据类型列表、字典和集合的使用
+# Python-列表、字典、集合、字符串
 
 * <a href="#列表">列表：增、删、改、查、初始化</a>
 
@@ -113,8 +113,10 @@ dic['Alice'] = 20 #直接修改
 * **查**
 
 ```python
-dic.keys() #查看所有的键，返回一个可迭代的对象，可以用 for x in dic.keys() 获取，不能直接操作。
-dic.values() #查看所有的值，也是一个可迭代的对象
+list(dic.keys()) #查看所有的键，返回一个可迭代的对象，可以用 for x in dic.keys() 获取，不能直接操作。
+list(dic.values()) #查看所有的值，也是一个可迭代的对象，如果直接操作最好套个 list
+
+
 dic.get('Eli', 0) #找不到也不会报错，还会返回 0
 for k,v in dic.items(): #注意这里要有 items() 函数
     print('key:',k,'value:',v)
@@ -228,7 +230,18 @@ if subStr in S: #返回 bool 值
 ```
 
 * 正则表达式
+^： 匹配字符串的开头--这里是从头匹配，说明只可能有一个。
+$：匹配字符串的末尾，这里是到文档末尾，说明也只能有一个。
+.：匹配任意字符
+？：匹配0或1个。
++：匹配1个或多个。
 
+```python
+import re
+s = "abc 123"
+li = re.findall("[a-z0-9]+", s) #输出 abc
+
+```
 
 
 
