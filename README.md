@@ -5,16 +5,16 @@
 <a name="算法"></a>
 
 ### 算法
-参考Leetcode、剑指offer
-[Python3 版本](/notes/Python/Python-算法目录.md)
-[Go 版本](/notes/Go/Go-算法目录.md)
-[CPP 版本](/notes/CPP/CPP-算法目录.md)
-[JAVA 版本](/notes/JAVA/JAVA-算法目录.md)
+参考Leetcode、剑指offer，本节不单独将数据结构作为一章，会显得内容枯燥，不易理解，可直接参照各个栈、队列、堆、树等章节的算法，结合例题和概念，更易理解和掌握。
+[Python3 版本](notes/Python/Python-算法目录.md)
+[JAVA 版本](notes/JAVA/JAVA-算法目录.md)
+[CPP 版本](notes/CPP/CPP-算法目录.md)
+[Go 版本](notes/Go/Go-算法目录.md)
 
 ****
 <a name="网络"></a>
 
-### 网络
+### 计算机网络
 * [计算机网络基础练习题](/notes/计算机网络/计算机网络目录.md)
 * 天勤考研网络练习题
 * 图解TCP/IP
@@ -27,6 +27,16 @@
 
 ### 数据库
 ***
+
+<a name="JAVA"></a>
+### JAVA
+* [基础语法](notes/JAVA/JAVA-基础语法.md)
+* [高级编程](notes/JAVA/JAVA-高级编程.md)
+* [面向对象](notes/JAVA/JAVA-面向对象.md)
+* [设计模式](notes/JAVA/JAVA-设计模式.md)
+* [算法目录](notes/JAVA/JAVA-算法目录.md)
+***
+
 <a name="Python"></a>
 ### Python3
 * [基础语法](notes/Python/Python-基础语法.md)
@@ -35,22 +45,13 @@
 * [面试基础知识](notes/Python/Python-面试问题.md)
 * [设计模式](notes/Python/Python-设计模式.md)
 ***
-<a name="Go"></a>
 
+<a name="Go"></a>
 ### Go
 * 基础语法
 * 设计模式
 ***
-<a name="JAVA"></a>
 
-### JAVA
-* [基础语法](notes/JAVA/JAVA-基础语法.md)
-* [高级编程](notes/JAVA/JAVA-高级编程.md)
-* [面向对象](notes/JAVA/JAVA-面向对象.md)
-* [设计模式](notes/JAVA/JAVA-设计模式.md)
-* [算法目录](notes/JAVA/JAVA-算法目录.md)
-
-***
 <a name="C++"></a>
 ### C++
 * [基础语法](notes/CPP/CPP-基础语法.md)
@@ -58,8 +59,10 @@
 * [STL](notes/CPP/CPP-STL.md)
 * [设计模式](notes/CPP/CPP-设计模式.md)
 ***
+
 ### 智力题
 * [牛客网](notes/牛客网-智力题.md)
 ***
+
 ### 排版
 版面格式很大部分参考了 [CyC2018](https://cyc2018.github.io/CS-Notes)，因为自己排版有很大问题嘛，这个项目的排版很棒，内容也很突出，有兴趣的可以了解一下。

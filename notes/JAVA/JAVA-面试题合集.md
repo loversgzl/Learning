@@ -1,4 +1,4 @@
-# JAVA-基础知识
+# JAVA-面试题合集
 
 **简介**
 由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。
@@ -49,18 +49,15 @@ System.out.println(Byte.MAX_VALUE); //最大值
 boolean b = true; //小写
 char g = 'g'; //一个字符
 String st = "this is a line"; //双引号
-Object ob = null; //空表示
 
 //强制类型转换
 long a = 100;
 int b = (int)a;
+
 Integer.parseInt(String) //将String字符类型数据转换为Integer整型数据。
-    
-int n = Math.pow(a,b); //a 的 b 次方。
 ```
 
 **常量和数组**
-
 ```java
 //常量
 final double PI = 3.1415927; //关键字 final 通常常量全部大写
@@ -218,10 +215,6 @@ import java.lang.Math;
 
 //java 网络编程常用包
 //java.net 包，java.io 包
-import java.io.File // I/O文件对象包
-import java.io.FileInputStream; //输入流
-import java.io.FileOutputStream; //输出流
-
 ```
 
 **数据结构**
