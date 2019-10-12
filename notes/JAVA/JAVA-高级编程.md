@@ -8,6 +8,12 @@
 * JAVA - 分布式编程
 * JAVA - 框架
 
+**JAVA - 反射**
+在对象方法前，加上修饰符 synchronized ，同步对象是当前实例。
+那么如果在类方法前，加上修饰符 synchronized，同步对象是这个类的反射。
+
+使用反射方式，首先准备一个配置文件，就叫做 spring.txt 吧, 放在 src 目录下。 里面存放的是类的名称，和要调用的方法名。在测试类Test中，首先取出类名称和方法名，然后通过反射去调用这个方法。当需要从调用第一个业务方法，切换到调用第二个业务方法的时候，不需要修改一行代码，也不需要重新编译，只需要修改配置文件 spring.txt，再运行即可。
+这也是 Spring 框架的最基本的原理，只是它做的更丰富，安全，健壮。
 
 
 **JAVA - I/O**
@@ -68,12 +74,6 @@ public class test{
 }
 ```
 
-
-
-
-
-
-
 ### JAVA - 多线程编程
 
 [参考教程](http://how2j.cn/k/thread/thread-start/353.html#nowhere)
@@ -97,9 +97,49 @@ t1.setDaemon(true); //如果一个进程只剩下守护线程，则该进程会�
 ```
 
 **线程同步问题**
-一个线程运行结束后不会立马销毁么？？？会发生什么？？
+知识点：1线程同步的关键字，2同步主线程和子线程的三种方法，
+疑问：一个线程运行结束后不会立马销毁么？？？会发生什么？？
+疑问：脏数据？？？
+```java
+Object someObject =new Object();
+synchronized (someObject){
+  //此处的代码只有占有了someObject后才可以执行
+}
+```
 
+问：java 实现多个子线程执行完毕后，再执行主线程
+知识点：join 和 countDownLatch 进行阻塞
+```java
+//下面的代码没有实现此功能哦，主线程会先结束，子线程还未执行完毕。
+//以下两种做法的区别，参考：https://blog.csdn.net/zhang199416/article/details/70846958
+/*
+1 final CountDownLatch latch = new CountDownLatch(3); 需要阻塞的线程数量
+子线程中添加：latch.countDown();
 
+2 子线程.join();
+*/
+public class test {
+	public static void main(String[] args) {
+		System.out.println("主线程开始执行....");
+		for (int i = 0; i < 3; i++) {
+			new Thread(){
+				@Override
+				public void run() {
+					try {
+						System.out.println(Thread.currentThread().getName()+"  开始执行存储过程..");						
+						Thread.sleep(1000);
+						System.out.println(Thread.currentThread().getName()+"  存储过程执行完毕...");						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				};
+			}.start();
+		}
+		System.out.println("主线程执行完毕....");
+	}
+}
+
+```
 
 
 
