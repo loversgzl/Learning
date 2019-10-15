@@ -15,6 +15,10 @@
 使用反射方式，首先准备一个配置文件，就叫做 spring.txt 吧, 放在 src 目录下。 里面存放的是类的名称，和要调用的方法名。在测试类Test中，首先取出类名称和方法名，然后通过反射去调用这个方法。当需要从调用第一个业务方法，切换到调用第二个业务方法的时候，不需要修改一行代码，也不需要重新编译，只需要修改配置文件 spring.txt，再运行即可。
 这也是 Spring 框架的最基本的原理，只是它做的更丰富，安全，健壮。
 
+**获取类对象的三种方式**
+Class.forName（“Hero”），Hero.class，new Hero().getClass()，（Hero 是一个类）在一个JVM中，一种类，只会有一个类对象存在。所以以上三种方式取出来的类对象，都是一样的。反射其实就是获取类对象。
+
+
 
 **JAVA - I/O**
 [参考教程](http://how2j.cn/k/io/io-file/345.html#nowhere)
@@ -74,15 +78,26 @@ public class test{
 }
 ```
 
+### 集合框架
+
+
+
+
+
+
 ### JAVA - 多线程编程
 
 [参考教程](http://how2j.cn/k/thread/thread-start/353.html#nowhere)
-创建多线程有 3 种方式，分别是 继承线程类，实现 Runnable 接口，匿名类，个人感觉第一种比较好，代码耦合度比较低。
+
+**创建线程**
+创建多线程有 3 种方式，分别是 继承线程类，实现 Runnable 接口，匿名类。
+继承线程类：创建一个对象就是一个线程。
+实现 Runnable 接口：和上面相似，只是在实例化的时候有区别。
+匿名类：和匿名函数相似，在用的时候才写，而且直接写在主函数里面。
 注： 启动线程是start()方法，run()并不能启动一个新的线程
 
+
 **多线程常用方法**
-疑问：主线程和子线程的运行顺序如何？？
-java：equals 和 == 的区别？？
 ```java
 Thread t1 = new Thread(){
 	public void run(){}//匿名函数修改 run 函数
@@ -98,14 +113,36 @@ t1.setDaemon(true); //如果一个进程只剩下守护线程，则该进程会�
 
 **线程同步问题**
 知识点：1线程同步的关键字，2同步主线程和子线程的三种方法，
-疑问：一个线程运行结束后不会立马销毁么？？？会发生什么？？
-疑问：脏数据？？？
+一、构造一个 object 对象，独占此对象才可执行该线程。
+二、将此对象设定为 类的实例，则独占此实例才可调用此实例的方法（被关键字 synchronized  修饰过的多个方法，只有独占此实例，才可调用其中的任意一个），
+三、如果在类方法前（静态方法），加上修饰符 synchronized，同步对象是这个类的反射（即这个类独占，才可以调用 被关键字 synchronized  修饰过的多个方法中的一个）。
+一般是在方法前加 关键字，类前面是不加的。
 ```java
+//1定义一个全局 object，谁占用谁有话语权
 Object someObject =new Object();
 synchronized (someObject){
   //此处的代码只有占有了someObject后才可以执行
 }
+//2.不如用实例代替，谁占用实例，谁可以用里面加了 synchronized 的方法，下面是三种实现方式，效果相同，1同上，将类实例作为令牌，谁占有谁有话语权。
+Hero gareen = new Hero();
+synchronized (gareen){
+  //此处的代码只有占有了gareen 实例后，才可调用里面的方法
+}
+//synchronized 修饰方法有两种形式，方法直接调用即可。
+public void hurt(){
+	synchronized(this){ //this 就代表了这个实例
+		hp = hp - 1;
+	}
+}
+public synchronized void hurt(){//效果相同
+	hp = hp - 1;
+}
 ```
+
+** java 线程池**
+问：如果一个线程出现异常，那么这个线程会被如何处理？
+参考：https://blog.csdn.net/u011635492/article/details/80328815
+未理解？？
 
 问：java 实现多个子线程执行完毕后，再执行主线程
 知识点：join 和 countDownLatch 进行阻塞
@@ -140,18 +177,200 @@ public class test {
 }
 
 ```
+问：可以用线程实现生产者消费者模型么？
+
+问：lock 和 synchronized 的区别？
+与  synchronized (someObject)  类似的，lock() 方法，表示当前线程占用 lock 对象，一旦占用，其他线程就不能占用了。
+与 synchronized 不同的是，一旦 synchronized 块结束，就会自动释放对 someObject 的占用。 lock却必须调用 unlock 方法进行手动释放，为了保证释放的执行，往往会把 unlock() 放在 finally 中进行。
+
+疑问区：
+疑问：一个线程运行结束后不会立马销毁么？？？会发生什么？？
+疑问：脏数据？？？
+疑问：主线程和子线程的运行顺序如何？？
+java：equals 和 == 的区别？？
+疑问：wait 和sleep 的区别？？
+this.wait()表示 让占有 this 的线程等待，并临时释放占有
 
 
-
-
-
-**JAVA - 网络编程**
+### 网络编程
 [参考W3C 网络编程](https://www.w3cschool.cn/java/java-networking.html)
-[参考W3C 网络教程](https://www.w3cschool.cn/java/java-k5ct21dn.html)
+[参考 How2j.cn](http://how2j.cn/k/socket/socket-ip-port/399.html)
 能够实现：如何创建服务器套接字、如何创建客户端套接字、
+知识点：获取本机 IP 地址，
 
 ```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+public class test{
+	public static void main(String[] args) throws IOException{
+	//可执行 exe 程序
+		Process p = Runtime.getRuntime().exec("ping " + "www.baidu.com");
+	//获取 流 到缓存中
+		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while((line = br.readLine()) != null){
+			if(line.length() != 0)
+				sb.append(line + "\r\n");
+		}
+		System.out.println(sb.toString());
+	}
+}
 
+```
+
+实例：编写客户端和服务器端双向通信，多线程实现。
+```java
+// 客户端代码
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+ 
+public class ClientThread {
+ 
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        try{
+            Socket socket = new Socket("127.0.0.1",9612);
+            SendServer(socket);
+            ReceiveServer(socket);
+             
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+ 
+    private static void SendServer(Socket socket) {
+        new Thread() {
+ 
+            @Override
+            public void run() {
+                //synchronized (socket) {
+                    try (OutputStream os = socket.getOutputStream();
+                            DataOutputStream dos = new DataOutputStream(os);
+                            Scanner scann = new Scanner(System.in);) {
+                        while (true) {
+                            String msg = scann.nextLine();
+                            dos.writeUTF(msg);
+                        }
+ 
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            //}
+             
+        }.start();
+    }
+ 
+    private static void ReceiveServer(Socket socket) {
+        new Thread() {
+ 
+            @Override
+            public void run() {
+                synchronized (socket) {
+                    try (InputStream ins = socket.getInputStream(); DataInputStream dins = new DataInputStream(ins);) {
+                        while (true) {
+                            //System.out.println("从服务器收到的信息：");
+                            String msg = dins.readUTF();
+                            System.out.println("从服务器收到的信息："+msg);
+                        }
+ 
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+             
+        }.start();
+    }
+ 
+}
+ 
+// 服务端代码
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+ 
+public class ServerThread {
+ 
+    public static void main(String[] args) {
+        System.out.println("运行中……");
+        try{
+            ServerSocket serversocket = new ServerSocket(9612);
+            System.out.println("服务器等待连接");
+            Socket socket = serversocket.accept();
+            // 设置服务器监听的端口
+            ReceiveClient(socket);
+            SendClient(socket);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    private static void ReceiveClient(Socket socket) {
+        new Thread() {
+ 
+            @Override
+            public void run() {
+                try (
+                        InputStream ins = socket.getInputStream();
+                        DataInputStream dins = new DataInputStream(ins);
+                ){
+                    while (true) {
+                        String msg = dins.readUTF();
+                        System.out.println("接受客户端的信息："+msg);
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+             
+        }.start();
+    }
+ 
+    private static void SendClient(Socket socket) {
+        new Thread() {
+ 
+            @Override
+            public void run() {
+                //synchronized (socket) {
+                    try (OutputStream os = socket.getOutputStream();
+                            DataOutputStream dos = new DataOutputStream(os);
+                            Scanner scann = new Scanner(System.in);) {
+                        while (true) {
+                            String msg = scann.nextLine();
+                            dos.writeUTF(msg);
+                        }
+ 
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                //}
+            }
+             
+        }.start();
+    } 
+}
 ```
 
 
