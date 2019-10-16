@@ -56,13 +56,13 @@ Object ob = null; //空表示
 long a = 100;
 int b = (int)a;
 Integer.parseInt(String) //将String字符类型数据转换为Integer整型数据。
-    
 int n = Math.pow(a,b); //a 的 b 次方。
 ```
 
 ### 集合框架与数组
 数组缺点：固定长度，数据多了不够，少了浪费空间。
 容器类：为了解决数组的缺点，如  ArrayList、
+
 ```java
 //数组-常规数组
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
@@ -72,7 +72,7 @@ for(int i=0; i<names.length; i++)//长度为 length，注意和动态 size 的�
 for(String name : names) //迭代
     System.out.println(name);
 
-//集合框架
+//集合框架-动态数组
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +99,25 @@ triangle.get(0).set(0,99); //修改第一个数组的第一个值为 99
 //查
 triangle.get(0).get(0); //获取第一个数组的第一个值
 triangle.size(); //动态数组的大小，注意和静态数组长度的区分
+
+import java.util.LinkedList; //LinkedList是一个双向链表结构的list
+
+//链表结构，拥有和 ArrayList 一样的方法再加上下面这些
+LinkedList<String> sts =new LinkedList<>();
+//增
+sts.addLast("last1"); //在末尾插入，
+sts.addFirst("first1");//在首部插入
+//删
+sts.removeLast();sts.removeFirst();
+//查
+sts.getLast(); sts.getFirst();
+
+//队列queue
+import java.util.Queue;
+Queue<String> q = new LinkedList<>();//也实现了队列的接口
+q.offer("inQueue");//入队列
+q.poll();//出队
+q.peek();//查看队首，但不取出
 ```
 
 ### 字符串
@@ -115,6 +134,7 @@ int b = Integer.parseInt(strs[1]); //将 ip 地址转换为整数
 String s = strs[0]+11+"22"; //一开始就可以确定的量，使用 + 更快
 //字符串拼接，循环中切忌使用，StringBuilder 最好。
 String s2 = s2.concat(String.valueOf(i));
+String s3 = s2.substring(beginIndex); //返回此坐标开始后的字符串
 
 List<String> list = new ArrayList<String>();
 for (int i = 0; i < 10000; i++)
