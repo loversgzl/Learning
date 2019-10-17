@@ -55,8 +55,12 @@ Object ob = null; //空表示
 //强制类型转换
 long a = 100;
 int b = (int)a;
-Integer.parseInt(String) //将String字符类型数据转换为Integer整型数据。
+Integer.parseInt(String); //将String字符类型数据转换为Integer整型数据。
 int n = Math.pow(a,b); //a 的 b 次方。
+
+//增强型 for 循环
+for(String str :strs)
+    System.out.println(str);
 ```
 
 ### 集合框架与数组
@@ -86,6 +90,7 @@ import java.util.List;
 	set(index,obj);修改某个位置的值 toArray();转换为数组
 查：contains、get、indexOf、size、
 	get(index); 获取某个位置的对象 indexOf(obj);某个对象的位置 size()集合大小
+	contains(x); 返回true/false
 输出：toString(),以字符串逗号隔开的形式输出。
 */
 //增
@@ -112,6 +117,25 @@ sts.removeLast();sts.removeFirst();
 //查
 sts.getLast(); sts.getFirst();
 
+//字典
+import java.util.HashMap;
+HashMap<String,Integer> dic = new HashMap<>();
+dic.put("Tom",12); //如果已经存在，则覆盖
+dic.get("Tom");
+dic.clear();
+
+//集合
+/*问：如何去除数组中重复的元素？
+方法一：只需要创建一个集合，然后遍历数组逐一放入集合，只要在放入之前用 contains()方法判断一下集合中是否已经存在这个元素就行了，然后用 toArray 转成数组一切搞定。 
+方法二：最简单的方法就是利用Set集合无序不可重复的特性进行元素过滤。 */
+import java.util.HashSet;
+Set<Integer> set = new HashSet();  //实例化一个set集合  
+//遍历数组并存入集合,如果元素已存在则不会重复存入  
+for (int x : arr)
+    set.add(arr[i]);  
+return set.toArray();  //返回Set集合的数组形式
+
+
 //队列queue
 import java.util.Queue;
 Queue<String> q = new LinkedList<>();//也实现了队列的接口
@@ -123,6 +147,7 @@ q.peek();//查看队首，但不取出
 ### 字符串
 问：字符串拼接，StringBuffer，StringBuilder，concat 和 + 的区别。
 答：[参考博客](https://www.cnblogs.com/lojun/articles/9664794.html)
+
 ```java
 String preStr = "192.168.1.1"; 
 String[] strs = preStr.split("\\."); //正确写法。对小圆点进行转义
@@ -148,44 +173,6 @@ sb.toString();
 
 
 ```
-
-
-
-**集合**
-```java
-/*如何去除数组中重复的元素：
-方法一：只需要创建一个集合，然后遍历数组逐一放入集合，只要在放入之前用 contains()方法判断一下集合中是否已经存在这个元素就行了，然后用 toArray 转成数组一切搞定。 
-方法二：最简单的方法就是利用Set集合无序不可重复的特性进行元素过滤。 */
-
-public static int[] one(int[] arr){
-    Set<Integer> set = new HashSet();  //实例化一个set集合  
-    //遍历数组并存入集合,如果元素已存在则不会重复存入  
-    for (int i = 0; i < arr.length; i++) {  
-    set.add(arr[i]);  
-    }  
-    return set.toArray();  //返回Set集合的数组形式
-}
-
-public static void two(int[] arr){  
-    List list = new ArrayList();  //创建一个集合 
-    for(int i=0; i<arr.length; i++){  //遍历数组往集合里存元素
-        if(!list.contains(arr[i])){  //如果集合里面没有相同的元素才往里存
-        list.add(arr[i]);  
-        }  
-    }  
-
-    //toArray()方法会返回一个包含集合所有元素的Object类型数组  
-    int[] newArr = list.toArray();  
-    for(int i=0;i<newArr.length;i++){ //遍历输出一下测试是否有效 
-   		System.out.println(" "+newArr[i]);  
-    }  
-
-}  
-
-```
-
-
-**JAVA 增强 for 循环**：Java5引入了一种主要用于数组的增强型for循环。
 
 **switch 语句**：switch 语句中的变量类型只能为 byte、short、int 或者 char。当变量的值与 case语句的值相等时，那么 case 语句之后的语句开始执行，直到 break 语句出现才会跳出 switch 语句。
 
@@ -231,6 +218,11 @@ System.out.printf(); //C 格式输出
 ```java
 Math.max(a,b); //选取最大值，参数为 2.
 Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); //利用三目运算符，三数取最大值。
+int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
+import java.util.Random;//重新创建随机数生成器
+Random rand = new Random(11);//需要种子
+int i = rand.nextInt(100);//产生[0,100) 的随机数
+
 ```
 
 ### 常用类
@@ -238,7 +230,6 @@ Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); //利用三目运算符
 装箱与拆箱，Java语言为每一个内置数据类型提供了对应的包装类，所有的包装类（Integer、Long、Byte、Double、Float、Short）都是抽象类 Number 的子类。
 
 **Character 类**
-
 
 **JAVA 常用包**
 
@@ -249,6 +240,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Random;
 
