@@ -61,13 +61,42 @@ int n = Math.pow(a,b); //a 的 b 次方。
 //增强型 for 循环
 for(String str :strs)
     System.out.println(str);
+
+//返回系统时间
+long start = System.currentTimeMillis();
+
+```
+
+### 输入输出
+```java
+//输入
+import java.util.Scanner;
+Scanner scan = new Scanner(System.in);
+if(scan.hasNext()){//只读取一次，遇到空格结束
+	String str1 = scan.next();
+	System.out.println("输入为：" + str1);
+}
+
+if(scan.hasNextLine()){//可以读取一行，遇到换行符结束
+	String str2 = scan.nextLine();
+	System.out.println("输入为：" + str2);
+} 
+
+System.out.println(); //输出带换行
+System.out.print(); //输出不带换行
+System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进制，%s 字符串
+System.out.printf(); //C 格式输出
 ```
 
 ### 集合框架与数组
 数组缺点：固定长度，数据多了不够，少了浪费空间。
 容器类：为了解决数组的缺点，如  ArrayList、
-
 ```java
+//易混淆点
+//数组的长度：.lenght; List的长度：.size(); 字符串的长度：length();
+//List添加元素：add(x); 字符串添加元素：append(x);
+//List 的获取用 get！不要总是用 [] 数组的东西。
+//StringBuilder 用charAt,
 //数组-常规数组
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 int[] numbers = new int[10]; //默认值为 0
@@ -130,9 +159,9 @@ dic.clear();
 方法二：最简单的方法就是利用Set集合无序不可重复的特性进行元素过滤。 */
 import java.util.HashSet;
 Set<Integer> set = new HashSet();  //实例化一个set集合  
-//遍历数组并存入集合,如果元素已存在则不会重复存入  
+ 
 for (int x : arr)
-    set.add(arr[i]);  
+    set.add(arr[i]);  //遍历数组并存入集合,如果元素已存在则不会重复存入 
 return set.toArray();  //返回Set集合的数组形式
 
 
@@ -142,6 +171,24 @@ Queue<String> q = new LinkedList<>();//也实现了队列的接口
 q.offer("inQueue");//入队列
 q.poll();//出队
 q.peek();//查看队首，但不取出
+
+//Collection是 Set List Queue 和 Deque 的接口 
+//Collections是一个类，容器的工具类，只能是容器，无返回值，改变原List
+import java.util.Collections;
+List<Integer> numbers = new ArrayList<>();
+Collections.reverse(numbers); //倒转数组,
+Collections.shuffle(numbers);//混淆
+Collections.sort(numbers);
+Collections.swap(numbers,0,1);
+Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
+
+//栈
+Stack stack = new Stack(); //初始化
+stack.empty(); //判断是否为空，返回true/false
+stack.peek(); //取栈顶值（不出栈），返回 Object
+stack.push(Object);//进栈，返回 Object
+stack.pop();//出栈，返回的是 Object 对象，需要类型转换
+
 ```
 
 ### 字符串
@@ -149,6 +196,18 @@ q.peek();//查看队首，但不取出
 答：[参考博客](https://www.cnblogs.com/lojun/articles/9664794.html)
 
 ```java
+//查
+StringBuilder sb = new StringBuilder();
+char ch = sb.charAt(index); //返回某个位置的字符!!很容易忘
+int length = sb.length();
+String s = sb.substring(beginIndex); //返回此坐标开始后的字符串
+
+//增
+
+
+
+//改
+//字符串，整数，互换
 String preStr = "192.168.1.1"; 
 String[] strs = preStr.split("\\."); //正确写法。对小圆点进行转义
 String ss = String.valueOf(11); //将数字转为字符串
@@ -159,13 +218,12 @@ int b = Integer.parseInt(strs[1]); //将 ip 地址转换为整数
 String s = strs[0]+11+"22"; //一开始就可以确定的量，使用 + 更快
 //字符串拼接，循环中切忌使用，StringBuilder 最好。
 String s2 = s2.concat(String.valueOf(i));
-String s3 = s2.substring(beginIndex); //返回此坐标开始后的字符串
-
+//list 拼接
 List<String> list = new ArrayList<String>();
 for (int i = 0; i < 10000; i++)
 	list.add(String.valueOf(i)); 
 StringUtils.join(list, ""); //将字符串数组拼接
-
+//StringBuffer 拼接
 StringBuffer sb = new StringBuffer(); //StringBuilder 类似
 for (int i = 0; i < 100000; i++)
 	sb.append(String.valueOf(i));
@@ -174,77 +232,102 @@ sb.toString();
 
 ```
 
-**switch 语句**：switch 语句中的变量类型只能为 byte、short、int 或者 char。当变量的值与 case语句的值相等时，那么 case 语句之后的语句开始执行，直到 break 语句出现才会跳出 switch 语句。
-
+学习代码，查找重复的字符串
 ```java
-for(int x : numbers){
-	System.out.prin(x)
-}
-
-switch(10){//只能是常量或者一个字符
-	case 10:
-	System.out.println("输出 10");
-	case 11: //这里也会执行
-	System.out.println("输出 11");
-	break; //遇到 break 才会跳出
-	default: //前面没有跳出，执行完这里也会跳出
-	System.out.println("输出 default");
-}
+    public static void main(String[] args) {
+        // s创建一个长度是100的字符串数组
+        // s字符串数组排序
+        // for循环中采用StringBuilder比用String的 `+=`高效
+        // Hashset的add 可以判断有没有添加重复的字符，size()用来计算重复的个数
+ 
+        // s 创建一个长度是100的字符串数组
+        // s使用长度是2的随机字符填充该字符串数组
+        // s统计这个字符串数组里重复的字符串有多少种
+        // s 使用HashSet来解决这个问题
+        StringBuilder string = new StringBuilder();// 获取全部的有效字符并存储
+        Random rand = new Random();//随机对象
+        char ch = 0; //shengcheng 生成一个随机字符
+        String[] str = new String[100];
+        HashSet<String> set = new HashSet<String>();// 存放数据
+        String chongfu = new String();// 拼接重复的字符串
+        char c;
+        for (short i = 0; i < 128; i++) {
+            c = (char) i;
+            if (Character.isDigit(c) || Character.isLetter(c)) {
+                string.append(c);
+            }
+        }
+        for (int i = 0; i < 100; i++) {
+            str[i] = "";
+            for (int j = 0; j < 2; j++) {
+                int rs = rand.nextInt(string.length()); // 从62抽出一个随机数字
+                ch = string.charAt(rs);// 调用charAt()，把随机数字传递实参，生成一个随机字符
+                str[i] += String.valueOf(ch);// char转String
+            }
+            if (set.add(str[i]) == false) { // you 有重复的字符串返false
+                chongfu += str[i] + ":" + (i + 1) + " ";// pinjie 拼接重复的字符串
+            }
+            System.out.printf("%3d:%s ", i + 1, str[i]);
+//          System.out.print((i + 1) + ":" + str[i] + " ");
+            if ((i + 1) % 10 == 0) {
+                System.out.println();
+            }
+        }
+        int len = str.length - set.size();// shuzu 数组的长度减去set的长度就是重复字符串的个数
+        if (len != 0) {
+            System.out.println("总共有" + len + "种重复的字符串");
+            System.out.printf("分別是：%n%s", chongfu);
+        } else {
+            System.out.println("没有重复的字符串");
+        }
+    }
 ```
 
-**输入输出**
-```java
-//输入
-import java.util.Scanner;
-Scanner scan = new Scanner(System.in);
-if(scan.hasNext()){//只读取一次，遇到空格结束
-	String str1 = scan.next();
-	System.out.println("输入为：" + str1);
-}
-
-if(scan.hasNextLine()){//可以读取一行，遇到换行符结束
-	String str2 = scan.nextLine();
-	System.out.println("输入为：" + str2);
-} 
-
-System.out.println(); //输出带换行
-System.out.print(); //输出不带换行
-System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进制，%s 字符串
-System.out.printf(); //C 格式输出
-```
 
 
 ### 函数
 ```java
-Math.max(a,b); //选取最大值，参数为 2.
-Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); //利用三目运算符，三数取最大值。
-int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
-import java.util.Random;//重新创建随机数生成器
-Random rand = new Random(11);//需要种子
-int i = rand.nextInt(100);//产生[0,100) 的随机数
 
 ```
 
 ### 常用类
 **Number 和 Math 类**
 装箱与拆箱，Java语言为每一个内置数据类型提供了对应的包装类，所有的包装类（Integer、Long、Byte、Double、Float、Short）都是抽象类 Number 的子类。
+```java
+Math.max(a,b); //选取最大值，参数为 2.
+Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); //利用三目运算符，三数取最大值。
+int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
+```
 
 **Character 类**
+```java
+char ch = 'a';
+Character.isDigit(ch);
+Character.isLetter(ch);
+Character.isUpperCase(ch);
+Character.isLowerCse(ch);
+```
+
+**Random 类**
+```java
+import java.util.Random;//重新创建随机数生成器
+Random rand = new Random(11);//需要种子
+int i = rand.nextInt(100);//产生[0,100) 的随机数
+```
 
 **JAVA 常用包**
-
 ```java
 //java.util 包
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.ArrayList;//动态数组
+import java.util.List;//接口
+import java.util.LinkedList;//链表
 import java.util.Hashtable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Random;
-
+import java.util.HashMap;//字典
+import java.util.HashSet;//集合
+import java.util.Collection;//方法调用,容器的工具类
+import java.util.Scanner;//输入
+import java.util.Random;//随机数
 
 //java.lang 包
 import java.lang.Math;
