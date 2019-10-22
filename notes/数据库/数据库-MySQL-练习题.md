@@ -1,8 +1,13 @@
 # 数据库-MySQL-编程基本概念
 
-**有些比较难理解的命令，还是需要动手操作，比如 group by、inner join、 MAX 、MIN、 COUNT、 avg 等等。**
+基本函数
+```mysql
+#日期+时间，日期，时间
+now();curdate();curtime();
 
-* 书籍推荐《MySQL 里的 36 条军规》
+
+```
+
 
 注释，增、删、改表和创建数据库
 ```mysql
@@ -43,8 +48,9 @@ ALTER TABLE `students` add column `age` int not null after `sex`;
 四种基本操作：INSERT、DELETE、UPDATE、SELECT（主要考察 select，所有后面着重介绍）
 ```mysql
 ###INSERT
-INSERT INTO students(name,sex,age,in_time) VALUE ('张四',1,25,NOW());
-
+INSERT INTO students(name,sex,age,in_time) VALUE ('张四',1,25,crudate());
+DELETE FROM students where age = 20;
+UPDATE students set sex = 0 where id = 1;
 
 ```
 

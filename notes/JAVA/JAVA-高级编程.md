@@ -8,7 +8,7 @@
 * JAVA - 分布式编程
 * JAVA - 框架
 
-**JAVA - 反射**
+### JAVA - 反射
 在对象方法前，加上修饰符 synchronized ，同步对象是当前实例。
 那么如果在类方法前，加上修饰符 synchronized，同步对象是这个类的反射。
 
@@ -18,9 +18,7 @@
 **获取类对象的三种方式**
 Class.forName（“Hero”），Hero.class，new Hero().getClass()，（Hero 是一个类）在一个JVM中，一种类，只会有一个类对象存在。所以以上三种方式取出来的类对象，都是一样的。反射其实就是获取类对象。
 
-
-
-**JAVA - I/O**
+### JAVA - I/O
 [参考教程](http://how2j.cn/k/io/io-file/345.html#nowhere)
 
 ** I/O 文件对象**
@@ -78,10 +76,6 @@ public class test{
 }
 ```
 
-### 集合框架
-
-
-
 
 
 
@@ -96,8 +90,8 @@ public class test{
 匿名类：和匿名函数相似，在用的时候才写，而且直接写在主函数里面。
 注： 启动线程是start()方法，run()并不能启动一个新的线程
 
-
 **多线程常用方法**
+
 ```java
 Thread t1 = new Thread(){
 	public void run(){}//匿名函数修改 run 函数
@@ -379,23 +373,101 @@ public class ServerThread {
 [参考博客](https://blog.csdn.net/Neuf_Soleil/article/details/80962686)
 JavaEE 号称有十三种核心技术。它们分别是：**JDBC、Servlet、JSP**、JNDI、EJB、RMI、XML、JMS、Java IDL、JTS、JTA、JavaMail和JAF。一般来讲，初学者应该遵循路径 Servlet -> JSP -> Spring -> 组合框架。
 
-### 框架
-**组合框架**
-**SSH**：Structs + Spring + Hibernate
-**SSM**：Spring + SpringMVC + MyBatis（先学习这种）
+### JDBC
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+public class test {
+	public static void main(String[] args) {
+		try{
+			Class.forName("com.mysql.jdbc.Driver");//加载数据库驱动类，在引入的 jar 包中
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		//建立与数据库的连接，获取 statement 对象，执行 SQL 语句
+		//放在try 里面，是关闭流，执行完自动关闭，不需要最后那段。
+		try (Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/school?characterEncoding=UTF-8",	"root","1234");	Statement s = con.createStatement();){
+			//执行 SQL 语句，字符串用单引号。
+			String insert = "insert into students value(5,'王五',1,26,1,curdate());";
+             String delete = "delete from students where age = 25;";
+			String update = "update students set age = 24 where id = 1; ";
+			s.execute(update);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} 
+	}
+}
+//SELECT	由于 select 语句会有返回值，所以单独列出
+import java.sql.ResultSet;
+ResultSet rs = s.executeQuery(select);
+while(rs.next()){
+    //可以根据字段名称，或者序号从 1 开始，获得返回值。
+    int id = rs.getInt("id"); 
+    String name = rs.getString(2);
+    System.out.printf("id: %d, name: %s\n",id,name);
+}
 
-**Spring**
-Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
-**SpringMVC**
-**MyBatis**
+//SQL语句判断账号密码是否正确：错误的做法是把所有数据加载进内存，应该去数据库中查找
+if(rs.next())
+    System.out.println("账号密码正确");
 
-**Spring Security**
-**Spring Boot**
+/*
+Statement 和 PreparedStatement 比较
+Statement 需要进行字符串拼接，可读性和维护性比较差，改进 PreparedStatement
+*/
+Statement s = con.createStatement();
+s.execute(sql);
+PreparedStatement ps = con.prepareStatement(sql);//需要输入数据的sql语句
+ps.setString(1,"张三");
+ps.setInt(2,25);
+ps.execute();
 
 
-### JAVA EE 方向
+/*
+execute 与 executeUpdate 的区别
+不同1：
+execute可以执行查询语句
+然后通过getResultSet，把结果集取出来
+executeUpdate不能执行查询语句
+不同2:
+execute返回boolean类型，true表示执行的是查询语句，false表示执行的是insert,delete,update等等
+executeUpdate返回的是int，表示有多少条数据受到了影响
+*/
+s.execute(sqlSelect);
+ResultSet rs = s.getResultSet();
+while (rs.next()) 
+    System.out.println(rs.getInt("id"));
 
-**Servlet**
+/*
+事务	只有所有操作都正确执行，事务才发生
+MYSQL 表的类型必须是INNODB才支持事务
+*/
+c.setAutoCommit(false); //自动提交关闭
+String sql1 = "update hero set hp = hp +1 where id = 22";
+s.execute(sql1);
+// 不小心写错写成了 updata(而非update)
+String sql2 = "updata hero set hp = hp -1 where id = 22";
+s.execute(sql2);
+c.commit();// 手动提交
+
+/*
+ORM=Object Relationship Database Mapping 
+对象和关系数据库的映射 ,简单说，一个对象，对应数据库里的一条记录
+对象的属性，就是数据库中不同的字段
+*/
+
+/*
+数据库连接池
+当有多个线程，每个线程都需要连接数据库执行SQL语句的话，那么每个线程都会创建一个连接，并且在使用完毕后，关闭连接。创建连接和关闭连接的过程也是比较消耗时间的，当多线程并发的时候，系统就会变得很卡顿。
+同时，一个数据库同时支持的连接总数也是有限的，如果多线程并发量很大，那么数据库连接的总数就会被消耗光，后续线程发起的数据库连接就会失败。
+*/
+
+
+```
+
+### Servlet
 <img src="../../pics/servlet.png" align="center">
 [ 参考博客](https://learner.blog.csdn.net/article/details/81091580)
 Servlet 是运行在 Web 服务器或应用服务器上的 Java "小"程序。Servlet 可以动态地生成网页，广义的 Servlet 指任何实现了 Servlet 接口的 Java 程序。
@@ -409,10 +481,8 @@ Servlet 是运行在 Web 服务器或应用服务器上的 Java "小"程序。Se
 4. 服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。
 5. Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。
 
-**JSP**
+### JSP
 全称（Java Server Pages）是一种动态网页开发技术。它使用 JSP 标签在 HTML 网页中插入 Java代码。标签通常以<%开头以%>结束。与 JavaScript 相比：虽然 JavaScript 可以在客户端动态生成HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。
-
-
 
 
 **JSP 和 Servlet 的区别**
@@ -423,76 +493,23 @@ Servlet 是运行在 Web 服务器或应用服务器上的 Java "小"程序。Se
 **常见容器**：Tomcat, Jetty, resin, Oracle Application server, WebLogic Server, Glassfish, Websphere, JBoss 等等。（提供了 Servlet 功能的服务器，叫做 Servlet 容器。对 web 程序来说，Servlet 容器的作用就相当于桌面程序里操作系统的作用，都是提供一些编程基础设施）
 
 
-
-
 **Swing**
 * Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI）器件如：文本框，按钮，分隔窗格和表。
 **五子棋**：1.掌握 JavaGUI 界面设计、2.掌握鼠标事件的监听（MouseListener，MouseMotionListener）
 
 
+### 框架
+**组合框架**
+**SSH**：Structs + Spring + Hibernate
+**SSM**：Spring + SpringMVC + MyBatis（先学习这种）
 
+**Spring**
+Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
+**SpringMVC**
+**MyBatis**
 
-### Eclipse 教程
-[参考 W3C教程](https://www.w3cschool.cn/eclipse/)
-**简介**：Eclipse是一款基于Java的开源可扩展开发平台，Eclipse不是一门编程语言，而是一个框架和一组服务。Eclipse为开发者提供了一个标准的插件集，包括Java开发工具（Java Development Kit，JDK）。虽然Eclipse 是使用Java语言开发的，但它的用途并不限于 Java 语言；还提供支持C/C++、COBOL、PHP、Android等编程语言的插件。
-
-```java
-//Java Project > Java 包 > .java 文件
-```
-
-**常量和数组**
-```java
-final double PI = 3.1415927; //关键字 final 通常常量全部大写
-String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
-int[] numbers = new int[10]; //默认值为 0
-
-import java.util.Arrays //类能方便地操作数组，它提供的所有方法都是静态的。
-//包含 fill：给数组赋值，sort：对数组排序，equals：比较数组，binarySearch：查找数组元素
-```
-
-
-**枚举**
-```java
-//代码参考 W3C
-class FreshJuice {
-   enum FreshJuiceSize{ SMALL, MEDIUM, LARGE }
-   FreshJuiceSize size;
-}
-
-public class FreshJuiceTest {
-   public static void main(String args[]){
-      FreshJuice juice = new FreshJuice();
-      juice.size = FreshJuice. FreshJuiceSize.MEDIUM ;
-   }
-}
-```
-
-**条件语句**
-**JAVA 增强 for 循环**：Java5引入了一种主要用于数组的增强型for循环。
-```java
-for(int x : numbers){
-	System.out.prin(x)
-}
-```
-
-
-**函数**
-
-
-
-**输入输出**
-```java
-System.out.println() //输出带换行
-```
-
-**Number 和 Math 类**
-装箱与拆箱，Java语言为每一个内置数据类型提供了对应的包装类，所有的包装类（Integer、Long、Byte、Double、Float、Short）都是抽象类 Number 的子类。
-
-**Character 类**
-
-
-
-
+**Spring Security**
+**Spring Boot**
 
 
 

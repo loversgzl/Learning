@@ -61,6 +61,12 @@ int n = Math.pow(a,b); //a 的 b 次方。
 //增强型 for 循环
 for(String str :strs)
     System.out.println(str);
+//List 使用迭代器
+ArrayList list = new ArrayList();//省略赋值过程
+Iterator iterator = list.iterator();
+while(iterator.hasNext())
+	System.out.println(iterator.next());
+
 
 //返回系统时间
 long start = System.currentTimeMillis();
@@ -371,8 +377,9 @@ public class test{
 	}
 }
 ```
-问：equals 和 == 的区别？
-前者：不能用于基本数据类型比较，只能用于引用类型，比较内存地址。
-后者：基本数据类型比较值，引用类型比较内存地址。
 
+
+### 异常
+异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem: 
+解决：反复看都没有找到错误，是因为缺少了包名，package test; 这个一定要放在第一句的！
 

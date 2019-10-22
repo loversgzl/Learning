@@ -1,18 +1,41 @@
 # JAVA-面试题合集
 
-**简介**
-由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。
-它既有能开发桌面应用的 Java SE（Java Platform，Standard Edition）
-也有开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）
-还有 Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）
-[JAVA SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)
-[JAVA 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)
+**问：Java 中的值传递和引用传递？**
+错误理解一：值传递和引用传递，区分的条件是传递的内容，如果是个值，就是值传递。如果是个引用，就是引用传递。
+错误理解二：Java是引用传递。
+错误理解三：传递的参数如果是普通类型，那就是值传递，如果是对象，那就是引用传递。
+其实我觉得和 Python 中可变类型与不可变类型的概念类似，具体可参考[Python 五种数据类型](https://blog.csdn.net/qq_29611345/article/details/100736961)
+我的理解就是不可变类型是值传递，如（Integer、String）
+可变类型是引用传递：如（int[]，ArrayList）
 
-**知名应用**：我的世界、淘宝网、Android 操作系统。
-**JDK**：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。
-[JDK 和 JRE 的区别](https://blog.csdn.net/shaochenshuo/article/details/78507132)
+**问：equals 和  ==  的区别？**
+前者：不能用于基本数据类型比较，只能用于引用类型，比较内存地址。
+后者：基本数据类型比较值，引用类型比较内存地址。
 
-**JAVA 注释类似 C++，这里就不单独介绍了**
+**错误：在循环内进行删除。**
+```java
+ArrayList<String> list = new ArrayList<String>();  
+list.add("a");  
+list.add("bb");  
+list.add("bb");  
+list.add("ccc");  
+list.add("ccc");  
+list.add("ccc");
+//第一种，可能会没有删干净
+for (int i = 0; i < list.size(); i++) {  
+	String s = list.get(i);  
+	if (s.equals("bb")) 
+		list.remove(s);  
+}
+//第二种：出现异常 并发修改异常java.util.ConcurrentModificationException
+for (String s : list) {  
+	if (s.equals("bb")) 
+		list.remove(s);  
+}  
+```
+
+
+
 
 **第一个 JAVA 程序**
 

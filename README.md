@@ -6,10 +6,11 @@
 
 ### 算法
 参考Leetcode、剑指offer，本节不单独将数据结构作为一章，会显得内容枯燥，不易理解，可直接参照各个栈、队列、堆、树等章节的算法，结合例题和概念，更易理解和掌握。
-[Python3 版本](notes/Python/Python-算法目录.md)
-[JAVA 版本](notes/JAVA/JAVA-算法目录.md)
-[CPP 版本](notes/CPP/CPP-算法目录.md)
-[Go 版本](notes/Go/Go-算法目录.md)
+
+* [Python3 版本](notes/Python/Python-算法目录.md)
+* [JAVA 版本](notes/JAVA/JAVA-算法目录.md)
+* [CPP 版本](notes/CPP/CPP-算法目录.md)
+* [Go 版本](notes/Go/Go-算法目录.md)
 
 ****
 <a name="网络"></a>
@@ -26,6 +27,9 @@
 <a name="数据库"></a>
 
 ### 数据库
+* [MySQL-基本概念](notes/数据库/数据库-MySQL-基本概念.md)
+* [MySQL-练习题](notes/数据库/数据库-MySQL-练习题.md)
+
 ***
 
 <a name="JAVA"></a>
