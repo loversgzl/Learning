@@ -1,84 +1,207 @@
 
 
-# 排序-经典算法-Python
+# 查找-经典算法-Python
 
-1. 插入类排序：<a href="#简单插入排序">简单插入排序</a>，升级为-<a href="#希尔排序">希尔排序</a>
-2. 选择类排序：<a href="#简单选择排序">简单选择排序</a>，升级为-<a href="#堆排序">堆排序</a>
-3. 交换类排序：<a href="#冒泡排序">冒泡排序</a>，升级为-<a href="#快速排序">快速排序</a>
-4. <a href="#归并排序">归并排序</a>、<a href="#计数排序">计数排序</a>
-5. <a href="#乱数排序">乱数排序</a>
-6. <a href="#三色旗">三色旗</a>
-7. <a href="#摆动排序">摆动排序</a>
-8. <a href="#煎饼排序">煎饼排序</a>
-9. <a href="#距离相等的条形码">距离相等的条形码</a>
-10. <a href="#距离顺序排列矩阵单元格">距离顺序排列矩阵单元格</a>
-
+1. <a href="#二分查找">二分查找</a>
+2. <a href="#快慢指针">快慢指针</a>
+3. <a href="#经典结构">经典结构</a>：二叉搜索树、平衡二叉树、B树、红黑树
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
-![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
 
+**二分查找**<a name="二分查找"></a>
+```java
+'''二分查找
+条件：只能对已经排序好的列表进行查找
+需求：对搜索时间要求为O(logn)一般都是二分查找。
+模板一：用于查找数组中的某个确定值，经典用法，考察一般。
+模板二：有条件查找，如寻找第一个比5大的值，考察较多。
+模板三：有双重条件的查找。
+'''
+def binarySearchOne(li, target):
+    left, right = 0,len(li)-1
+    while left <= right:
+        mid = (left+right)//2
+        if li[mid] == target:
+            return mid
+        #注意这里左右指针的赋值
+        if li[mid] > target:
+            right = mid - 1
+        else:
+            left = mid + 1
+    #End Condition: left > right
+    return -1
+    
+#模板一：搜索旋转数组
+#排序好的数组某一部分旋转了，查找某个数。
+def search(nums, target):
+    start,end = 0,len(nums) - 1
+    while start <= end:
+        mid = (start + end) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < nums[start]: # case [7 8 0 {1} 2 3 4 5]
+            if nums[mid] <= target <= nums[end] :
+                start = mid + 1
+            else:
+                end = mid - 1
+        else:# nums[mid] > nums[start] case [4 5 6 {7} 0 1 2]
+            if nums[start] <= target <= nums[mid]:
+                end = mid - 1
+            else:
+                start = mid + 1
+    return -1    
+    
+#模板二：第一个错误的版本，某个版本出错了，之后的版本肯定也都是错的。
+#思路：我们以错误的版本为目标，这样在最后判断left<right时，若left==right，则返回的值，一定是正确答案，不需要其他的判断。并且一定要计算到left==right，才可以结束。
+def firstBadVersion(n):
+    left,right = 1,n
+    while left < right:
+        mid = (left+right)//2
+        if isBadVersion(mid):#返回True表示是错误的版本，False才是正确的版本
+        #没用 mid - 1，是因为 mid - 1 可能不是 BadVersion，因此需要保留 mid   
+            right = mid
+        else:
+            left = mid + 1
+    #End Condition: left == right
+    return right
 
-
-```python
-#python函数的使用
-
-#题：有n个正整数，输出连成最大的整数串。
-st = [str(x) for x in nums]
-st.sort(key = cmp_to_key(lambda s1,s2:s1+s2 if s2+s1 < s1+s2 else s2+s1))
-
-#内置的打乱顺序的函数
-import random
-li = [x for x in range(10)]
-random.shuffle(li)
-print(li)
+//Tencent2018秋招
+/*
+小Q的父母要出差N天，走之前给小Q留下了M块巧克力。小Q决定每天吃的巧克力数量不少于前一天吃的一半，但是他又不想在父母回来之前的某一天没有巧克力吃，请问他第一天最多能吃多少块巧克力，二分查找的变形。
+*/
+import java.util.Scanner;
+public class Main{
+    /*
+    统计第一天吃了s，后面严格克制自己只刚好满足要求，而不多吃。
+    如：14、7、4、2、1，但是我们可以吃，14、8、4、2、1
+    */
+    public static int mySum(int n, int s){
+        int total = 0;
+        for(int i=0; i<n; i++){
+            total += s;
+            s = (s+1)/2;
+        }
+        return total;
+    }
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        int left=1, right=m;
+        while(left<=right){
+            int mid = (left+right)/2;
+            System.out.println(mid);
+            if(mySum(n,mid)==m){//如果按照严格控制刚好满足，则返回，不过应该情况不多。
+                System.out.println(mid);
+                break;
+            }else if(mySum(n,mid) < m){
+                left = mid+1;
+            }else{
+                right = mid-1;
+            }
+        }
+        //更多的应该是第一天吃14块还多一点，15块就不够了。多一点可以第二天或者后面吃。
+        if(left>right)
+            System.out.println(left-1);
+    }
+}
 ```
 
-
-
-**以下先介绍三种简单排序：冒泡排序、选择排序、插入排序。**
-
-<a name="冒泡排序"></a>
-
+**快慢指针**<a name="快慢指针"></a>
 ```python
-'''冒泡排序
-选择理由：稳定，与原位置偏离不远。
-基本思想：正宗的冒泡排序，j 其实从后往前走的，不过我们比较喜欢，从下标0开始嘛，效果一样，但是要知道。默认有增加一个状态判断，如果某趟没有进行过交换，则直接结束。
-时间复杂度：最好O(n)，最差O(n2), 平均O(n2)
-空间复杂度：O(1)
+'''快慢指针
+寻找环入口：从起点开始，走到某处会出现一个环的入口，找出该点。
+快指针比慢指针快两倍，同时出发，肯定会在某一点 C 相遇，慢指针走了 n，快指针走了 2n，因此从 C 点，慢指针再走 n 步是不是和快指针走的一样远。解释：只要在环内，就一定会相遇。
 '''
-def BobleSort(li):
-    n = len(li)
-    for i in range(n-1):#定义几趟排序n-1，最后一趟不比较
-        state = False
-        for j in range(n-1-i):#每趟排序的比较次数
-            if li[j] > li[j+1]:
-                li[j],li[j+1] = li[j+1],li[j]
-            state = True
-        if  not state:
-            return li
-    return li
+def findDuplicate(self, nums):
+    tortoise = hare = nums[0]
+    while True:
+    	tortoise = nums[tortoise]
+    	hare = nums[nums[hare]]
+    	if tortoise == hare:
+    		break
+    p1 = nums[0]
+    p2 = tortoise
+    while p1 != p2:
+    	p1 = nums[p1]
+    	p2 = nums[p2]
+    return p1
 ```
 
-<a name="简单插入排序"></a>
+**经典结构**<a name="经典结构"></a>
+**二叉搜索树、平衡二叉树、B树、红黑树**
+1、二叉搜索树：左边的值小于根节点，右边的值大于根节点。
+  二叉搜索树缺点：会出现全部节点在一端的情况，升级为平衡二叉树[AVL]。
+2、平衡二叉树[AVL]：根节点左右两边深度差不超过1。
+  平衡二叉树[AVL]缺点：对于插入删除频繁的操作，需要多次旋转，升级为红黑树，平衡二叉树性  质的改进。
+  平衡二叉树[AVL]缺点：每个节点只存放一个元素，最多只有两个子节点，查找需要多次磁盘IO（不同层数据存放在不同页），升级为B树。
+
+3、B树也叫B-树，一种多路平衡树。查找不稳定，遍历比较麻烦，分支多层数少。B树每一层存放了更多的节点，由AVL树的“瘦高”变成了“矮胖”。可以相对减少磁盘IO的次数。一般用于数据库中做索引，MongoDB的索引就是用 B 树实现的。[B树参考博客](https://www.cnblogs.com/nullzx/p/8729425.html)
+  B树缺点：查找不稳定，遍历比较麻烦，升级为B+树。
+
+4、B+树：每个非叶子结点存放的元素只用于索引作用，所有数据保存在叶子结点。一般来说都会进行一个优化，就是将所有的叶子节点用指针串联起来，遍历叶子节  点就能获取全部数据，这样就能进行区间访问了，每个非叶子结点存放的元素只用于索引作用，所有数据保存在叶子结点。
+[B+树参考](https://blog.csdn.net/wanderlustLee/article/details/81297253)
+
+5、红黑树：[参考博客](https://blog.csdn.net/net_wolf_007/article/details/79706498)
+由来：对平衡二叉树的限制条件，通过对任何一条从根到叶子的简单路径上各个节点的颜色进行约束，确保没有一条路径会比其他路径长2倍，因而是近似平衡的。所以相对于严格要求平衡的AVL树来说，它的旋转保持平衡次数较少。用于搜索时，插入删除次数多的情况下我们就用红黑树来取代AVL。
+规则：
+特征一：节点要么是红色，要么是黑色（红黑树名字由来）。
+特征二：根节点是黑色的
+特征三：每个叶节点(nil或空节点)是黑色的。
+特征四：每个红色节点的两个子节点都是黑色的（相连的两个节点不能都是红色的）。
+特征五：从任一个节点到其每个叶子节点的所有路径都是包含相同数量的黑色节点。
+
 
 ```python
-'''简单插入排序
-选择理由：稳定，基本有序。
-基本思想:从第一个元素开始，不断整理顺序。
-时间复杂度：最好O(n)，最差O(n2),平均O(n2)
-空间复杂度：O(1)
+'''二叉搜索树
+如果满足：(L.val-root.val)*(R.val-root.val) <= 0，那么LR肯定在根节点两侧。
+1、二叉搜索树查找某个值
+2、普通树查找某个值
+3、中序遍历的方式将二叉搜索树转为数组
+4、判断是否为平衡二叉树
 '''
-def InsertSort(li):
-    for i in range(1, len(li)):#定义趟数n-1
-        tempi = li[i]; j = i
-        while j > 0 and tempi < li[j-1]:#for就显示不出来优势了
-            li[j] = li[j-1]#后面的值上移
-            j -= 1
-        li[j] = tempi
+def SearchOne(root, val):
+    while root:
+    	if root.val == val:
+    		return root
+    	elif root.val > val:
+    		root = root.left
+    	else:
+    		root = root.right
+    return None
+
+#寻找某个值，用迭代的方式遍历所有节点，适用于所有树
+def SearchTwo(root, val):
+	stack = [root]
+	while stack:
+		node = stack.pop(0)
+		if node == None:
+			continue
+		if node.val == val:
+			return node
+		stack.append(node.left)
+		stack.append(node.right)
+	return None
+
+#中序遍历的方式将二叉搜索树转为数组
+def traverse(root):
+	if root == None:
+		return []
+	return traverse(root.left) + [root.val] + traverse(root.right)
+
+#判断是否为平衡二叉树
+def isBalanced(root):
+	def dfsBalanced(node):
+	    if not node: return 0 #返回数据0
+	    left = self.dfsBalanced(node.left)
+	    right = self.dfsBalanced(node.right)
+	    if left == -1 or right == -1 or abs(left-right)>1:
+	        return -1
+	    return max(left, right)+1#注意返回条件的选择
+    return self.dfsBalanced(root) >= 0
 ```
 
 <a name="简单选择排序"></a>
-
 ```python
 '''简单选择排序
 选择理由：不稳定，很无序，与原位置偏离较远。

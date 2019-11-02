@@ -29,34 +29,101 @@ public class test {
 3.通过 JVM 执行 .class 文件
 编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc
 */
+
+/*
+F3 :可以查看某个函数的源码
+放在某个函数上，F2 可以查看具体的使用方法
+*/
+
 ```
 
 ### 命名
 **类名**：驼峰命名法，所有单词首字母大写
 **方法名**：第一个单词小写，其余单词首字母大写
 **源文件名**：源文件名必须和类名相同，文件名的后缀为.java。（如果文件名和类名不相同则会导致编译错误）。
+**关键字与保留字**：Java 保留字是指现在Java版本尚未使用，但以后版本可能会作为关键字使用。所以注意false、true、null等都是保留字。
+**Java标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。
 
-
-### JAVA 基本数据类型
-* **内置数据类型**：byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
+### JAVA 常用包
 ```java
-//其他数据类型也有相同的常量
-//Byte、Short、Integer、Long、Float、Double、boolean、Character
-System.out.println(Byte.SIZE); //二进制位数
-System.out.println(Byte.MIN_VALUE); //最小值
-System.out.println(Byte.MAX_VALUE); //最大值
+/*
+常用内置类
+*/
+StringBuilder;StringBuffer;
 
+/*
+java.util 包
+*/
+import java.util.Arrays;
+import java.util.ArrayList;//动态数组
+import java.util.List;//接口
+import java.util.LinkedList;//链表
+import java.util.Hashtable;
+import java.util.HashMap;//字典
+import java.util.HashSet;//集合
+import java.util.Collections;//方法调用,容器的工具类
+import java.util.Scanner;//输入
+import java.util.Random;//随机数
+
+/*
+java.lang 包
+*/
+import java.lang.Math;
+
+/*
+java.net 网络编程常用包
+*/
+import java.net.Socket;
+
+/*
+java.io 包
+*/
+import java.io.File // I/O文件对象包
+import java.io.FileInputStream; //输入流
+import java.io.FileOutputStream; //输出流
+import java.io.OutputStream;
+import java.io.DataOutputStream;
+```
+
+### 常用类
+**Number类 和 Math 类**
+Java 语言是一个面向对象的语言，但是 Java 中的基本数据类型却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样八个和基本数据类型对应的类统称为包装类(Wrapper Class)，其中六个包装类都是抽象类 Number 的子类。byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
+```java
+//基本数据类型 和 包装类
+byte;short;int;long;float;double;char;boolean;
+Byte;Short;Integer;Long;Float;Double;Character;Boolean;
+
+//装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
+Integer x = 5; x = x +10;
+
+int a = 99; 
+Integer c = new Integer(a);//装箱
+Integer b = Integer.valueOf(a);//装箱，该方法返回参数的原生Number对象。
+int d = b.intValue(); //拆箱，可以拆成任意 Number 类
+
+//包装类的常量
+Byte.SIZE; //二进制位数
+Byte.MIN_VALUE; //最小值
+Byte.MAX_VALUE; //最大值
+
+//基本数据类型赋值
 final double PI = 3.1415927; //常量 final 通常常量全部大写
 boolean b = true; //小写
 char g = 'g'; //一个字符
 String st = "this is a line"; //双引号
 Object ob = null; //空表示
 
-//强制类型转换
-long a = 100;
+/*
+强制类型转换，包装类的方法以Integer为例，其它类似：
+Integer.parseInt()、Integer.toString()
+注意：Integer.valueOf()是装箱，返回的是包装类。
+*/
+long a = 100; 
 int b = (int)a;
-Integer.parseInt(String); //将String字符类型数据转换为Integer整型数据。
-int n = Math.pow(a,b); //a 的 b 次方。
+String st = Integer.toString(b); //将整数转为字符串
+int n = Integer.parseInt(st); //字符串转整数，后面可带进制
+
+
 
 //增强型 for 循环
 for(String str :strs)
@@ -71,7 +138,38 @@ while(iterator.hasNext())
 //返回系统时间
 long start = System.currentTimeMillis();
 
+
+//Math
+Math.max(a,b); //选取最大值，参数为 2.
+//利用三目运算符，三数取最大值。
+Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); 
+int n = Math.pow(a,b); //a 的 b 次方。
+//向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
+Math.floor(11.5); Math.ceil(11.5); Math.round(-11.5); 
+
 ```
+
+**Character 类**
+
+```java
+import java.lang.Character;
+char ch = 'a';
+Character.isDigit(ch);
+Character.isLetter(ch);
+Character.isUpperCase(ch);
+Character.isLowerCse(ch);
+```
+
+**Random 类**
+
+```java
+import java.util.Random;//重新创建随机数生成器
+Random rand = new Random(11);//需要种子
+int i = rand.nextInt(100);//产生[0,100) 的随机数
+int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
+```
+
+
 
 ### 输入输出
 ```java
@@ -80,6 +178,7 @@ import java.util.Scanner;
 Scanner scan = new Scanner(System.in);
 if(scan.hasNext()){//只读取一次，遇到空格结束
 	String str1 = scan.next();
+    int one = scan.nextInt();
 	System.out.println("输入为：" + str1);
 }
 
@@ -96,26 +195,35 @@ System.out.printf(); //C 格式输出
 
 ### 集合框架与数组
 数组缺点：固定长度，数据多了不够，少了浪费空间。
-容器类：为了解决数组的缺点，如  ArrayList、
+容器类：为了解决数组的缺点，如  ArrayList、LinkedList、
+
 ```java
-//易混淆点
-//数组的长度：.lenght; List的长度：.size(); 字符串的长度：length();
-//List添加元素：add(x); 字符串添加元素：append(x);
-//List 的获取用 get！不要总是用 [] 数组的东西。
-//StringBuilder 用charAt,
-//数组-常规数组
+/*
+易混淆点
+数组的长度：.lenght; List的长度：.size(); 字符串的长度：length();
+List添加元素：add(x); 字符串添加元素：append(x);
+List 的获取用 get！不要总是用 [] 数组的东西。
+StringBuilder 用charAt,
+数组-常规数组
+*/
+
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 int[] numbers = new int[10]; //默认值为 0
 for(int i=0; i<names.length; i++)//长度为 length，注意和动态 size 的区分。
     System.out.println(names[i]);
 for(String name : names) //迭代
     System.out.println(name);
+//容器的工具类
+import java.util.Collections;
+Collections.sort(arr);//正序排序
+Collections.reverse(arr);//排完之后再倒转一下
 
 //集合框架-动态数组
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-/* List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
+/* 
+List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
 方法：
 增：add、addAll、
 	add(object);末尾添加 add(index,object);指定位置添加
@@ -127,22 +235,24 @@ import java.util.List;
 	get(index); 获取某个位置的对象 indexOf(obj);某个对象的位置 size()集合大小
 	contains(x); 返回true/false
 输出：toString(),以字符串逗号隔开的形式输出。
-*/
+
+二维数组
 //增
 List<List<Integer>> triangle = new ArrayList<List<Integer>>(); //构造二维数组，长度不固定
 triangle.add(new ArrayList<>()); //添加一个数组元素
 triangle.get(0).add(1); //给第一个数组添加一个元素
-
 //改
 triangle.get(0).set(0,99); //修改第一个数组的第一个值为 99
-
 //查
 triangle.get(0).get(0); //获取第一个数组的第一个值
 triangle.size(); //动态数组的大小，注意和静态数组长度的区分
+*/
 
-import java.util.LinkedList; //LinkedList是一个双向链表结构的list
-
-//链表结构，拥有和 ArrayList 一样的方法再加上下面这些
+/*
+链表结构，拥有和 ArrayList 一样的方法再加上下面这些
+LinkedList是一个双向链表结构的list
+*/
+import java.util.LinkedList; 
 LinkedList<String> sts =new LinkedList<>();
 //增
 sts.addLast("last1"); //在末尾插入，
@@ -152,24 +262,33 @@ sts.removeLast();sts.removeFirst();
 //查
 sts.getLast(); sts.getFirst();
 
-//字典
+/*
+字典接口 import java.util.MAP;
+四个实现类 import java.util.HashMap、LinkedHashMap、HashTable、TreeMap
+*/
 import java.util.HashMap;
-HashMap<String,Integer> dic = new HashMap<>();
+Map<String,Integer> dic = new HashMap<>();
+//增，改
 dic.put("Tom",12); //如果已经存在，则覆盖
-dic.get("Tom");
+//删
 dic.clear();
+//查
+dic.containsKey(); //返回Boolean
+dic.get("Tom");
 
-//集合
-/*问：如何去除数组中重复的元素？
+
+/* 集合 Set
+问：如何去除数组中重复的元素？
 方法一：只需要创建一个集合，然后遍历数组逐一放入集合，只要在放入之前用 contains()方法判断一下集合中是否已经存在这个元素就行了，然后用 toArray 转成数组一切搞定。 
-方法二：最简单的方法就是利用Set集合无序不可重复的特性进行元素过滤。 */
+方法二：最简单的方法就是利用Set集合无序不可重复的特性进行元素过滤。
+*/
 import java.util.HashSet;
 Set<Integer> set = new HashSet();  //实例化一个set集合  
  
 for (int x : arr)
     set.add(arr[i]);  //遍历数组并存入集合,如果元素已存在则不会重复存入 
 return set.toArray();  //返回Set集合的数组形式
-
+set.remove(obj); //删除
 
 //队列queue
 import java.util.Queue;
@@ -188,7 +307,7 @@ Collections.sort(numbers);
 Collections.swap(numbers,0,1);
 Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
 
-//栈
+//栈 Stack
 Stack stack = new Stack(); //初始化
 stack.empty(); //判断是否为空，返回true/false
 stack.peek(); //取栈顶值（不出栈），返回 Object
@@ -197,18 +316,33 @@ stack.pop();//出栈，返回的是 Object 对象，需要类型转换
 
 ```
 
-### 字符串
+### String 字符串
 问：字符串拼接，StringBuffer，StringBuilder，concat 和 + 的区别。
 答：[参考博客](https://www.cnblogs.com/lojun/articles/9664794.html)
 
 ```java
-//查
+/*
+String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它是 java 中唯一不需要 new 就可以产生对象的途径。以String s="abce";形式赋值在 java 中叫直接量,它是在常量池中而不是象 new 一样放在压缩堆中。这种形式的字符串，在JVM内部发生字符串拘留，即当声明这样的一个字符串后，JVM会在常量池中先查找有有没有一个值为"abcd"的对象,如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,如果没有,则在常量池中新创建一个"abcd",下一次如果有String s1 = "abcd";又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
+*/
+
 StringBuilder sb = new StringBuilder();
+
+//增
+sb.append("abcd");//在末尾添加串
+
+//删
+sb.delete(0,1);//删除一个字符，[0,1)，左闭右开，显示 bcd
+
+//改
+sb.reverse(); //倒转字符串，dcba
+sb.insert(0,9); //首位插入 9，9abcd
+sb.replace(0,1,"e");//替换[0,1)，左闭右开
+    
+//查
 char ch = sb.charAt(index); //返回某个位置的字符!!很容易忘
 int length = sb.length();
 String s = sb.substring(beginIndex); //返回此坐标开始后的字符串
 
-//增
 
 
 
@@ -216,13 +350,10 @@ String s = sb.substring(beginIndex); //返回此坐标开始后的字符串
 //字符串，整数，互换
 String preStr = "192.168.1.1"; 
 String[] strs = preStr.split("\\."); //正确写法。对小圆点进行转义
-String ss = String.valueOf(11); //将数字转为字符串
-int a = Integer.valueOf(strs[0]); //将 ip 地址转换为整数
-int b = Integer.parseInt(strs[1]); //将 ip 地址转换为整数
 
 //拼接字符串
 String s = strs[0]+11+"22"; //一开始就可以确定的量，使用 + 更快
-//字符串拼接，循环中切忌使用，StringBuilder 最好。
+//循环中切忌使用+来拼接字符串，StringBuilder 最好。
 String s2 = s2.concat(String.valueOf(i));
 //list 拼接
 List<String> list = new ArrayList<String>();
@@ -291,64 +422,8 @@ sb.toString();
 
 
 
-### 函数
-```java
 
-```
 
-### 常用类
-**Number 和 Math 类**
-装箱与拆箱，Java语言为每一个内置数据类型提供了对应的包装类，所有的包装类（Integer、Long、Byte、Double、Float、Short）都是抽象类 Number 的子类。
-```java
-Math.max(a,b); //选取最大值，参数为 2.
-Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); //利用三目运算符，三数取最大值。
-int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
-```
-
-**Character 类**
-```java
-char ch = 'a';
-Character.isDigit(ch);
-Character.isLetter(ch);
-Character.isUpperCase(ch);
-Character.isLowerCse(ch);
-```
-
-**Random 类**
-```java
-import java.util.Random;//重新创建随机数生成器
-Random rand = new Random(11);//需要种子
-int i = rand.nextInt(100);//产生[0,100) 的随机数
-```
-
-**JAVA 常用包**
-```java
-//java.util 包
-import java.util.Arrays;
-import java.util.ArrayList;//动态数组
-import java.util.List;//接口
-import java.util.LinkedList;//链表
-import java.util.Hashtable;
-import java.util.HashMap;//字典
-import java.util.HashSet;//集合
-import java.util.Collection;//方法调用,容器的工具类
-import java.util.Scanner;//输入
-import java.util.Random;//随机数
-
-//java.lang 包
-import java.lang.Math;
-
-//java.net 网络编程常用包
-import java.net.Socket;
-
-//java.io 包
-import java.io.File // I/O文件对象包
-import java.io.FileInputStream; //输入流
-import java.io.FileOutputStream; //输出流
-import java.io.OutputStream;
-import java.io.DataOutputStream;
-
-```
 
 包括：枚举（Enumeration）、位集合（BitSet）、向量（Vector）、栈（Stack）、字典（Dictionary）、哈希表（Hashtable）、属性（Properties）
 

@@ -5,7 +5,6 @@
 #日期+时间，日期，时间
 now();curdate();curtime();
 
-
 ```
 
 
@@ -24,7 +23,7 @@ create database `school`;
 use `school`;
 
 create table `students`(
-    `id` int not null,
+    `id` int not null auto_increment,
     `name` varchar(20) not null,
     `sex` smallint not null,
     `age` int not null,
@@ -54,7 +53,7 @@ UPDATE students set sex = 0 where id = 1;
 
 ```
 
-### SELECT
+### 基本查询语句考察
 
 * **问：查找年龄最大的学生的所有信息？**
 ```mysql
@@ -68,11 +67,11 @@ SELECT * FROM students WHERE age>=20 and age<=23;
 ```
 
 * **问：统计表中男女学生的人数？**
-* **进阶：统计不同年龄的人生，显示人生大于等 2 的年龄**
+* **进阶：统计不同年龄的人数，人数大于等与 2 **
 ```mysql
 #关键字：count，group by，having
 SELECT sex,count(*) num FROM students GROUP BY sex;
-SELECT age,count(*) as num FROM students GROUP BY age HAVING num>=2;
+SELECT age,count(*) as num FROM students GROUP BY age HAVING num >= 2;
 ```
 
 * **问：将学生按照年龄倒序排，按照 id 升序排？**
@@ -93,13 +92,24 @@ SELECT * FROM students WHERE name REGEXP '^a|^b';
 SELECT DISTINCT age FROM students;
 ```
 
-* **问：查找最晚入职员工的所有信息？**
+**问：一道写 SQL 语句的题，计算学生的平均成绩和总成绩？**
 ```mysql
-
+#关键字：AVG,sum
+select stuNum, avg(score) average from course GROUP BY stuNum;
+select stuNum, sum(score) total from course GROUP BY stuNum ORDER BY total DESC;
 ```
 
+**问：给定一个表，找出每门成绩（grade）都大于等于80分的学生姓名？**
+[参考博客](https://www.cnblogs.com/chenlin/p/7412253.html)
+```mysql
+SELECT * from (select DISTINCT stuNum from course) course1
+where not EXISTS 
+(select * 
+from (select DISTINCT stuNum from course where score < 80)course2 
+WHERE course1.stuNum=course2.stuNum);
+```
 
-* **关键字：limit**
+**关键字：limit**
 查询某些数据，如前三条，后三条，中间某些等等
 ```mysql
 #问：查找年龄第三小的员工所有信息？
@@ -168,7 +178,4 @@ GROUP BY d.dept_no*
 * 4-如果都要，可以这样理解，先用 Group by 进行分组，没有结束前是分组状态，不会只抽取第一条记录，当使用  MAX 函数过滤出每组的最大值后，每个分组只剩一条记录。
 
 
-
-不懂！
-1-对所有员工的当前(to_date='9999-01-01')薪水按照salary进行按照1-N的排名，相同salary并列且按照emp_no升序排列？
 

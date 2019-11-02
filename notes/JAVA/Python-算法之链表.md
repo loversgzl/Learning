@@ -5,15 +5,7 @@
 链表的各种操作：逆序（部分逆序，按某种条件逆序）、判断是否有环、环的入口节点、删除指定节点等。
 
 
-
-
-
-
-
-
-
-
-1. 最大子序列和
+1. 两数相加 - 两个链表的简化操作
 2. 选择类排序：<a href="#简单选择排序">简单选择排序</a>，升级为-<a href="#堆排序">堆排序</a>
 3. 交换类排序：<a href="#冒泡排序">冒泡排序</a>，升级为-<a href="#快速排序">快速排序</a>
 4. <a href="#归并排序">归并排序</a>、<a href="#计数排序">计数排序</a>
@@ -24,26 +16,42 @@
 9. <a href="#距离相等的条形码">距离相等的条形码</a>
 10. <a href="#距离顺序排列矩阵单元格">距离顺序排列矩阵单元格</a>
 
-
-
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
-![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
 
+### 两数相加
+操作两个链表的简化操作
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode root = new ListNode(0);
+        ListNode p1 = l1, p2 = l2, curr = root;
+        int carry = 0, temp = 0;
+        while(p1 != null || p2 != null){
+        	int x = (p1 != null) ? p1.val : 0;
+        	int y = (p2 != null) ? p2.val : 0;
+        	temp = x + y + carry;
+        	carry = temp / 10;
+        	curr.next = new ListNode(temp%10);
+        	curr = curr.next;
+        	if(p1 != null) p1 = p1.next;
+        	if(p2 != null) p2 = p2.next;
+        }
 
-
-```python
-#python函数的使用
-
-#题：有n个正整数，输出连成最大的整数串。
-st = [str(x) for x in nums]
-st.sort(key = cmp_to_key(lambda s1,s2:s1+s2 if s2+s1 < s1+s2 else s2+s1))
-
-#内置的打乱顺序的函数
-import random
-li = [x for x in range(10)]
-random.shuffle(li)
-print(li)
+        if(carry > 0){
+        	curr.next = new ListNode(1);
+        }
+        return root.next;
+    }
+}
 ```
 
 

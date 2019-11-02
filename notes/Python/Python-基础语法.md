@@ -39,6 +39,10 @@ z = x / y
 word = 'hello'
 print('str' + 'ing', 'my'*3)
 
+#数组
+arrOne = [0]*n #一维数组可以用乘法，但是二维数组不可以，会造成引用赋值
+arrTwo = [[0]*n for _ in range(n)] #n*n 的二维数组
+
 #元组，不可修改，可以存放多种类型
 tup = (11, 'hello', 22)
 

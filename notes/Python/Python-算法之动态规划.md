@@ -1,12 +1,14 @@
 
 
-# 排序-经典算法-Python
+# 动态规划-Python
 
-1. 插入类排序：<a href="#简单插入排序">简单插入排序</a>，升级为-<a href="#希尔排序">希尔排序</a>
-2. 选择类排序：<a href="#简单选择排序">简单选择排序</a>，升级为-<a href="#堆排序">堆排序</a>
-3. 交换类排序：<a href="#冒泡排序">冒泡排序</a>，升级为-<a href="#快速排序">快速排序</a>
-4. <a href="#归并排序">归并排序</a>、<a href="#计数排序">计数排序</a>
-5. <a href="#乱数排序">乱数排序</a>
+要解诸如最佳问题，使用动态规划，一般寻找唯一的情况要用到贪心，但是如果发现有规律可寻找，那么就改进为dp。理解动态规划最重要的是找一个实例，自已从头到尾推一下，推完就明白了。
+
+1. <a href="#01背包问题">01、完全、混合背包问题</a>
+2. <a href="#最小花费爬楼梯">最小花费爬楼梯</a>
+3. <a href="#买卖股票的最佳时机1-5">买卖股票的最佳时机1-5</a>
+4. <a href="#打家劫舍">打家劫舍</a>
+5. <a href="#石子游戏">石子游戏</a>
 6. <a href="#三色旗">三色旗</a>
 7. <a href="#摆动排序">摆动排序</a>
 8. <a href="#煎饼排序">煎饼排序</a>
@@ -15,167 +17,191 @@
 
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
-![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
-
-
-
+<a name="01背包问题"></a>
+**01、完全、混合背包问题**
 ```python
-#python函数的使用
+'''背包问题
+1-01背包 
+问题概述：这里注意，物品只能选择0个或1个。
+状态转移方程：需要倒过来range(capacity, weights[i]-1, -1),这样才是01背包
+2-完全背包 
+问题概述：给定物品的种类，每种物品的数量任意，达到最大价值。
+状态转移方程：从range(weights[i], capacity+1)那么数量是不作任何限制的，可用来做完全背包问题。
+3-混合背包 
+问题概述：给定物品的种类，每种物品的数量有限制，达到最大价值。
+可将物品数量变成1，转换为01背包问题。
+number=5是物品的数量，capacity=10是书包能承受的重量
+weights=[2,2,6,5,4]是每个物品的重量，prices=[6,3,5,4,6]是每个物品的价值
+01背包经典应用：
+1-外卖满减
+'''
+def knapsack01(capacity, number, weights, prices):
+    item = [0]*(capacity+1)
+    value = [0]*(capacity+1)#每个重量所能达到的最大价值。
+    for i in range(number):#遍历每一个水果
+    #前面的重量+这个物品的重量=后面的重量，如果价值更高，则替换掉。
+        for x in range(capacity, weights[i]-1, -1):
+            w = x - weights[i]
+            newvalue = value[w] + prices[i]#w重量的价值最优解+当前的价值，是否比x重量的最优解大。
+            if newvalue > value[x]:
+                value[x] = newvalue
+                item[x] = i#记录这个重量的最优解是：前面最优解+这个水果
+        print(i,value)
 
-#题：有n个正整数，输出连成最大的整数串。
-st = [str(x) for x in nums]
-st.sort(key = cmp_to_key(lambda s1,s2:s1+s2 if s2+s1 < s1+s2 else s2+s1))
+    i = capacity
+    while i > 0:
+        print("编号：%d  价格：%d "%(item[i],prices[item[i]]))
+        i = i - weights[item[i]]
 
-#内置的打乱顺序的函数
-import random
-li = [x for x in range(10)]
-random.shuffle(li)
-print(li)
+knapsack01(10, 6, [2,2,3,1,5,2], [2,3,1,5,4,3])
 ```
 
-
-
-**以下先介绍三种简单排序：冒泡排序、选择排序、插入排序。**
-
-<a name="冒泡排序"></a>
-
+<a name="最小花费爬楼梯"></a>
+**最小花费爬楼梯**
 ```python
-'''冒泡排序
-选择理由：稳定，与原位置偏离不远。
-基本思想：正宗的冒泡排序，j 其实从后往前走的，不过我们比较喜欢，从下标0开始嘛，效果一样，但是要知道。默认有增加一个状态判断，如果某趟没有进行过交换，则直接结束。
-时间复杂度：最好O(n)，最差O(n2), 平均O(n2)
-空间复杂度：O(1)
+'''最小花费爬楼梯
+问题描述：i代表楼梯，数值代表消耗的体力，一次可以跨一级或者两级台阶，求消耗最少的体力到达终点。
+cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
 '''
-def BobleSort(li):
-    n = len(li)
-    for i in range(n-1):#定义几趟排序n-1，最后一趟不比较
-        state = False
-        for j in range(n-1-i):#每趟排序的比较次数
-            if li[j] > li[j+1]:
-                li[j],li[j+1] = li[j+1],li[j]
-            state = True
-        if  not state:
-            return li
-    return li
+def minCostClimbingStairs(cost):
+    prv1, prv2 = 0, 0
+    for i in range(2,len(cost) + 1):
+        #从2开始，比较前两级台阶。暂时并没有考虑后面的台阶。
+        #从整体考虑：prv2是目前最优解+刚刚才移动的一个位置
+        #和上次最优解prv1+跳到中间节点（移动一个位置后面的一个值）
+        #不要问为什么prv1跳前面的点，prv2跳后面的点，其实这个是一个值，与后面的每两个点都要相加，然后比较。
+        prv1,prv2 = prv2,min(prv1 + cost[i-2],prv2 + cost[i-1])
+    return prv2
 ```
 
-<a name="简单插入排序"></a>
-
+<a name="买卖股票的最佳时机1-5"></a>
+**买卖股票的最佳时机1-5**
 ```python
-'''简单插入排序
-选择理由：稳定，基本有序。
-基本思想:从第一个元素开始，不断整理顺序。
-时间复杂度：最好O(n)，最差O(n2),平均O(n2)
-空间复杂度：O(1)
+'''买卖股票的最佳时机1-5
+参数：股票价格：[7,1,5,3,6,4]
+I:如果你最多只允许完成一笔交易，即买一次股票，卖一次股票。
+II：你可以尽可能地完成更多的交易，买之前需卖出之前购买的股票。
+III:你最多可以完成两笔交易
+IV：你最多可以完成 k 笔交易。三维dp
+V：你可以尽可能地完成更多的交易，卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。二维dp
 '''
-def InsertSort(li):
-    for i in range(1, len(li)):#定义趟数n-1
-        tempi = li[i]; j = i
-        while j > 0 and tempi < li[j-1]:#for就显示不出来优势了
-            li[j] = li[j-1]#后面的值上移
-            j -= 1
-        li[j] = tempi
+def One(prices):
+    if len(prices) < 2:
+        return 0
+    minimum,profit= prices[0],0
+    for x in prices:
+        minimum = min(x, minimum)
+        profit = max(x - minimum, profit)
+    print(profit)
+
+def Two(prices):
+    if len(prices) < 2:
+        return 0
+    profit = 0
+    for i in range(1, len(prices)):
+        p = prices[i] - prices[i-1]
+        if p > 0:
+            profit += p
+    print(profit)
+
+def Three(prices):
+    buy1 = buy2 = -10**10
+    profit1 = profit2 = 0
+    #其实就是将第一笔的利益，传递到第二笔利益的变量上，第二笔变量则时刻记录前两笔价值最高的利益。
+    for price in prices:
+        buy1 = max(buy1, -price)#每次比较买入的价格，记录最低的那个
+        profit1 = max(profit1, buy1+price)#以最低价格买入的股票，和每个价格卖出时的差值，记录最大那个
+        buy2 = max(buy2, profit1-price)#拿第一笔赚来的钱减去第二笔的购买资金，找到剩余最多的那笔
+        profit2 = max(profit2, buy2+price)#由于上面剩余最多，那么和后面所有价格之和最大的那个就是两笔资金的最大值
+    return profit2
 ```
 
-<a name="简单选择排序"></a>
-
+<a name="打家劫舍"></a>
+**打家劫舍**
 ```python
-'''简单选择排序
-选择理由：不稳定，很无序，与原位置偏离较远。
-基本思想:后面找到最小的值后再来交换，比冒泡排序的优点是不用交换那么多次[可能也是唯一的优点吧]。
-时间复杂度：无论好差平均都是O(n2)
-空间复杂度：O(1)
+'''打家劫舍
+财富数量：[1,2,3,1]，求能获取的最大财富值。
+测试用例：注意，空，一个值，两个值，等情况。
+
+I:如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+II：房屋都围成一圈，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+III:房屋连成一颗二叉树，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
 '''
-def SelectSort(li):
-    for i in range(len(li)-1):#定义趟数n-1
-        minIndex = i
-        for j in range(i+1,len(li)):#定义每趟排序的比较次数
-            if li[minindex] > li[j]:
-                minindex = j
-        if minindex != i:
-            li[i],li[minindex] = li[minindex],li[i]
+def robOne():
+    if not nums:
+        return 0
+    elif len(nums) <= 2:
+        return max(nums)
+    #[0,0]其实是两条偷窃路线
+    l = [[0,0] for _ in range(len(nums))]
+    for i,n in enumerate(nums):
+        #i-1是-1，列表里也是可以的。
+        l[i][0] = l[i-1][1] + n #（上上一家保存下来的最大值，这里是两个上 + 自己价值的值）
+        l[i][1] = max(l[i-1][1],l[i-1][0])#我这家不能偷，之前偷窃的最大值保存进来。
+    return max(l[-1][0],l[-1][1])
+
+def robTwo(nums):
+    n = len(nums)
+    if n == 0:
+        return 0
+    if n == 1:
+        return nums[0]
+    
+# nums[0] was robbered，经过统计，fst1是不加最后一个值时最大财富，sed1是加了最后一个值的财富
+    fst1, sed1 = nums[0], nums[0]
+# nums[0] was not robbered，类似上，
+    fst2, sed2 = 0, nums[1]
+    
+    #分两种情况分别统计最大的值
+    for i in range(2, n):
+        nxt1 = max(fst1 + nums[i], sed1)#统计最大值
+        fst1 = sed1#通过一个中间值sed1，延缓一个记录
+        sed1 = nxt1
+        
+        nxt2 = max(fst2 + nums[i], sed2)
+        fst2 = sed2
+        sed2 = nxt2
+        
+    return max(fst1, sed2)
+
+def robThree(nums):
+    if root==None:
+        return 0
+    def helper(root):
+        if root==None:
+            return [0,0]
+#第一个值为 上上次偷窃的最大值+这家偷窃的值，第二个值为到上次为止，偷窃的最大值。
+        left = helper(root.left)
+        right = helper(root.right)
+        rob = root.val + left[1] + right[1]
+        skip = max(left) + max(right)
+        return [rob, skip]
+    res = helper(root)
+    return max(res)
 ```
 
-**前面三种最差都是O(n2)，经过后人的不断努力，研究，速度才得以提升。排序要加快的基本原则之一，是让后一次的排序进行时，尽量利用前一次排序后的结果，以加快排序的速度。以下介绍几种进阶排序：希尔排序、堆排序、归并排序、快速排序、计数排序**
-
-<a name="希尔排序"></a>
-
+石子游戏<a name="石子游戏"></a>
 ```python
-'''希尔排序-缩小增量排序
-选择理由：不稳定，适合基本无序的序列，内部使用了简单插入排序。
-基本思想:我们比较的元素可以再远一点，即所谓的增量，等距的一些元素先排序，再逐渐过渡到整个数组，最后的增量肯定是 1，检查还有哪些没有排好序。
-时间复杂度：最差O(n2)，最好平均不确定(增量的选择很关键，有很多研究)
-空间复杂度：O(1)
+'''石子游戏
+题目简介：有一堆石子排成一行，piles[i] 都是正整数，两人轮流从两端拿，问最终先手比后手会多多少颗石子。
+解题详解：dp其实就是存储了递归过程中的数值，dp[i][j]代表从i到j所能获得的最大的绝对分数，（比如为1就说明先手从 i 到 j 可以赢后手1分），如何计算dps[i][j]呢:max(piles[i]-dp[i+1][j],piles[j]-dp[i][j-1]);
+这里减去dp数组是因为后手也要找到最大的
+最后dp = [5 2 4 1]
+        [0 3 1 4]
+        [0 0 4 1]
+        [0 0 0 5]
 '''
-import random
-def ShellSort(li):
-    def shellInsert(li, d):#使用的是直接插入排序
-        n = len(li)
-        for front in range(d, n):
-            rear = front - d
-            temp = li[front]
-            while rear >= 0 and li[rear] > temp:
-                li[rear+d] = li[rear]
-                rear -= d
-            if li[front] != temp:
-                li[rear+d] = temp
-    n = len(li)
-    if n <= 1:
-        return li
-    d = n // 2
-    while d >= 1:
-        shellInsert(li, d)
-        d //= 2
-    return li
-#测试
-li = [x for x in range(10)]
-random.shuffle(li)
-print(li)
-print(ShellSort(li))
-```
-
-<a name="堆排序"></a>
-
-```python
-'''堆排序
-选择理由：简单选择排序没有很好利用第一次比较的结果，因此改进为堆排序,不稳定。
-基本思想:建堆：从最后一个非叶子节点开始调整到根节点；
-大顶堆：将最大值移动到根节点，父节点：一定比所有的子节点都大
-小顶堆：将最小值移动到根节点，父节点：一定比所有的子节点都小
-排序：从根节点取出数放在最后面n-1次。这里并不直接使用数，而是用数组模拟树结构，数组到树的转换，下标从 0 开始，节点若存在父节点则下标为 n//2，若有子节点则左子节点下标为 2*n+1，右子节点下标为 2*n+2.
-
-时间复杂度：最好-最差-平均都是：O(nlogn)这就很厉害了！
-空间复杂度：O(1)
-
-堆排序经典应用：
-1. 三角形的最大周长：给定一个长度数组，返回三条构成三角形的最大周长。
-解题思路：不一定要将数组全部排序，构造大顶堆，边排序边判断两边之和大于第三边即可。
-'''
-def heapadjust(li, root, end):
-    leaf = root*2+1
-    tmp = li[root]
-    while leaf <= end:
-        if leaf < end and li[leaf+1] > li[leaf]:#比较两个子节点
-            leaf += 1
-        #迭代后不是和父节点比较，因为我没有交换，和保存父节点值的tmp比较
-        if li[leaf] > tmp:
-            li[root] = li[leaf]# 将父节点替换成新的子节点的值，这里就完成了转换。
-            root = leaf# 赋坐标，为下一步迭代做好准备，子节点变成父节点
-            leaf = root*2+1#寻找子节点的子节点
-        else:
-            break
-    li[root] = tmp# 将转换的值赋给最终移动到的地方。
-
-def heapsort(li):
-    n = len(li)
-    # 创建堆，和下面排序不同的是，我们转换的范围永远是整个数组n-1
-    for not_leaf in range(n//2-1, -1, -1):#下标从零开始。
-        heapadjust(li, not_leaf, n-1)
-
-     # 挨个出数，创建堆已经完成了第一次排序
-    for end in range(n-1, -1, -1):
-        li[end],li[0] = li[0],li[end] # 将最后一个值与父节点交互位置
-        heapadjust(li, 0, end-1)
+def stoneGame():
+    n = int(input())#n个石子
+    piles = [int(x) for x in input().split()]#输入n个石子
+    dp = [[0]*n for _ in range(n)]
+    for i in range(n):#dp[i][i]存储当前i的石子数
+        dp[i][i] = piles[i]
+    for d in range(1,n):#d=1,其实代表，先算两个子的时候
+        for j in range(n-d):#有多少组要比较，
+        	#比较 j 到 d+j
+            dp[j][j+d] = max(piles[j]-dp[j+1][j+d], piles[j+d]-dp[j][j+d-1])
+    print(dp[0][-1])
 ```
 
 <a name="归并排序"></a>

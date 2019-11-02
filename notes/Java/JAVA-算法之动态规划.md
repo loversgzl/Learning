@@ -1,92 +1,37 @@
 
 
-# 查找-经典算法-Python
+# 动态规划经典算法-Java
 
-1. <a href="#二分查找">二分查找</a>
-2. <a href="#快慢指针">快慢指针</a>
+1. 插入类排序：<a href="#简单插入排序">简单插入排序</a>，升级为-<a href="#希尔排序">希尔排序</a>
+2. 选择类排序：<a href="#简单选择排序">简单选择排序</a>，升级为-<a href="#堆排序">堆排序</a>
+3. 交换类排序：<a href="#冒泡排序">冒泡排序</a>，升级为-<a href="#快速排序">快速排序</a>
+4. <a href="#归并排序">归并排序</a>、<a href="#计数排序">计数排序</a>
+5. <a href="#乱数排序">乱数排序</a>
+6. <a href="#三色旗">三色旗</a>
+7. <a href="#摆动排序">摆动排序</a>
+8. <a href="#煎饼排序">煎饼排序</a>
+9. <a href="#距离相等的条形码">距离相等的条形码</a>
+10. <a href="#距离顺序排列矩阵单元格">距离顺序排列矩阵单元格</a>
 
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
-### 其他经典搜索方法
-二叉搜索树：左边的值小于根节点，右边的值大于根节点。
-平衡二叉树：根节点左右两边深度差不超过1
-定义：AVL、B、红黑树。参考：https://blog.csdn.net/wanderlustLee/article/details/81297253
-1-二叉搜索树缺点：会出现全部节点在一端的情况，升级为AVL。
-2-AVL缺点：每个节点只存放一个元素，最多只有两个子节点，查找需要多次磁盘IO（不同层数据存放在不同页）,升级为B树。
-3-B树也叫B-树，一种多路平衡树。相对减少了磁盘IO操作，但是查找不稳定，遍历比较麻烦--应用：一般用于数据库中做索引，分支多层数少。
-B树参考：https://www.cnblogs.com/nullzx/p/8729425.html
-4-B+树：每个非叶子结点存放的元素只用于索引作用，所有数据保存在叶子结点。一般来说都会进行一个优化，就是将所有的叶子节点用指针串联起来，遍历叶子节  点就能获取全部数据，这样就能进行区间访问了
+![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
 
-#红黑树：参考：https://blog.csdn.net/net_wolf_007/article/details/79706498
-由来：对平衡二叉树的限制条件，通过对任何一条从根到叶子的简单路径上各个节点的颜色进行约束，确保没有一条路径
-会比其他路径长2倍，因而是近似平衡的。所以相对于严格要求平衡的AVL树来说，它的旋转保持平衡次数较少。
-用于搜索时，插入删除次数多的情况下我们就用红黑树来取代AVL。插入，删除操作。
-规则：
-特征一：节点要么是红色，要么是黑色（红黑树名字由来）。
-特征二：根节点是黑色的
-特征三：每个叶节点(nil或空节点)是黑色的。
-特征四：每个红色节点的两个子节点都是黑色的（相连的两个节点不能都是红色的）。
-特征五：从任一个节点到其每个叶子节点的所有路径都是包含相同数量的黑色节点。
-'''
 
-* **二分查找**<a name="二分查找"></a>
-条件：只能对已经排序好的列表进行查找
-需求：对搜索时间要求为O(logn)一般都是二分查找。
-模板一：用于查找数组中的某个确定值，经典用法，考察一般。
-模板二：有条件查找，如寻找第一个比5大的值，考察较多。
-模板三：有双重条件的查找。
 
 ```python
-#模板一:经典算法
-def binarySearchOne(li, target):
-    left, right = 0,len(li)-1
-    while left <= right:
-        mid = (left+right)//2
-        if li[mid] == target:
-            return mid
-        #注意这里左右指针的赋值
-        if li[mid] > target:
-            right = mid - 1
-        else:
-            left = mid + 1
-    #End Condition: left > right
-    return -1
-    
-#模板一：搜索旋转数组
-#排序好的数组某一部分旋转了，查找某个数。
-def search(nums, target):
-    start,end = 0,len(nums) - 1
-    while start <= end:
-        mid = (start + end) // 2
-        if nums[mid] == target:
-            return mid
-        if nums[mid] < nums[start]: # case [7 8 0 {1} 2 3 4 5]
-            if nums[mid] <= target <= nums[end] :
-                start = mid + 1
-            else:
-                end = mid - 1
-        else:# nums[mid] > nums[start] case [4 5 6 {7} 0 1 2]
-            if nums[start] <= target <= nums[mid]:
-                end = mid - 1
-            else:
-                start = mid + 1
-    return -1    
-    
-#模板二：第一个错误的版本，某个版本出错了，之后的版本肯定也都是错的。
-#思路：我们以错误的版本为目标，这样在最后判断left<right时，若left==right，则返回的值，一定是正确答案，不需要其他的判断。并且一定要计算到left==right，才可以结束。
-def firstBadVersion(n):
-    left,right = 1,n
-    while left < right:
-        mid = (left+right)//2
-        if isBadVersion(mid):#返回True表示是错误的版本，False才是正确的版本
-        #没用 mid - 1，是因为 mid - 1 可能不是 BadVersion，因此需要保留 mid   
-            right = mid
-        else:
-            left = mid + 1
-    #End Condition: left == right
-    return right
-```
+#python函数的使用
 
+#题：有n个正整数，输出连成最大的整数串。
+st = [str(x) for x in nums]
+st.sort(key = cmp_to_key(lambda s1,s2:s1+s2 if s2+s1 < s1+s2 else s2+s1))
+
+#内置的打乱顺序的函数
+import random
+li = [x for x in range(10)]
+random.shuffle(li)
+print(li)
+```
 
 
 

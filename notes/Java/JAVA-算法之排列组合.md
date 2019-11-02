@@ -1,6 +1,6 @@
 
 
-# 排序-经典算法-Python
+# 排列组合-Python
 
 1. 插入类排序：<a href="#简单插入排序">简单插入排序</a>，升级为-<a href="#希尔排序">希尔排序</a>
 2. 选择类排序：<a href="#简单选择排序">简单选择排序</a>，升级为-<a href="#堆排序">堆排序</a>
@@ -15,22 +15,22 @@
 
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
-![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
+```java
+//java排列组合基本语法
+//阶乘的实现
+private static long factorial(int n){
+	long num = 1;
+	while(n > 0)
+		sum *= n--;
+	return sum;
+}
+//排列的实现
+public static long arrangement(int m, int n)
+	return m <= n ? factorial(n) / factorial(n - m) : 0;
+//组合实现
+public static long combination(int m, int n)
+	return m <= n ? factorial(n) / (factorial(m)*factorial((n-m))) : 0;
 
-
-
-```python
-#python函数的使用
-
-#题：有n个正整数，输出连成最大的整数串。
-st = [str(x) for x in nums]
-st.sort(key = cmp_to_key(lambda s1,s2:s1+s2 if s2+s1 < s1+s2 else s2+s1))
-
-#内置的打乱顺序的函数
-import random
-li = [x for x in range(10)]
-random.shuffle(li)
-print(li)
 ```
 
 
