@@ -327,6 +327,10 @@ JSP 相当于在 HTML 里面写代码，用两个%括起来，所有的变量也
 所以单独用一个做很繁琐，就将两个的优势结合，就是MVC的思想。
 Modle 模型-数据，View 视图-网页JSP，Controller 控制器-Servlet。
 
+### Filter
+
+
+
 
 ### GUI
 **Swing**
@@ -335,19 +339,82 @@ Modle 模型-数据，View 视图-网页JSP，Controller 控制器-Servlet。
 
 
 ### 框架
-**组合框架**
 **SSH**：Structs + Spring + Hibernate
 **SSM**：Spring + SpringMVC + MyBatis（先学习这种）
 
-**Spring**
+
+### Spring
+
+ ** IOC 是反转控制 (Inversion Of Control) **
 Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
+传统的方式：通过 new  关键字主动创建一个对象
+IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象。 IOC 是反转控制 (Inversion Of Control) 的缩写，就像控制权从本来在自己手里，交给了 Spring。
+
+**Spring 注解方式**
+a.	@Autowired：默认按类型装配
+b.	@Resource：默认先按名称，找不到按类型
+若要按指定名称：@Resource(“service”)
+@Resource注解属性名表示按照属性名来查找类，找到匹配的类后，自动创建一个bean来存放对象，并注入属性。
+@Autowired时先按照出行的类型进行查找类，如果有多个再找属性名，属性名还是有多个就报错
+
+**AOP 即 Aspect Oriented Program 面向切面编程**
+首先，在面向切面编程的思想里面，把功能分为核心业务功能，和周边功能。
+所谓的核心业务，比如登陆，增加数据，删除数据都叫核心业务
+所谓的周边功能，比如性能统计，日志，事务管理等等
+
+
 **SpringMVC**
-**MyBatis**
-
-**Spring Security**
-**Spring Boot**
 
 
+
+
+
+### MyBatis
+**基础**
+
+**动态 SQL **
+if 标签，可以对 SQL 语句进行控制。
+where 标签，可以自动删除多余的 and 和 or。
+
+```xml
+<mapper namespace="mybatis">
+    <select id="One" resultType="Product">
+    select * from product
+    <if test="name != null">
+    where name like concat('%',#{name},'%')
+    </if>        
+    </select>
+
+    <select id="Two" resultType="Product">
+    select * from product
+    <where>
+    <if test="name!=null">
+    and name like concat('%',#{name},'%')
+    </if>        
+    <if test="price!=null and price!=0">
+    and price > #{price}
+    </if>
+    </where>     
+    </select>
+    
+    <update id="updateProduct" parameterType="Product" >
+        update product
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="price != null">price=#{price}</if>
+        </set>
+         where id=#{id}   
+    </update>
+</mapper>
+```
+
+**注解 **
+将原来配置在 XML 中的数据库命令，转移到新建的接口类文件中，并以装饰器的方式，插入 sql 语句，方法名就是原来 xml 指令的 id，参数就是原来的参数。
+
+
+### 错误集锦
+**错误提示：java.lang.NoClassDefFoundError？**
+解决：搜索了一下，意思是某个类明明有，但是运行的时候找不到了，即这个类不在 classpath 中，一直不知道这个 classpath 在哪里，真是眼瞎，在导入外部包的时候啊！！有两个选项，Moudlepath、Classpath，我以为都一样，随便点了第一个！，不要这么随意好么？？
 
 
 

@@ -66,23 +66,30 @@ import java.util.Scanner;//输入
 import java.util.Random;//随机数
 
 /*
-java.lang 包
+java.io 包
 */
-import java.lang.Math;
+import java.io.File // I/O文件对象接口
+import java.io.FileInputStream; //输入流
+import java.io.FileOutputStream; //输出流
+import java.io.ObjectOutputStream;
+import java.io.DataOutputStream;
+import java.io.Serializable; //序列化接口
+
+/*
+java.net 多线程编程
+*/
+
 
 /*
 java.net 网络编程常用包
 */
 import java.net.Socket;
 
+
 /*
-java.io 包
+java.lang 包
 */
-import java.io.File // I/O文件对象包
-import java.io.FileInputStream; //输入流
-import java.io.FileOutputStream; //输出流
-import java.io.OutputStream;
-import java.io.DataOutputStream;
+import java.lang.Math;
 ```
 
 ### 常用类
@@ -123,21 +130,18 @@ int b = (int)a;
 String st = Integer.toString(b); //将整数转为字符串
 int n = Integer.parseInt(st); //字符串转整数，后面可带进制
 
-
-
 //增强型 for 循环
 for(String str :strs)
     System.out.println(str);
+
 //List 使用迭代器
 ArrayList list = new ArrayList();//省略赋值过程
 Iterator iterator = list.iterator();
 while(iterator.hasNext())
 	System.out.println(iterator.next());
 
-
 //返回系统时间
 long start = System.currentTimeMillis();
-
 
 //Math
 Math.max(a,b); //选取最大值，参数为 2.
@@ -193,26 +197,34 @@ System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进
 System.out.printf(); //C 格式输出
 ```
 
-### 集合框架与数组
+### 集合框架
+![集合框架](../../pics/集合框架.jpg)
+
+由图可见，集合框架主要包括两种类型的容器，集合（Collection）、图（Map），前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue，具体实现类有ArrayList、LinkedList、HashSet、LinkedHashSet，图的具体实现类有：HashMap、HashTable、LinkedHashMap、HashTree。
+接口：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象。
+
 数组缺点：固定长度，数据多了不够，少了浪费空间。
 容器类：为了解决数组的缺点，如  ArrayList、LinkedList、
 
 ```java
 /*
 易混淆点
-数组的长度：.lenght; List的长度：.size(); 字符串的长度：length();
+数组的长度：.lenght; List的长度：.size(); 字符串的长度：.length();
 List添加元素：add(x); 字符串添加元素：append(x);
 List 的获取用 get！不要总是用 [] 数组的东西。
 StringBuilder 用charAt,
-数组-常规数组
 */
 
+/*
+普通数组
+*/
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 int[] numbers = new int[10]; //默认值为 0
 for(int i=0; i<names.length; i++)//长度为 length，注意和动态 size 的区分。
     System.out.println(names[i]);
 for(String name : names) //迭代
     System.out.println(name);
+
 //容器的工具类
 import java.util.Collections;
 Collections.sort(arr);//正序排序
@@ -224,21 +236,38 @@ import java.util.ArrayList;
 import java.util.List;
 /* 
 List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
-方法：
-增：add、addAll、
-	add(object);末尾添加 add(index,object);指定位置添加
-删：remove、clear、
-	remove();可以是下标也可以是对象。
-改：set、toArray、
-	set(index,obj);修改某个位置的值 toArray();转换为数组
-查：contains、get、indexOf、size、
-	get(index); 获取某个位置的对象 indexOf(obj);某个对象的位置 size()集合大小
-	contains(x); 返回true/false
-输出：toString(),以字符串逗号隔开的形式输出。
+*/
+List<String> list = new ArrayList<>();
+list.add("hello");list.add("java");
+
+
+//增：末尾添加、指定位置添加、添加另一个列表、
+	add(object);  add(index,object);  addAll(list);
+//删：下标或对象、清空、
+	remove();  clear();
+//改：修改某个位置的值、转换为数组、
+	set(index,obj); toArray();
+//查：获取某个位置的对象、某个对象的位置、返回元素个数、返回是否包含元素x、
+	get(index);  indexOf(obj);  size();  contains(x); 
+//输出：以字符串逗号隔开的形式输出。
+	toString();
+//三种遍历方式
+for(String str : list)
+    System.out.println(str);
+
+list.toArray(strArray); //一个字符串数组
+for(int i=0; i<strArray.length; i++)
+    System.out.println(strArray[i]);
+
+Iterator<String> it = list.iterator();
+while(it.hasNext())
+    System.out.println(it.next());
+
 
 二维数组
-//增
+
 List<List<Integer>> triangle = new ArrayList<List<Integer>>(); //构造二维数组，长度不固定
+//增
 triangle.add(new ArrayList<>()); //添加一个数组元素
 triangle.get(0).add(1); //给第一个数组添加一个元素
 //改
@@ -246,7 +275,7 @@ triangle.get(0).set(0,99); //修改第一个数组的第一个值为 99
 //查
 triangle.get(0).get(0); //获取第一个数组的第一个值
 triangle.size(); //动态数组的大小，注意和静态数组长度的区分
-*/
+
 
 /*
 链表结构，拥有和 ArrayList 一样的方法再加上下面这些
@@ -262,21 +291,6 @@ sts.removeLast();sts.removeFirst();
 //查
 sts.getLast(); sts.getFirst();
 
-/*
-字典接口 import java.util.MAP;
-四个实现类 import java.util.HashMap、LinkedHashMap、HashTable、TreeMap
-*/
-import java.util.HashMap;
-Map<String,Integer> dic = new HashMap<>();
-//增，改
-dic.put("Tom",12); //如果已经存在，则覆盖
-//删
-dic.clear();
-//查
-dic.containsKey(); //返回Boolean
-dic.get("Tom");
-
-
 /* 集合 Set
 问：如何去除数组中重复的元素？
 方法一：只需要创建一个集合，然后遍历数组逐一放入集合，只要在放入之前用 contains()方法判断一下集合中是否已经存在这个元素就行了，然后用 toArray 转成数组一切搞定。 
@@ -284,13 +298,19 @@ dic.get("Tom");
 */
 import java.util.HashSet;
 Set<Integer> set = new HashSet();  //实例化一个set集合  
- 
+
+//增
 for (int x : arr)
     set.add(arr[i]);  //遍历数组并存入集合,如果元素已存在则不会重复存入 
 return set.toArray();  //返回Set集合的数组形式
-set.remove(obj); //删除
+//删除
+remove(x); 
+//查：返回是否包含x、
+contains(x);
 
-//队列queue
+/*
+队列queue
+*/
 import java.util.Queue;
 Queue<String> q = new LinkedList<>();//也实现了队列的接口
 q.offer("inQueue");//入队列
@@ -314,6 +334,37 @@ stack.peek(); //取栈顶值（不出栈），返回 Object
 stack.push(Object);//进栈，返回 Object
 stack.pop();//出栈，返回的是 Object 对象，需要类型转换
 
+
+
+/*
+字典接口 import java.util.MAP;
+四个实现类 import java.util.HashMap、LinkedHashMap、HashTable、TreeMap
+*/
+import java.util.HashMap;
+Map<String,Integer> map = new HashMap<>();
+//增，改,如果已经存在，则覆盖
+put("Tom",12); 
+//清空、删除某个键、
+clear();remove(x);
+//查
+containsKey("Tom"); //返回Boolean
+get("Tom");
+
+//四种遍历方式
+for(String key : map.keySet())
+    System.out.println(key+map.get(key));
+
+Iterator<Map.Entry<String, Integer>> it = map.entrySet().iterator();
+while(it.hasNext){
+    Map.Entry<String, Integer> entry = it.next();
+    System.out.println(entry.getKey()+entry.getValue());
+}
+
+for(Map.Entry<String, Integer> entry : map.entrySet())
+    System.out.println(entry.getKey()+entry.getValue());
+
+for(String v : map.values())
+    System.out.println(v);
 ```
 
 ### String 字符串
@@ -455,6 +506,11 @@ public class test{
 
 
 ### 异常
-异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem: 
+大致分为三类：检查性异常、运行时异常、错误。
+try、catch、finally：无论是否发生异常，最后这个都会被执行。
+**异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem？**
 解决：反复看都没有找到错误，是因为缺少了包名，package test; 这个一定要放在第一句的！
 
+**异常：如果是语法错误，如少了一个分号，则会出现：java.lang.Error**
+
+**异常：java.lang.ArithmeticException，除零异常等**
