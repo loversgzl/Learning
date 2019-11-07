@@ -404,7 +404,23 @@ expression = "execution(* spring.ProductService.*(..)) "/>
 ```
 
 ### SpringMVC
-
+通过 Bean 的映射，将指定路径映射到指定的类实例中。通过 Controller 将模型与视图整合起来。
+同样可以使用注解的方式，删除 Bean，在类上添加 @Controller @RequestMapping("/index")
+```java
+package springmvc;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+//将模型与视图整合
+public class IndexController implements Controller {
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ModelAndView mav = new ModelAndView("index.jsp");
+        mav.addObject("message", "Hello Spring MVC");
+        return mav;
+    }
+}
+```
 
 
 
