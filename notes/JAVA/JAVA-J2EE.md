@@ -126,6 +126,7 @@ ORM=Object Relationship Database Mapping
 [ 参考博客](https://learner.blog.csdn.net/article/details/81091580)
 
 **问：Java Servlet 与使用 CGI（Common Gateway Interface，公共网关接口）有什么优势**：
+
 1. 性能明显更好。
 2. Servlet 在 Web 服务器的地址空间内执行。这样它就没有必要再创建一个单独的进程来处理每个客户端请求。
 3. Servlet 是独立于平台的，因为它们是用 Java 编写的。
@@ -334,7 +335,7 @@ Modle 模型-数据，View 视图-网页JSP，Controller 控制器-Servlet。
 
 ### GUI
 **Swing**
-* Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI）器件如：文本框，按钮，分隔窗格和表。
+Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI）器件如：文本框，按钮，分隔窗格和表。
 **五子棋**：1.掌握 JavaGUI 界面设计、2.掌握鼠标事件的监听（MouseListener，MouseMotionListener）
 
 
@@ -344,26 +345,65 @@ Modle 模型-数据，View 视图-网页JSP，Controller 控制器-Servlet。
 
 
 ### Spring
+Spring是一个基于 IOC 和 AOP 的结构 J2EE 系统的框架。
 
  ** IOC 是反转控制 (Inversion Of Control) **
 Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
 传统的方式：通过 new  关键字主动创建一个对象
-IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象。 IOC 是反转控制 (Inversion Of Control) 的缩写，就像控制权从本来在自己手里，交给了 Spring。
+IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象，就像控制权从本来在自己手里，交给了 Spring。
 
 **Spring 注解方式**
-a.	@Autowired：默认按类型装配
-b.	@Resource：默认先按名称，找不到按类型
-若要按指定名称：@Resource(“service”)
-@Resource注解属性名表示按照属性名来查找类，找到匹配的类后，自动创建一个bean来存放对象，并注入属性。
-@Autowired时先按照出行的类型进行查找类，如果有多个再找属性名，属性名还是有多个就报错
+@Autowired：默认按类型装配
+@Resource：默认先按名称，找不到按类型
+若要按指定名称：@Resource(name="one")
+@Resource注解属性名表示按照属性名来查找类，找到匹配的类后，自动创建一个bean来存放对象，并注入属性，找不到或者找到多个，都会抛出异常。
+@Autowired时先按照出行的类型进行查找类，如果有多个再找属性名，属性名还是有多个就报错。
+@Component：对整个 Bean 进行注解。
 
 **AOP 即 Aspect Oriented Program 面向切面编程**
 首先，在面向切面编程的思想里面，把功能分为核心业务功能，和周边功能。
-所谓的核心业务，比如登陆，增加数据，删除数据都叫核心业务
-所谓的周边功能，比如性能统计，日志，事务管理等等
+所谓的核心业务：比如登陆，增加数据，删除数据都叫核心业务
+所谓的周边功能（切面）：比如性能统计，日志，事务管理等等
+在面向切面编程 AOP 的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 "编织" 在一起，这就叫 AOP。
 
 
-**SpringMVC**
+```xml
+<!-- spring反转控制，在xml中产生实例，在主函数中通过 getBean("c") 获取这个实例。 -->
+<bean name="c" class="spring.Category">
+	<property name="name" value="CategoryOne" />
+</bean>
+
+<!-- spring 注入对象,将上一个实例注入到另一个实例中 -->
+<bean name="p" class="spring.Product">
+	<property name="name" value="ProductOne" />
+	<property name="category" ref="c" />
+</bean>
+
+<!-- spring 使用注解的方式注入对象 -->
+<!-- 在主配置文件 .xml 中 bean 的前面添加 <content:annotation-config/>  -->
+<!-- 在 product 类中的 Category 属性上面添加 @AutoWired，或者 set 方法上面-->
+<!-- 或者添加 @Resource(name="c") -->
+
+<!-- 更进一步，将 bean 对象本身也通过注解 -->
+<!-- 在主配置文件 .xml 中删除所有的 bean，添加 <content:component-scan base-package="spring"/>  -->
+<!-- 在Product类上添加 @Component("p"),需要注入对象的属性上面添加@AutoWired-->
+<!-- 同时属性要在类中初始化了 -->
+
+<!-- 将核心业务功能与切面功能整合 -->
+<bean name="s" class="spring.ProductService"></bean>   
+<bean id="loggerAspect" class="spring.LoggerAspect"/>
+
+<aop:config>
+<aop:pointcut id="loggerCutpoint" 
+expression = "execution(* spring.ProductService.*(..)) "/>
+
+<aop:aspect id="logAspect" ref="loggerAspect">
+<aop:around pointcut-ref="loggerCutpoint" method="log"/>
+</aop:aspect>
+</aop:config>   
+```
+
+### SpringMVC
 
 
 
