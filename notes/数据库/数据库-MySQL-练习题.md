@@ -1,12 +1,17 @@
 # 数据库-MySQL-编程基本概念
 
+基本命令
+```mysql
+#查看数据库引擎
+show engines;
+
+```
+
 基本函数
 ```mysql
 #日期+时间，日期，时间
 now();curdate();curtime();
-
 ```
-
 
 注释，增、删、改表和创建数据库
 ```mysql
@@ -36,8 +41,8 @@ drop table `students`;
 drop database `school`;
 ALTER TABLE students DROP column nickname;
 
-#修改表名，数据库名好像不好修改，重建吧
-#为已有表格增加一列
+#数据库名好像不好修改，重建吧
+#修改表名，为已有表格增加一列
 ALTER TABLE `student` RENAME TO `students`; 
 ALTER TABLE `students` add column `age` int not null after `sex`;
 
@@ -46,14 +51,20 @@ ALTER TABLE `students` add column `age` int not null after `sex`;
 ### 在一个表中查询
 四种基本操作：INSERT、DELETE、UPDATE、SELECT（主要考察 select，所有后面着重介绍）
 ```mysql
-###INSERT
 INSERT INTO students(name,sex,age,in_time) VALUE ('张四',1,25,crudate());
 DELETE FROM students where age = 20;
 UPDATE students set sex = 0 where id = 1;
 
 ```
 
-### 基本查询语句考察
+### 基本查询语句
+```mysql
+#基本关键字和函数包括
+函数：max、min、sum、avg、count、
+关键字：group by、having、order by[DESC、ASC]、distinct、limit、regexp、like
+赋予权限的关键词：GRANT
+
+```
 
 * **问：查找年龄最大的学生的所有信息？**
 ```mysql
@@ -84,15 +95,44 @@ SELECT * FROM students ORDER BY age DESC, id ASC;
 ```mysql
 #关键字：regexp
 SELECT * FROM students WHERE name REGEXP '^a|^b';
+SELECT * from students where name like 'a%' or name like 'b%';
+/*
+LIKE子句
+在 where like 的条件查询中，SQL 提供了四种匹配方式。
+%：表示任意 0 个或多个字符。可匹配任意类型和长度的字符，有些情况下若是中文，请使用两个百分号（%%）表示。
+_：表示任意单个字符。匹配单个任意字符，它常用来限制表达式的字符长度语句。
+[]：表示括号内所列字符中的一个（类似正则表达式）。指定一个字符、字符串或范围，要求所匹配对象为它们中的任一个。
+[^] ：表示不在括号所列之内的单个字符。其取值和 [] 相同，但它要求所匹配对象为指定字符以外的任一个字符。
+查询内容包含通配符时,由于通配符的缘故，导致我们查询特殊字符 “%”、“_”、“[” 的语句无法正常实现，而把特殊字符用 “[ ]” 括起便可正常查询。
+
+'%a'     //以a结尾的数据
+'a%'     //以a开头的数据
+'%a%'    //含有a的数据
+'_a_'    //三位且中间字母是a的
+'_a'     //两位且结尾字母是a的
+'a_'     //两位且开头字母是a的
+*/
+
+/*
+REGEXP ：正则表达式
+'a$'     //以a结尾的数据
+'^a'     //以a开头的数据
+'a'    //含有a的数据
+'^[a-z]|end$'    //以字母开头或者以end结尾
+*/
+
 ```
 
 * **问：查找所有年龄，不同年龄只显示一次？**
 ```mysql
 #关键字：distinct
 SELECT DISTINCT age FROM students;
+#或者使用group by，并且效率会更高
+SELECT age from students GROUP BY age;
 ```
 
 **问：一道写 SQL 语句的题，计算学生的平均成绩和总成绩？**
+
 ```mysql
 #关键字：AVG,sum
 select stuNum, avg(score) average from course GROUP BY stuNum;
@@ -105,8 +145,8 @@ select stuNum, sum(score) total from course GROUP BY stuNum ORDER BY total DESC;
 SELECT * from (select DISTINCT stuNum from course) course1
 where not EXISTS 
 (select * 
-from (select DISTINCT stuNum from course where score < 80)course2 
-WHERE course1.stuNum=course2.stuNum);
+from (select DISTINCT stuNum from course where score < 80) course2 
+WHERE course1.stuNum=course2.stuNum);#？？？不加where语句不可以么？
 ```
 
 **关键字：limit**
@@ -121,25 +161,35 @@ SELECT * from students LIMIT -1,5;#最后 5 条数据不要了，其余全要。
 ```
 
 ### 涉及到两个或多个表的操作
-
-* **关键字：join **
-即表格的交并补操作，有左连接，右连接，内部连接，外部连接
-左连接：求两个表的交集外加左表剩下的数据；
-右连接：求两个表的交集外加右表剩下的数据；
-内部连接：求两个表的交集；
-外部连接：就是求两个集合的并集，但是 MySQL 不支持 OUTER JOIN，但是我们可以对左右连接做 UNION 操作实现。
+* **关键字：union **
+MySQL UNION 操作符用于连接两个以上的 SELECT 语句的结果组合到一个结果集合中。多个 SELECT 语句会删除重复的数据。使用 union 的前后两个查询语句的结构必须是一样的，可以采用字段组合或是不足补空行的方式把前后两个结构调整为一样的。
 ```mysql
-
+select col1,col2,'' as col3 from t1
+union
+select col1,col2,col3 from t2
 ```
 
-* **问：在两个表中，分别查找一个字段？**
-*select salaries.salary,dept_manager.dept_no
-from salaries inner join dept_manager
-on dept_manager.emp_no = salaries.emp_no
-and dept_manager.to_date = '9999-01-01'
-and salaries.to_date = '9999-01-01';*
+* **关键字：join **  [参考博客](https://www.cnblogs.com/fudashi/p/7491039.html)
+即表格的交并补操作，有左连接，右连接，内部连接，外部连接
+左连接（left join）：求两个表的交集外加左表剩下的数据；
+右连接（right join）：求两个表的交集外加右表剩下的数据；
+内部连接（inner join）：求两个表的交集；
+外部连接：就是求两个集合的并集，但是 MySQL 不支持 OUTER JOIN，但是我们可以对左右连接做 UNION 操作实现。
 
-参考博客：https://www.cnblogs.com/fudashi/p/7491039.html
+```mysql
+join、left join、right join、
+on、using、
+```
+
+* **问：查找学生的姓名，年龄，和所对应的班级全称（另一个表的信息）？**
+```mysql
+SELECT stu.name, stu.age, cla.name 
+from students stu inner join class cla 
+ON stu.class = cla.classId;
+#另一个关键字 using(classID)：用法相当于 on，但是 using 里面的字段不是可选的且两张表都要有。
+#注意，如果两边的表如果某个记录为空，则是不会显示的，因为不符合 on 的条件。
+#如果想显示左边空的记录，则选择左连接即可。
+```
 
 **left join 如果有多张表，关键字可以使用多次**
 可以使用别名，using 的用法相当于 on，但是 using 里面的字段不是可选的（就是 select 里面你选不了），且两张表都要有。
@@ -152,16 +202,6 @@ using(emp_no)*
 *select e.emp_no 
 from employees e left join dept_manager d on e.emp_no = d.emp_no
 where d.dept_no is null*
-
-
-
-**count 函数 having**
-一般使用 where 时，count 是在查询完成后进行聚合。如：查询每个部门成绩大于89的员工数
-SELECT dept,COUNT(user_name) FROM ec_uses WHERE score>89 GROUP BY dept;
-
-如果要在聚合之后删选记录，就是删选聚合出来的数据，那么要用到 having 了。
-参考博客：https://www.cnblogs.com/yunfeioliver/p/7887463.html
-
 
 
 

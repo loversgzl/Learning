@@ -91,105 +91,19 @@ java.lang 包
 */
 import java.lang.Math;
 ```
-
-### 常用类
-**Number类 和 Math 类**
-Java 语言是一个面向对象的语言，但是 Java 中的基本数据类型却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样八个和基本数据类型对应的类统称为包装类(Wrapper Class)，其中六个包装类都是抽象类 Number 的子类。byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
-```java
-//基本数据类型 和 包装类
-byte;short;int;long;float;double;char;boolean;
-Byte;Short;Integer;Long;Float;Double;Character;Boolean;
-
-//装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
-Integer x = 5; x = x +10;
-
-int a = 99; 
-Integer c = new Integer(a);//装箱
-Integer b = Integer.valueOf(a);//装箱，该方法返回参数的原生Number对象。
-int d = b.intValue(); //拆箱，可以拆成任意 Number 类
-
-//包装类的常量
-Byte.SIZE; //二进制位数
-Byte.MIN_VALUE; //最小值
-Byte.MAX_VALUE; //最大值
-
-//基本数据类型赋值
-final double PI = 3.1415927; //常量 final 通常常量全部大写
-boolean b = true; //小写
-char g = 'g'; //一个字符
-String st = "this is a line"; //双引号
-Object ob = null; //空表示
-
-/*
-强制类型转换，包装类的方法以Integer为例，其它类似：
-Integer.parseInt()、Integer.toString()
-注意：Integer.valueOf()是装箱，返回的是包装类。
-*/
-long a = 100; 
-int b = (int)a;
-String st = Integer.toString(b); //将整数转为字符串
-int n = Integer.parseInt(st); //字符串转整数，后面可带进制
-
-//增强型 for 循环
-for(String str :strs)
-    System.out.println(str);
-
-//List 使用迭代器
-ArrayList list = new ArrayList();//省略赋值过程
-Iterator iterator = list.iterator();
-while(iterator.hasNext())
-	System.out.println(iterator.next());
-
-//返回系统时间
-long start = System.currentTimeMillis();
-
-//Math
-Math.max(a,b); //选取最大值，参数为 2.
-//利用三目运算符，三数取最大值。
-Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); 
-int n = Math.pow(a,b); //a 的 b 次方。
-//向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
-Math.floor(11.5); Math.ceil(11.5); Math.round(-11.5); 
-
-```
-
-**Character 类**
-
-```java
-import java.lang.Character;
-char ch = 'a';
-Character.isDigit(ch);
-Character.isLetter(ch);
-Character.isUpperCase(ch);
-Character.isLowerCse(ch);
-```
-
-**Random 类**
-
-```java
-import java.util.Random;//重新创建随机数生成器
-Random rand = new Random(11);//需要种子
-int i = rand.nextInt(100);//产生[0,100) 的随机数
-int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
-```
-
-
-
 ### 输入输出
 ```java
 //输入
 import java.util.Scanner;
 Scanner scan = new Scanner(System.in);
-if(scan.hasNext()){//只读取一次，遇到空格结束
-	String str1 = scan.next();
-    int one = scan.nextInt();
-	System.out.println("输入为：" + str1);
-}
+int one = scan.nextInt(); //一个一个读
+String str = scan.nextLine(); //一行一行读
+char ch = (char)System.in.read();
+ch = (char)(ch+32); //大写转小写
 
-if(scan.hasNextLine()){//可以读取一行，遇到换行符结束
-	String str2 = scan.nextLine();
-	System.out.println("输入为：" + str2);
-} 
+if(scan.hasNext()){//只读取一次，遇到空格或者回车结束
+	String str1 = scan.next();//读取字符串
+}
 
 System.out.println(); //输出带换行
 System.out.print(); //输出不带换行
@@ -471,9 +385,96 @@ sb.toString();
     }
 ```
 
+### 常用内置类 Math
+```java
+//Math
+Math.max(a,b); //选取最大值，参数为 2.
+//利用三目运算符，三数取最大值。
+Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); 
+int n = Math.pow(a,b); //a 的 b 次方。
+//向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
+Math.floor(11.5); Math.ceil(11.5); Math.round(-11.5); 
+Math.sqrt(x); //求平方根
 
 
 
+```
+
+### 常用类需引包 Number、Character、
+**Number类**
+Java 语言是一个面向对象的语言，但是 Java 中的基本数据类型却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样八个和基本数据类型对应的类统称为包装类(Wrapper Class)，其中六个包装类都是抽象类 Number 的子类。byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
+```java
+//基本数据类型 和 包装类
+byte;short;int;long;float;double;char;boolean;
+Byte;Short;Integer;Long;Float;Double;Character;Boolean;
+
+//装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
+Integer x = 5; x = x +10;
+
+int a = 99; 
+Integer c = new Integer(a);//装箱
+Integer b = Integer.valueOf(a);//装箱，该方法返回参数的原生Number对象。
+int d = b.intValue(); //拆箱，可以拆成任意 Number 类
+
+//包装类的常量
+Byte.SIZE; //二进制位数
+Byte.MIN_VALUE; //最小值
+Byte.MAX_VALUE; //最大值
+
+//基本数据类型赋值
+final double PI = 3.1415927; //常量 final 通常常量全部大写
+boolean b = true; //小写
+char g = 'g'; //一个字符
+String st = "this is a line"; //双引号
+Object ob = null; //空表示
+&& | ! //逻辑运算符，与或非
+
+/*
+强制类型转换，包装类的方法以Integer为例，其它类似：
+Integer.parseInt()、Integer.toString()
+注意：Integer.valueOf()是装箱，返回的是包装类。
+*/
+long a = 100; 
+int b = (int)a;
+String st = Integer.toString(b); //将整数转为字符串
+int n = Integer.parseInt(st); //字符串转整数，后面可带进制
+char ch = 'G';
+ch = (char)(ch+32); //大写转小写
+
+
+
+//增强型 for 循环
+for(String str :strs)
+    System.out.println(str);
+
+//List 使用迭代器
+ArrayList list = new ArrayList();//省略赋值过程
+Iterator iterator = list.iterator();
+while(iterator.hasNext())
+	System.out.println(iterator.next());
+
+//返回系统时间
+long start = System.currentTimeMillis();
+
+```
+
+**Character 类**
+```java
+import java.lang.Character;
+char ch = 'a';
+Character.isDigit(ch);
+Character.isLetter(ch);
+Character.isUpperCase(ch);
+Character.isLowerCse(ch);
+```
+
+**Random 类**
+```java
+import java.util.Random;//重新创建随机数生成器
+Random rand = new Random(11);//需要种子
+int i = rand.nextInt(100);//产生[0,100) 的随机数
+int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
+```
 
 
 包括：枚举（Enumeration）、位集合（BitSet）、向量（Vector）、栈（Stack）、字典（Dictionary）、哈希表（Hashtable）、属性（Properties）

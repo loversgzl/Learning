@@ -88,10 +88,7 @@ while (rs.next())
 MYSQL 表的类型必须是INNODB才支持事务
 */
 c.setAutoCommit(false); //自动提交关闭
-String sql1 = "update hero set hp = hp +1 where id = 22";
 s.execute(sql1);
-// 不小心写错写成了 updata(而非update)
-String sql2 = "updata hero set hp = hp -1 where id = 22";
 s.execute(sql2);
 c.commit();// 手动提交
 
@@ -99,6 +96,7 @@ c.commit();// 手动提交
 ORM=Object Relationship Database Mapping 
 对象和关系数据库的映射 ,简单说，一个对象，对应数据库里的一条记录
 对象的属性，就是数据库中不同的字段
+DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面，其他地方看不到JDBC的代码。
 */
 
 /*
@@ -125,15 +123,8 @@ ORM=Object Relationship Database Mapping
 <img src="../../pics/servlet.png" align="center">
 [ 参考博客](https://learner.blog.csdn.net/article/details/81091580)
 
-**问：Java Servlet 与使用 CGI（Common Gateway Interface，公共网关接口）有什么优势**：
-
-1. 性能明显更好。
-2. Servlet 在 Web 服务器的地址空间内执行。这样它就没有必要再创建一个单独的进程来处理每个客户端请求。
-3. Servlet 是独立于平台的，因为它们是用 Java 编写的。
-4. 服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。
-5. Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。
-
-简介：用于处理用户提交的数据
+简介：Servlet用于处理用户提交的数据，熟悉request和response两种方法，了解不同的跳转方式。
+熟悉servlet对数据库的基本操作。
 Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一个 web 应用是部署在 tomcat 中的，所以开发一个 servlet 需要如下几个步骤：
 1.创建 web 应用项目；2.编写 servlet 代码；3.部署到 tomcat 中
 浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 classes  文件的路径，即通过浏览器可以访问到的文件夹），在 java 项目的.classes 文件夹中包含 .xml 文件，分析 浏览器的 ip 地址访问的是哪个页面，然后根据不同的页面，映射对应的 Servlet。
@@ -152,6 +143,13 @@ Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一�
 request.getRequestDispatcher("success.html").forward(request, response);
 或者直接通知客户端自己进行跳转：response.sendRedirect("fail.html");
 八、Servlet 自启动
+
+**问：Java Servlet 与使用 CGI（Common Gateway Interface，公共网关接口）有什么优势**：
+1. 性能明显更好。
+2. Servlet 在 Web 服务器的地址空间内执行。这样它就没有必要再创建一个单独的进程来处理每个客户端请求。
+3. Servlet 是独立于平台的，因为它们是用 Java 编写的。
+4. 服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。
+5. Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。
 
 ```java
 import java.io.IOException;
@@ -345,30 +343,30 @@ Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI�
 
 
 ### Spring
-Spring是一个基于 IOC 和 AOP 的结构 J2EE 系统的框架。
+Spring是一个基于 IOC 和 AOP 结构的 J2EE 系统框架。
 
  ** IOC 是反转控制 (Inversion Of Control) **
 Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
 传统的方式：通过 new  关键字主动创建一个对象
-IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象，就像控制权从本来在自己手里，交给了 Spring。
+IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象，就像控制权从本来在自己手里，交给了 Spring。在主程序调用 xml 文件时，就开始对实例进行初始化构造了，不管是直接写的 bean 还是用注解方式（自动生成一个bean），效果都一样。
 
 **Spring 注解方式**
-@Autowired：默认按类型装配
-@Resource：默认先按名称，找不到按类型
+@Autowired：默认按类装配
+@Resource：默认先按名称，找不到按类
 若要按指定名称：@Resource(name="one")
 @Resource注解属性名表示按照属性名来查找类，找到匹配的类后，自动创建一个bean来存放对象，并注入属性，找不到或者找到多个，都会抛出异常。
 @Autowired时先按照出行的类型进行查找类，如果有多个再找属性名，属性名还是有多个就报错。
 @Component：对整个 Bean 进行注解。
 
 **AOP 即 Aspect Oriented Program 面向切面编程**
-首先，在面向切面编程的思想里面，把功能分为核心业务功能，和周边功能。
+首先，在面向切面编程的思想里面，把功能分为核心业务功能和周边功能。
 所谓的核心业务：比如登陆，增加数据，删除数据都叫核心业务
 所谓的周边功能（切面）：比如性能统计，日志，事务管理等等
-在面向切面编程 AOP 的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 "编织" 在一起，这就叫 AOP。
+在面向切面编程 AOP 的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 "编织" 在一起，这就叫 AOP。在编写切面功能时，有一个核心功能接口 joinpoin，默认在切面功能里将所有功能完成后，再在 xml 中进行编织。
 
 
 ```xml
-<!-- spring反转控制，在xml中产生实例，在主函数中通过 getBean("c") 获取这个实例。 -->
+<!-- spring 反转控制，在xml中产生实例，在主函数中通过 getBean("c") 获取这个实例。 -->
 <bean name="c" class="spring.Category">
 	<property name="name" value="CategoryOne" />
 </bean>
@@ -386,13 +384,14 @@ IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里
 
 <!-- 更进一步，将 bean 对象本身也通过注解 -->
 <!-- 在主配置文件 .xml 中删除所有的 bean，添加 <content:component-scan base-package="spring"/>  -->
-<!-- 在Product类上添加 @Component("p"),需要注入对象的属性上面添加@AutoWired-->
+<!-- 在Product类上添加 @Component("p") 即表明此类是 bean,需要注入对象的属性上面添加@AutoWired-->
 <!-- 同时属性要在类中初始化了 -->
 
-<!-- 将核心业务功能与切面功能整合 -->
-<bean name="s" class="spring.ProductService"></bean>   
-<bean id="loggerAspect" class="spring.LoggerAspect"/>
+<!-- 这个是在测试的时候调用的 -->
+<bean name="s" class="spring.ProductService"></bean>  
 
+<!-- 将核心业务功能与切面功能整合 -->
+<bean id="loggerAspect" class="spring.LoggerAspect"/>
 <aop:config>
 <aop:pointcut id="loggerCutpoint" 
 expression = "execution(* spring.ProductService.*(..)) "/>
@@ -407,18 +406,52 @@ expression = "execution(* spring.ProductService.*(..)) "/>
 通过 Bean 的映射，将指定路径映射到指定的类实例中。通过 Controller 将模型与视图整合起来。
 同样可以使用注解的方式，删除 Bean，在类上添加 @Controller @RequestMapping("/index")
 ```java
-package springmvc;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-//将模型与视图整合
+//使用 Bean 跳转，将模型与视图整合
 public class IndexController implements Controller {
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//如果要进行客户端跳转，则修改为：ModelAndView("redirect:/index.jsp");
         ModelAndView mav = new ModelAndView("index.jsp");
         mav.addObject("message", "Hello Spring MVC");
         return mav;
     }
+}
+
+//使用注解方式
+package springmvc;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+ 
+@Controller
+public class IndexController {
+    @RequestMapping("/index")
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("message", "Hello Spring MVC");
+        return mav;
+    }
+ 
+    @RequestMapping("/jump")//客户端跳转
+    public ModelAndView jump() {
+        ModelAndView mav = new ModelAndView("redirect:/index");
+        return mav;
+    }
+ 
+    @RequestMapping("/check")//session的访问次数
+    public ModelAndView check(HttpSession session) {
+        Integer i = (Integer) session.getAttribute("count");
+        if (i == null)
+            i = 0;
+        i++;
+        session.setAttribute("count", i);
+        ModelAndView mav = new ModelAndView("check");
+        return mav;
+    }
+ 
 }
 ```
 
