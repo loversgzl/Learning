@@ -96,7 +96,7 @@ import java.lang.Math;
 //输入
 import java.util.Scanner;
 Scanner scan = new Scanner(System.in);
-int one = scan.nextInt(); //一个一个读
+int one = scan.nextInt(); //一个一个读，遇到空格或者回车结束。
 String str = scan.nextLine(); //一行一行读
 char ch = (char)System.in.read();
 ch = (char)(ch+32); //大写转小写
@@ -134,23 +134,43 @@ StringBuilder 用charAt,
 */
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 int[] numbers = new int[10]; //默认值为 0
+int[][] array = new int[10][10]; //二维数组
 for(int i=0; i<names.length; i++)//长度为 length，注意和动态 size 的区分。
     System.out.println(names[i]);
 for(String name : names) //迭代
     System.out.println(name);
+System.arraycopy(origin,0,copy,0,9); //拷贝数组(原始数组,index,新数组,index,数量)。
+
+
+
+/*
+判断空的情况
+*/
+if(names == null || names != null && names.length == 0){}
+
 
 //容器的工具类
 import java.util.Collections;
 Collections.sort(arr);//正序排序
 Collections.reverse(arr);//排完之后再倒转一下
+//Collection是  List Set Queue 的接口 
+//Collections是一个类，容器的工具类，只能是容器，无返回值，改变原List
+import java.util.Collections;
+List<Integer> numbers = new ArrayList<>();
+Collections.reverse(numbers); //倒转数组,
+Collections.shuffle(numbers);//混淆
+Collections.sort(numbers);
+Collections.swap(numbers,0,1);
+Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
 
-//集合框架-动态数组
+
+/* 
+集合框架-动态数组
+List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
+*/
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-/* 
-List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
-*/
 List<String> list = new ArrayList<>();
 list.add("hello");list.add("java");
 
@@ -178,7 +198,7 @@ while(it.hasNext())
     System.out.println(it.next());
 
 
-二维数组
+//动态二维数组
 
 List<List<Integer>> triangle = new ArrayList<List<Integer>>(); //构造二维数组，长度不固定
 //增
@@ -231,23 +251,6 @@ q.offer("inQueue");//入队列
 q.poll();//出队
 q.peek();//查看队首，但不取出
 
-//Collection是 Set List Queue 和 Deque 的接口 
-//Collections是一个类，容器的工具类，只能是容器，无返回值，改变原List
-import java.util.Collections;
-List<Integer> numbers = new ArrayList<>();
-Collections.reverse(numbers); //倒转数组,
-Collections.shuffle(numbers);//混淆
-Collections.sort(numbers);
-Collections.swap(numbers,0,1);
-Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
-
-//栈 Stack
-Stack stack = new Stack(); //初始化
-stack.empty(); //判断是否为空，返回true/false
-stack.peek(); //取栈顶值（不出栈），返回 Object
-stack.push(Object);//进栈，返回 Object
-stack.pop();//出栈，返回的是 Object 对象，需要类型转换
-
 
 
 /*
@@ -256,13 +259,17 @@ stack.pop();//出栈，返回的是 Object 对象，需要类型转换
 */
 import java.util.HashMap;
 Map<String,Integer> map = new HashMap<>();
+Map<int[],Integer> map = new HashMap<>();
+
 //增，改,如果已经存在，则覆盖
-put("Tom",12); 
+put("Tom",12); putAll(anotherMap); 
+
 //清空、删除某个键、
 clear();remove(x);
+
 //查
 containsKey("Tom"); //返回Boolean
-get("Tom");
+get("Tom"); getOrDefault(key, 0);
 
 //四种遍历方式
 for(String key : map.keySet())
@@ -279,6 +286,23 @@ for(Map.Entry<String, Integer> entry : map.entrySet())
 
 for(String v : map.values())
     System.out.println(v);
+
+/*
+在集合框架之前应用的一些类，现在一般用集合框架代替。
+Dictionary、Vector、Stack、Properties、
+*/
+
+//栈 Stack
+Stack stack = new Stack(); //初始化
+stack.empty(); //判断是否为空，返回true/false
+stack.peek(); //取栈顶值（不出栈），返回 Object
+stack.push(Object);//进栈，返回 Object
+stack.pop();//出栈，返回的是 Object 对象，需要类型转换
+
+
+
+
+
 ```
 
 ### String 字符串
@@ -438,6 +462,7 @@ long a = 100;
 int b = (int)a;
 String st = Integer.toString(b); //将整数转为字符串
 int n = Integer.parseInt(st); //字符串转整数，后面可带进制
+String st = String.valueOf(b); //将整数转为字符串
 char ch = 'G';
 ch = (char)(ch+32); //大写转小写
 
@@ -508,6 +533,8 @@ public class test{
 
 ### 异常
 大致分为三类：检查性异常、运行时异常、错误。
+异常分为两类，Error 和 Exception，它们都继承 Throwable。
+
 try、catch、finally：无论是否发生异常，最后这个都会被执行。
 **异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem？**
 解决：反复看都没有找到错误，是因为缺少了包名，package test; 这个一定要放在第一句的！
@@ -515,3 +542,12 @@ try、catch、finally：无论是否发生异常，最后这个都会被执行�
 **异常：如果是语法错误，如少了一个分号，则会出现：java.lang.Error**
 
 **异常：java.lang.ArithmeticException，除零异常等**
+
+
+### 基本语法概念
+**问：switch(x)语句中，x可以是哪些类型？**
+答：包括：byte、short、int、char、java7后开始支持String、
+case 语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。
+case 语句开始执行，直到 break 语句出现才会跳出 switch 语句。
+
+

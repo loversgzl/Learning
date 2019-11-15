@@ -1,21 +1,75 @@
 
 
-# 动态规划经典算法-Java
+# Java-算法之动态规划
 
-1. 插入类排序：<a href="#简单插入排序">简单插入排序</a>，升级为-<a href="#希尔排序">希尔排序</a>
-2. 选择类排序：<a href="#简单选择排序">简单选择排序</a>，升级为-<a href="#堆排序">堆排序</a>
-3. 交换类排序：<a href="#冒泡排序">冒泡排序</a>，升级为-<a href="#快速排序">快速排序</a>
-4. <a href="#归并排序">归并排序</a>、<a href="#计数排序">计数排序</a>
-5. <a href="#乱数排序">乱数排序</a>
-6. <a href="#三色旗">三色旗</a>
-7. <a href="#摆动排序">摆动排序</a>
-8. <a href="#煎饼排序">煎饼排序</a>
-9. <a href="#距离相等的条形码">距离相等的条形码</a>
-10. <a href="#距离顺序排列矩阵单元格">距离顺序排列矩阵单元格</a>
+1. <a href="#最长上升子序列">最长上升子序列</a>
 
-快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
-
-![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
+* **最长上升子序列**  <a name="最长上升子序列"></a>
+题目概述：一个数组，求里面的最长递增序列，不要求连续
+解题思路：
+一、插入排序，不断更新数组里的值，保留最小值，插入可以改进为二分插入，
+二、动态规划
+要求：将算法的时间复杂度降低到O(nlogn)
+```java
+//插入排序+二分插入
+import java.util.ArrayList;
+class Solution {
+//二分查找，寻找第一个比x大的值。
+    public void binaryInsert(ArrayList<Integer> dp, int x){
+        int left = 0, right = dp.size()-1, mid = 0;
+        while(left < right){
+            mid = (left+right)/2;
+            if(dp.get(mid) < x)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        dp.set(left,x);
+    }
+    public int lengthOfLIS(int[] nums) {
+        if(nums == null)
+            return 0;
+        if(nums.length <= 1)
+            return nums.length;
+//遍历数组，如果比目前最大值大，肯定加入队列，否则插入到队列中，因为肯定可以替换里面一个比他大的值
+        ArrayList<Integer> dp = new ArrayList<>();
+        dp.add(nums[0]);
+        for(int i=1; i<nums.length; i++){
+            if(nums[i] > dp.get(dp.size()-1))
+                dp.add(nums[i]);
+            else
+                binaryInsert(dp,nums[i]);                
+        }
+        return dp.size();
+    }
+}
+    
+//动态规划
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if(nums == null)
+            return 0;
+        if(nums.length <= 1)
+            return nums.length;
+        int[] dp = new int[nums.length];
+        for(int i=0; i<nums.length; i++)
+            dp[i] = 1;
+        for(int i=1; i<nums.length; i++){
+            for(int j=0; j<i; j++){
+//如果新扩展的i能够加入到前面的递增数列中，则更新，遍历所有递增数列，
+//如果不能则不更新，所以最大值不一定存在最后一个
+                if(nums[j] < nums[i])
+                    dp[i] = Math.max(dp[j]+1, dp[i]);
+            }
+        }
+        int max = 0;
+        for(int x : dp)
+            if(x > max)
+                max = x;
+        return max;
+    }
+}
+```
 
 
 
