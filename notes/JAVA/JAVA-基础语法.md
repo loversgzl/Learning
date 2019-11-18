@@ -133,6 +133,7 @@ StringBuilder 用charAt,
 普通数组
 */
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
+return new int[]{1,2,3}; //直接返回一个匿名数组
 int[] numbers = new int[10]; //默认值为 0
 int[][] array = new int[10][10]; //二维数组
 for(int i=0; i<names.length; i++)//长度为 length，注意和动态 size 的区分。
