@@ -49,7 +49,7 @@ F3 :可以查看某个函数的源码
 /*
 常用内置类
 */
-StringBuilder;StringBuffer;
+Math,StringBuilder;StringBuffer;
 
 /*
 java.util 包
@@ -92,6 +92,13 @@ java.lang 包
 import java.lang.Math;
 ```
 ### 输入输出
+按照流是否直接与特定的地方（如磁盘、内存、设备等）相连，分为 节点流 和 处理流 两类。
+**节点流**：可以从或向一个特定的地方（节点）读写数据。
+文 件 FileInputStream FileOutputStrean FileReader FileWriter 文件进行处理的节点流。
+
+
+
+
 ```java
 //输入
 import java.util.Scanner;
@@ -124,14 +131,21 @@ System.out.printf(); //C 格式输出
 /*
 易混淆点
 数组的长度：.lenght; List的长度：.size(); 字符串的长度：.length();
-List添加元素：add(x); 字符串添加元素：append(x);
-List 的获取用 get！不要总是用 [] 数组的东西。
-StringBuilder 用charAt,
+字符串添加元素：append(x);
+List添加元素：add(x); 
+List获取用 get！不要总是用 [] 数组的东西。
+StringBuilder用charAt
 */
 
 /*
 普通数组
 */
+//排序函数
+import java.util.Arrays;
+Arrays.parallelSort(nums);
+
+
+
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 return new int[]{1,2,3}; //直接返回一个匿名数组
 int[] numbers = new int[10]; //默认值为 0
@@ -314,8 +328,9 @@ stack.pop();//出栈，返回的是 Object 对象，需要类型转换
 /*
 String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它是 java 中唯一不需要 new 就可以产生对象的途径。以String s="abce";形式赋值在 java 中叫直接量,它是在常量池中而不是象 new 一样放在压缩堆中。这种形式的字符串，在JVM内部发生字符串拘留，即当声明这样的一个字符串后，JVM会在常量池中先查找有有没有一个值为"abcd"的对象,如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,如果没有,则在常量池中新创建一个"abcd",下一次如果有String s1 = "abcd";又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
 */
-
+//内置类型
 StringBuilder sb = new StringBuilder();
+StringBuffer br = new StringBuffer();
 
 //增
 sb.append("abcd");//在末尾添加串
@@ -359,55 +374,49 @@ sb.toString();
 
 ```
 
-学习代码，查找重复的字符串
+正则表达式
 ```java
-    public static void main(String[] args) {
-        // s创建一个长度是100的字符串数组
-        // s字符串数组排序
-        // for循环中采用StringBuilder比用String的 `+=`高效
-        // Hashset的add 可以判断有没有添加重复的字符，size()用来计算重复的个数
- 
-        // s 创建一个长度是100的字符串数组
-        // s使用长度是2的随机字符填充该字符串数组
-        // s统计这个字符串数组里重复的字符串有多少种
-        // s 使用HashSet来解决这个问题
-        StringBuilder string = new StringBuilder();// 获取全部的有效字符并存储
-        Random rand = new Random();//随机对象
-        char ch = 0; //shengcheng 生成一个随机字符
-        String[] str = new String[100];
-        HashSet<String> set = new HashSet<String>();// 存放数据
-        String chongfu = new String();// 拼接重复的字符串
-        char c;
-        for (short i = 0; i < 128; i++) {
-            c = (char) i;
-            if (Character.isDigit(c) || Character.isLetter(c)) {
-                string.append(c);
-            }
-        }
-        for (int i = 0; i < 100; i++) {
-            str[i] = "";
-            for (int j = 0; j < 2; j++) {
-                int rs = rand.nextInt(string.length()); // 从62抽出一个随机数字
-                ch = string.charAt(rs);// 调用charAt()，把随机数字传递实参，生成一个随机字符
-                str[i] += String.valueOf(ch);// char转String
-            }
-            if (set.add(str[i]) == false) { // you 有重复的字符串返false
-                chongfu += str[i] + ":" + (i + 1) + " ";// pinjie 拼接重复的字符串
-            }
-            System.out.printf("%3d:%s ", i + 1, str[i]);
-//          System.out.print((i + 1) + ":" + str[i] + " ");
-            if ((i + 1) % 10 == 0) {
-                System.out.println();
-            }
-        }
-        int len = str.length - set.size();// shuzu 数组的长度减去set的长度就是重复字符串的个数
-        if (len != 0) {
-            System.out.println("总共有" + len + "种重复的字符串");
-            System.out.printf("分別是：%n%s", chongfu);
-        } else {
-            System.out.println("没有重复的字符串");
-        }
-    }
+import java.util.regex.Pattern;
+public static void main(String[] args) {
+    String content = "I am noob " + "from runoob.com.";
+    String pattern = ".*runoob.*";
+    boolean isMatch = Pattern.matches(pattern, content);
+    System.out.println("字符串中是否包含了 'runoob' 子字符串? " + isMatch);
+}   
+
+public static void main(String[] args) {
+	// 按指定模式在字符串查找
+	String line = "This order was placed for QT3000! OK?";
+	String pattern = "(\\D*)(\\d+)(.*)";
+    //捕获组定义多个表达式,不同表达式组合作为一个表达式，所以调换顺序也会有很大影响
+	
+	// 创建 Pattern 对象
+	Pattern r = Pattern.compile(pattern);
+	
+	// 现在创建 matcher 对象
+	Matcher m = r.matcher(line);
+	if (m.find( )) {
+        //后面三个加起来应该等于第一个。
+	   System.out.println("Found value: " + m.group(0) );//表示整个表达式匹配的内容
+	   System.out.println("Found value: " + m.group(1) );//第一个左括号匹配到的内容
+	   System.out.println("Found value: " + m.group(2) );//第二个左括号匹配到的内容
+	   System.out.println("Found value: " + m.group(3) );//第三个左括号匹配到的内容
+	} else {
+	   System.out.println("NO MATCH");
+	}
+}
+
+/*
+^ ：匹配输入字符串开始的位置。
+$ ：匹配输入字符串结尾的位置。
+* ：零次或多次匹配前面的字符或子表达式。
++ ：一次或多次匹配前面的字符或子表达式。
+? ：零次或一次匹配前面的字符或子表达式。
+\d ：数字字符匹配。等效于 [0-9]。
+\D ：非数字字符匹配。等效于 [^0-9]。
+*/
+
+
 ```
 
 ### 常用内置类 Math
@@ -427,7 +436,11 @@ Math.sqrt(x); //求平方根
 
 ### 常用类需引包 Number、Character、
 **Number类**
-Java 语言是一个面向对象的语言，但是 Java 中的基本数据类型却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样八个和基本数据类型对应的类统称为包装类(Wrapper Class)，其中六个包装类都是抽象类 Number 的子类。byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
+Java 语言是一个面向对象的语言，但是 Java 中的基本数据类型（原生类）却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样八个和基本数据类型对应的类统称为包装类(Wrapper Class)，其中六个包装类都是抽象类 Number 的子类。byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
+**原生类**：Java中，数据类型分为基本数据类型（或叫做原生类、内置类型）和引用数据类型。
+Java不是纯的面向对象的语言，不纯的地方就是这些基本数据类型不是对象。当然初期Java的运行速度很慢，但是基本数据类型能在一定程度上改善性能。如果你想编写纯的面向对象的程序，用包装器类是取代基本数据类型就可以了。六种数字类型都是有符号的，固定的存储空间正是Java可移植性、跨平台的原因之一；
+基本类型的存在导致了Java OOP的不纯粹性。因为基本类型不是对象，一切皆对象是个小小的谎言。这是出于执行效率的权衡。
+
 ```java
 //基本数据类型 和 包装类
 byte;short;int;long;float;double;char;boolean;

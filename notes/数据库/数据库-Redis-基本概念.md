@@ -1,15 +1,108 @@
-# 数据库-MySQL-底层概念
+# 数据库-Redis-底层概念
 
 ### 数据库简介
-RDBMS (Relational Database Management System，关系数据库管理系统)
-SQL (Structured Query Language，结构化查询语言)
+REmote DIctionary Server(Redis) 是一个由Salvatore Sanfilippo写的key-value存储系统。
+Redis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
+它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。
 
-MySQL是关系型数据库，目前属于 Oracle 旗下产品。MySQL 最流行的关系型数据库管理系统之一，选择如何存储和检索你的数据，这种灵活性是 MySQL 为什么如此受欢迎的主要原因，其中内置了多种存储引擎，是开源的，所以你不需要支付额外的费用；支持多线程，充分利用 CPU 资源；为多种编程语言提供了 API；可以处理拥有上千万条记录的大型数据库；
-InnoDB ：5.5 版本后 Mysql 的默认数据库引擎，事务型数据库的首选引擎，支持 ACID 事务，支持行级锁定，还有其他一些关系型数据库，最简单的是 Excel，如 SQLite 很小，可以随时移动。微软的 SQL Server,Oracle 出品的 MySQL。
-MySQL 与 SQL Server 的区别，参考：https://www.cnblogs.com/hhx626/p/6010369.html
-
-NoSQL[非关系型数据库]，MongoDB，Redis[内存存储]等都是非关系型数据库。随着互联网 web2.0 网站的兴起，传统的关系数据库在应付 web2.0 网站，特别是超大规模和高并发的 SNS 类型的 web2.0 纯动态网站已经显得力不从心，暴露了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常迅速的发展。NoSQL 数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题。
+NoSQL[非关系型数据库]，Redis[内存存储]是非关系型数据库，属于开源产品。随着互联网 web2.0 网站的兴起，传统的关系数据库在应付 web2.0 网站，特别是超大规模和高并发的 SNS 类型的 web2.0 纯动态网站已经显得力不从心，暴露了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常迅速的发展。NoSQL 数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题。
 分四大类：键值(Key-Value)存储数据库、列存储数据库、文档型数据库、图形(Graph)数据库
+
+用途：数据库、缓存和消息中间件。
+类型：字符串(strings)、散列(hashes)、列表(lists)、集合(sets)、有序集合(sorted sets)
+
+```sql
+''' strings 的基本操作'''
+'''增'''
+set animal 'Cat' #赋值一个变量，没有则创建，有则覆盖
+get animal #获取变量的值
+mset user1 'Tom' user2 'Amy' #赋值多个变量
+
+expire key 5#定时5秒
+set animal 'cat' EX 5#也是定时5秒
+set user:tom:age:45 'abcde'#比较好的编码方式
+
+'''删'''
+del animal #删除
+
+'''改'''
+set animal 'Cat' #赋值一个变量
+append animal 'Dog'#追加
+
+set count 100
+incr count #101增加1
+decr count #100减少1
+
+'''查'''
+exits count #查询是否存在返回0,1
+type count #查询类型
+
+get animal #获取
+mget user1 user2 animal #多个赋值
+
+```
+
+```sql
+''' lists 的基本操作'''
+'''增'''
+rpush mylist A B C #在右边插入值，相当于入栈
+lpush mylist E F G #在左边插入值
+
+'''删'''
+rpop mylist #出栈
+
+'''改'''
+
+'''查'''
+lrange mylist 0 -1 #就是显示全部元素
+
+```
+
+```sql
+''' hashes 的基本操作'''
+'''增'''
+hmset user username tom birth 1977 sex 1 # 给表格 user 字段赋值
+hmget user username birth sex #获取表格字段的值
+hset,mget #操作user 表的某个字段 
+
+'''删'''
+hdel user sex#删除某个字段
+'''改'''
+hsetnx user sex #如果存在，则不设置
+hincrby user birth 10#给出生年加10
+'''查'''
+hkeys/hvals user #获取user 表所有的键/值
+hlen user #返回user 表字段的数量
+hexists #是否存在
+```
+
+```sql
+''' sets 的基本操作'''
+'''增'''
+sadd myset 1 2 3 #赋值
+'''删'''
+srem myset 1 #删除元素
+'''改'''
+
+'''查'''
+sismember myset 1#判断元素是否在集合内
+smembers myset #返回所有成员，每次返回顺序可能不同
+sdiff set1 set2 #返回两个结合的差集set1 - set2
+sinter #返回几个集合的交集
+sunion #返回几个集合的并集
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 <a href="#事务的特性">事务的特性</a>
 <a href="#数据库引擎">数据库引擎</a>

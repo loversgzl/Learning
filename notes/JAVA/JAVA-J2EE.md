@@ -123,14 +123,14 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 <img src="../../pics/servlet.png" align="center">
 [ 参考博客](https://learner.blog.csdn.net/article/details/81091580)
 
-简介：Servlet用于处理用户提交的数据，熟悉request和response两种方法，了解不同的跳转方式。
-熟悉servlet对数据库的基本操作。
+简介：Servlet用于处理用户提交的数据，熟悉 request 和 response 两种方法，了解不同的跳转方式。
+熟悉 servlet 对数据库的基本操作。
 Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一个 web 应用是部署在 tomcat 中的，所以开发一个 servlet 需要如下几个步骤：
 1.创建 web 应用项目；2.编写 servlet 代码；3.部署到 tomcat 中
 浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 classes  文件的路径，即通过浏览器可以访问到的文件夹），在 java 项目的.classes 文件夹中包含 .xml 文件，分析 浏览器的 ip 地址访问的是哪个页面，然后根据不同的页面，映射对应的 Servlet。
 
-一、开发Servlet，打开 TomCat，访问地址为：http://127.0.0.1:8080/hello
-对应的servlet中有doGet方法，即执行web浏览器的请求的get方法。
+一、开发 Servlet，打开 TomCat，访问地址为：http://127.0.0.1:8080/hello
+对应的servlet中有doGet方法，即执行 web 浏览器的请求的get方法。
 二、获取参数，访问地址为：http://127.0.0.1:8080/login.html
 通过html文件继续访问，点击提交后会执行对应的servlet中doPost方法。
 三、如果浏览器是 GET 请求，那么服务端是 Response 给予响应；
@@ -138,7 +138,7 @@ Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一�
 四、继承 HttpServlet 的同时，也继承了一个 service 方法，判断是执行 doPost 还是 doGet，可以直接重写该方法，那么就不需要判断了。三者参数相同。
 五、获取中文，添加：request.setCharacterEncoding("UTF-8"); 
 响应中文，添加：response.setContentType("text/html; charset=UTF-8");
-六、生命周期：初始化（Servlet是单例的，所以只会初始化一次）
+六、生命周期：实例化（在路径找到对应的servlet后，如发现没有实例，则会调用该类的默认构造方法，且只会执行一次，因为是单例的）、初始化（Servlet是单例的，所以只会初始化一次）、提供服务、销毁、被回收。
 七、服务端跳转页面，并返回给客户端：（路径不变，只是将内容传递过去）
 request.getRequestDispatcher("success.html").forward(request, response);
 或者直接通知客户端自己进行跳转：response.sendRedirect("fail.html");
@@ -153,36 +153,54 @@ request.getRequestDispatcher("success.html").forward(request, response);
 
 ```java
 import java.io.IOException;
-import javax.servlet.ServletException;
 import java.io.PrintWriter;//response返回html的类
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;//需要继承的类
 import javax.servlet.http.HttpServletRequest;//处理POST
 import javax.servlet.http.HttpServletResponse;//处理GET
 public class HelloServlet extends HttpServlet{
-//服务端初始化
+
+/*
+服务端初始化，肯定在构造函数之后执行
+*/
 public void init(ServletConfig config) {//服务器启动初始化
 		for(int i=0; i<10; i++)
 			System.out.println("init of Hello Servlet");
-	}
-//处理请求
+}
+
+/*
+实际上，在执行doGet()或者doPost()之前，都会先执行service()
+由service()方法进行判断，到底该调用doGet()还是doPost()
+可以发现，service(), doGet(), doPost() 三种方式的参数列表都是一样的。
+所以，有时候也会直接重写service()方法，在其中提供相应的服务，就不用区分到底是get还是post了。
+*/
+protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+	
+	
+/*哪些是 get 的方式？
+form 默认的提交方式，通过 ip 地址访问，处理请求
+*/
 public void doGet(HttpServletRequest request, HttpServletResponse response)throw ServletException,IOException{//返回响应
-		//响应构造 html 编码
+		//响应构造 html 编码,如果有中文第一句不能省。
+		response.setContentType("text/html; charset=UTF-8"); 
   	    response.getWriter().println("<h1>three test!</h1>");
     }
-//处理发送的表单
+//处理发送的表单，一般在 form 上显示设置 method="post" 的时候
 protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException,ServletException{//处理表单
-    request.setCharacterEncoding("UTF-8");//如果post里面有中文，要进行中文编码
+    //如果 post 里面有中文，要进行中文编码
+    request.setCharacterEncoding("UTF-8");
 	String name = request.getParameter("name");//获取表单里对应属性的值
     System.out.println(name);//打印在服务器端
 
     String html = null;//设置html返回给客户端
     html = "<div style='color:green'>登录成功</div>";
-    response.setContentType("text/html; charset=UTF-8"); 
     //如果html编码里有中文，需要进行中文编码
+    response.setContentType("text/html; charset=UTF-8"); 
     PrintWriter pw = response.getWriter();
     pw.println(html);
 	}
+	
 /*
 进行页面间的跳转
 服务端跳转：浏览器地址不会变，
@@ -191,6 +209,15 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)t
 request.getRequestDispatcher("success.html").forward(request, response);
 response.sendRedirect("fail.html");//客户端跳转
 }
+
+/*Servlet 自启动
+在 web.xml 中，在某个servlet方法 <servlet-class> 下增加一句
+<load-on-startup>10</load-on-startup>
+取值范围是1-99，即表明该Servlet会随着Tomcat的启动而初始化，即启动服务器时会自动初始化该servlet方法，调用该类的构造方法和init方法。
+<load-on-startup>10</load-on-startup> 中的 10 表示启动顺序
+如果有多个Servlet都配置了自动启动，数字越小，启动的优先级越高
+*/
+
 
 /*
 Request的方法
@@ -217,12 +244,41 @@ response.getWriter().println(html);//获取返回html的对象
 response.sendRedirect("fail.html");//客户端跳转网页
 ```
 
+### web.xml 
+浏览器通过服务器会访问到此文件，根据里面对应的路径进行
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>HelloServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+ 
+</web-app>
+```
+
+### Servlet 的 CRUD操作
+```java
+/*
+ORM=Object Relationship Database Mapping 
+对象和关系数据库的映射 ,简单说，一个对象，对应数据库里的一条记录
+对象的属性，就是数据库中不同的字段
+DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面，其他地方看不到JDBC的代码。
+*/
+
+```
+
 ### JSP
 到这里，大家对使用 Servlet 进行CRUD开发就有比较全面感性认识了。 其中一个比较明显的弊端就是在 Servlet 编写 html 代码很痛苦，效率不高，可读性差，难以维护。最好可以在 html 文件里面写html 代码，同时又能在里面调用 java 的变量，那么这样就需要学习 JSP 了。
   全称（Java Server Pages）是一种动态网页开发技术。它使用 JSP 标签在 HTML 网页中插入 Java 代码。标签通常以 <%开头以%> 结束。与 JavaScript 相比：虽然 JavaScript 可以在客户端动态生成 HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。 **执行过程**：把 hello.jsp 转译为 hello_jsp.java 文件，这个文件继承了 HttpServlet，所以它就是一个Servlet，之后的处理就都是一样的了，编译为 class 文件，处理响应等等。
 
 **JSP 和 Servlet 的区别**
-从网络三层结构的角度看 JSP 和 Servlet 的区别，一个网络项目最少分三层：data layer(数据层)，business layer(业务层)，presentation layer(表现层)。当然也可以更复杂。Servlet 用来写 business layer 是很强大的，但是对于写 presentation layer 就很不方便。JSP 则主要是为了方便写 presentation layer 而设计的。综上所述，Servlet 是一个早期的不完善的产品，写 business layer 很好，写 presentation layer 就很臭，并且两层混杂。
+从网络三层结构的角度看 JSP 和 Servlet 的区别，一个网络项目最少分三层：data layer(数据层)，business layer(业务层)，presentation layer(表现层)。当然也可以更复杂。Servlet 用来写 business layer 是很强大的，但是对于写  presentation layer  就很不方便。JSP 则主要是为了方便写 presentation layer 而设计的。综上所述，Servlet 是一个早期的不完善的产品，写 business layer 很好，写 presentation layer 就很臭，并且两层混杂。
 所以，推出 JSP+BEAN，用 JSP 写 presentation layer，用 BEAN 写 business layer。SUN 自己的意思也是将来用 JSP 替代 Servlet。这是技术更新方面 JSP 和 Servlet 的区别。可是，这不是说，学了 Servlet 没用，实际上，你还是应该从 Servlet 入门，再上 JSP，再上 JSP+BEAN。
 强调的是：学了JSP，不会用 Java BEAN 并进行整合，等于没学。大家多花点力气在 JSP+BEAN 上。
 **常见容器**：Tomcat, Jetty, resin, Oracle Application server, WebLogic Server, Glassfish, Websphere, JBoss 等等。（提供了 Servlet 功能的服务器，叫做 Servlet 容器。对 web 程序来说，Servlet 容器的作用就相当于桌面程序里操作系统的作用，都是提供一些编程基础设施）
@@ -231,6 +287,11 @@ response.sendRedirect("fail.html");//客户端跳转网页
 
 ```jsp
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*" %>
+
+<%-- 日期，相当于 response.getWriter()，前面带 = 的属于需要输出的内容，不用分号结尾
+如果没有则表示正常的 java 代码，需要用分号结尾 --%>
+<%= new Date().toLocaleString() %>
+
 
 <%-- java 代码需要加分号 --%>
 <%
@@ -251,19 +312,21 @@ words.add("boy");
 <% } %>
 </table>
 
-<%-- 日期 --%>
-<%=new Date().toLocaleString() %>
 
 <%-- include 使用模板页 ，footer.jsp，并传递参数 --%>
-<%@include file="footer.jsp" %> <%-- 指令，编译像宏 --%>
+<%@include file="footer.jsp" %> <%-- 指令，编译像宏，且变量模板页可以任意访问 --%>
 <jsp:include page="footer.jsp"> <%-- 动作，编译像函数，会调用 --%>
-	<jsp:param name="year" value="2017"/> <%-- 这里最后的斜杠总是忘记 --%>
+	<jsp:param name="year" value="2017"/> <%-- 这里最后的斜杠总是忘记，模板页需要获取参数才可使用 --%>
 </jsp:include>
+<p style="text-align:center">copyright@<%=request.getParameter("year")%></p>
 
 <%-- 跳转页面，可以使用 servlet 的代码，下面是 jsp 的服务端跳转--%>
 <jsp:forward page="hello.jsp" />
+<%-- 客户端跳转和在原servlet中不变--%>
+<%    response.sendRedirect("hello.jsp"); %>
 
-<%-- 创建 Cookie，设置属性，值，生存时间，保存路径 --%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="javax.servlet.http.Cookie">
+<%-- 设置 (属性，值)，生存时间，保存路径 --%>
 <%
 Cookie c = new Cookie("name", "gareen");
 c.setMaxAge(24*60*60); 
@@ -285,7 +348,32 @@ session.setAttribute("name", "gareen");
 String name = (String)getAttribute("name");
 %>
 
-<%-- JSTL--%>
+<%-- 九种隐式对象：不需要显示定义，直接就可以使用的对象
+out：输出 <% out.println("hello jsp");%>
+page：表示当前对象
+request：请求
+response：响应
+session：会话作用域
+
+pageContext：当前页面作用域
+application：全局作用域
+
+config：可以获取一些在 web.xml 中初始化的参数。
+exception：只有当前页面的<%@page 指令设置为isErrorPage="true"的时候才可以使用。
+
+
+
+JSP有4个作用域，分别是
+pageContext 当前页面的jsp页面，跳转就访问不到了
+request 一次请求，结束数据即被回收。注意：客户端跳转，浏览器会发生一次新的访问，新的访问会产生一个新的request对象。所以页面间客户端跳转的情况下，是无法通过request传递数据的。（可以使用服务器跳转）
+session 当前会话可以任意访问，但是不能共享不同用户的数据。
+application 全局，所有用户共享
+
+
+--%>
+
+
+<%-- JSTL JSP Standard Tag Library 标准标签库 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="name" value="${'gareen'}" scope="request" />
 通过标签获取name: <c:out value="${name}" /> <br>
@@ -305,6 +393,9 @@ String name = (String)getAttribute("name");
     </tr>
 </c:forEach>
 
+
+
+
 <%-- EL 表达式--%>
 通过标签获取name: <c:out value="${name}" /> <br>
 通过 EL 获取name: ${name}
@@ -318,7 +409,7 @@ String name = (String)getAttribute("name");
 
 **Session**：Session对应的中文翻译是会话。会话指的是从用户打开浏览器访问一个网站开始，无论在这个网站中访问了多少页面，点击了多少链接，都属于同一个会话。 直到该用户关闭浏览器为止，都属于同一个会话。
 
-盒子对应服务器上的 Session。钥匙对应浏览器上的 Cookie。通过钥匙可以打开盒子。其实就是第一次访问会创建一个sessionID，返回给你保存在Cookie里，等再次访问时，服务端取出ID。如果没有Cookie那么每次只能重新生成session。
+盒子对应服务器上的 Session，十五分钟或者半小时没有访问过可能会清除，钥匙（SessionID）对应保存在浏览器上的 Cookie。通过钥匙可以找到盒子，会在第一次访问创建一个sessionID，返回给你保存在 Cookie 里，等再次访问时，服务端取出 ID。如果没有 Cookie 那么每次只能重新生成 session。
 
 ### MVC
 Servlet 相当于在 Java 代码里面写 html，肯定很繁琐，所有html都是字符串拼接起来的。
