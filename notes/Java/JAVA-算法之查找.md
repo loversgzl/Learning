@@ -73,7 +73,7 @@ public int binarySearchTwo(int[] array, int left, int right,int target){
         return -1;
 /*
 同理，该语句也可改为寻找最后一个小于target的值，如果更改while语句可能造成死循环，
-即判断条件改为如下，最后得到3，4都小于target，则陷入死循环。
+即判断条件改为如下，最后得到left=3，right=4都小于target，则陷入死循环。
 if(array[mid] < target) 
 	left = mid; 
 else 

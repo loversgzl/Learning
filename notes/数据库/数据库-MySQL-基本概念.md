@@ -71,6 +71,24 @@ JDBC[ java数据库连接(java DataBase Connectivity)]:由一组使用java语言
 　　如果是使用 JDBC 对数据库的事务设置隔离级别的话，也应该是在调用 Connection 对象的setAutoCommit(false) 方法之前。调用 Connection 对象的 setTransactionIsolation(level) 即可设置当前链接的隔离级别，至于参数 level，可以使用 Connection 对象的字段：
 在JDBC中设置隔离级别的部分代码：
 
+### 问：事务和数据库连接池有什么关系？
+[参考博客](https://www.cnblogs.com/panxuejun/p/5920845.html)
+将线程和连接绑定，保证事务能统一执行 
+
+```java
+Class.forName("com.mysql.jdbc.Driver");
+//一次调用只能获得一个 connection，并不能满足高并发情况。因为connection不是线程安全的，一个connection对应的是一个事务。数据库每次连接都很浪费cpu和内存资源，因此诞生了数据库连接池(线程池)。数据库连接池负责分配,管理和释放数据库连接,它允许应用程序重复使用一个现有的数据库连接,而不是重新建立一个。
+java.sql.Connection conn = DriverManager.getConnection(jdbcUrl);
+
+/*数据库连接池（注意这里是线程）
+注意pool.getConnection()，都是先从threadlocal里面拿的，如果threadlocal里面有，则用，保证线程里的多个dao操作，用的是同一个connection，以保证事务。
+如果新线程，则将新的connection放在threadlocal里，再get给到线程。
+*/
+//JTA事务和普通事务的区别？
+简单的说 jta是多库的事务 jdbc是单库的事务
+
+```
+
 
 <a name="数据库引擎"></a>
 ### 数据库引擎 

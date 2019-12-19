@@ -115,6 +115,7 @@ if(scan.hasNext()){//只读取一次，遇到空格或者回车结束
 System.out.println(); //输出带换行
 System.out.print(); //输出不带换行
 System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进制，%s 字符串
+System.out.println(String.format("%.2f", pi));//浮点数控制精度的方法，最后一位会自动四舍五入。
 System.out.printf(); //C 格式输出
 ```
 
@@ -123,6 +124,7 @@ System.out.printf(); //C 格式输出
 
 由图可见，集合框架主要包括两种类型的容器，集合（Collection）、图（Map），前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue，具体实现类有ArrayList、LinkedList、HashSet、LinkedHashSet，图的具体实现类有：HashMap、HashTable、LinkedHashMap、HashTree。
 接口：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象。
+还有一些在集合框架出现以前的数据结构：stack
 
 数组缺点：固定长度，数据多了不够，少了浪费空间。
 容器类：为了解决数组的缺点，如  ArrayList、LinkedList、
@@ -142,7 +144,7 @@ StringBuilder用charAt
 */
 //排序函数
 import java.util.Arrays;
-Arrays.parallelSort(nums);
+Arrays.sort(nums);
 
 
 
@@ -308,7 +310,8 @@ Dictionary、Vector、Stack、Properties、
 */
 
 //栈 Stack
-Stack stack = new Stack(); //初始化
+Stack stack = new Stack(); //初始化，对象默认是 Obejct
+Stack<Integer> stack1 = new Stack<Integer>();  //指定类型的初始化
 stack.empty(); //判断是否为空，返回true/false
 stack.peek(); //取栈顶值（不出栈），返回 Object
 stack.push(Object);//进栈，返回 Object
@@ -445,6 +448,8 @@ Java不是纯的面向对象的语言，不纯的地方就是这些基本数据�
 //基本数据类型 和 包装类
 byte;short;int;long;float;double;char;boolean;
 Byte;Short;Integer;Long;Float;Double;Character;Boolean;
+
+
 
 //装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
 Integer x = 5; x = x +10;

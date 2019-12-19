@@ -28,20 +28,30 @@ now();curdate();curtime();
 max(),min(),avg(),sum(),
 ```
 
-注释，增、删、改表和创建数据库
+创建数据库 和 注释，增、删、改表
 ```mysql
 #注释
 -- 三种注释之一，两杠后加一空格
 #三种注释之二，python语言风格
 /*三种注释之三，C语言风格*/
-
 #语法：不区分大小写，句末记得添加分号
 
-#字段可选类型：int、char、datetime、smallint、varchar
-#注意字段上的点，叫间隔号,建删表时不可省略，查询等操作可省略。
-create database `school`;
+
+#创建数据库，如果存在则先删除, #数据库名一旦创建好像不好修改，删除重建吧
+drop database if exists `school`;
+create database `school` default character set utf8;
 use `school`;
 
+
+#创建表格，字段可选类型：int、char、varchar、datetime、smallint、
+auto_increment #自增
+primary key(column) #主键
+engine=InnoDB default charset=utf8; #设置引擎和编码
+#设置外键，将产品 cid，绑定到 Category 的主键 id上
+constraint fk_product_category foreign key (cid) references category (id);
+
+#注意字段上的点，叫间隔号,建删表时不可省略，查询等操作可省略。
+drop table if exists `students`; 
 create table `students`(
     `id` int not null auto_increment,
     `name` varchar(20) not null,
@@ -51,15 +61,10 @@ create table `students`(
     primary key(`id`)
 ) default charset 'UTF8';
 
-#删除表格，数据库，表格的某一列
-drop table `students`; 
-drop database `school`;
-ALTER TABLE students DROP column nickname;
-
-#数据库名好像不好修改，重建吧
-#修改表名，为已有表格增加一列
-ALTER TABLE `student` RENAME TO `students`; 
-ALTER TABLE `students` add column `age` int not null after `sex`;
+#修改表格
+ALTER TABLE `student` RENAME TO `students`; #修改表名
+ALTER TABLE `students` add column `age` int not null after `sex`; #为已有表格增加一列
+ALTER TABLE students DROP column nickname; #删除表格格的某一列
 
 ```
 
@@ -144,6 +149,11 @@ REGEXP ：正则表达式
 SELECT DISTINCT age FROM students;
 #或者使用group by，并且效率会更高
 SELECT age from students GROUP BY age;
+#下面介绍了计算'2019-03-11'这一天访问过页面的所有用户数
+SELECT count(user_id) FROM (SELECT user_id FROM visit WHERE date = '2019-03-11'  GROUP BY user_id) f
+SELECT count(user_id) FROM (SELECT DISTINCT user_id FROM visit WHERE date = '2019-03-11') f
+SELECT count(DISTINCT user_id) FROM visit WHERE date = '2019-03-11'
+
 ```
 
 **问：一道写 SQL 语句的题，计算学生的平均成绩和总成绩？**

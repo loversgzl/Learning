@@ -86,11 +86,18 @@ while (rs.next())
 /*
 事务	只有所有操作都正确执行，事务才发生
 MYSQL 表的类型必须是INNODB才支持事务
+相关操作主要有四种：
 */
+
 c.setAutoCommit(false); //自动提交关闭
 s.execute(sql1);
 s.execute(sql2);
-c.commit();// 手动提交
+c.commit();// 手动提交,提交一个事务
+begin();//开始一个事务
+rollback();//回滚一个事务
+prepare();//准备提交一个事务
+
+
 
 /*
 ORM=Object Relationship Database Mapping 
@@ -101,11 +108,19 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 
 /*
 数据库连接池
-当有多个线程，每个线程都需要连接数据库执行SQL语句的话，那么每个线程都会创建一个连接，并且在使用完毕后，关闭连接。创建连接和关闭连接的过程也是比较消耗时间的，当多线程并发的时候，系统就会变得很卡顿。
+当有多个线程，每个线程都需要连接数据库执行SQL语句的话，那么每个线程都会创建一个连接，并且在使用完毕后，关闭连接。创建数据库连接和关闭数据库连接的过程也是特别消耗系统资源的，当多线程并发的时候，系统就会变得很卡顿。
 同时，一个数据库同时支持的连接总数也是有限的，如果多线程并发量很大，那么数据库连接的总数就会被消耗光，后续线程发起的数据库连接就会失败。
+
+与传统方式不同，连接池在使用之前，就会创建好一定数量的连接。如果有任何线程需要使用连接，那么就从连接池里面借用，而不是自己重新创建.使用完毕后，又把这个连接归还给连接池供下一次或者其他线程使用。倘若发生多线程并发情况，连接池里的连接被借用光了，那么其他线程就会临时等待，直到有连接被归还回来，再继续使用。整个过程，这些连接都不会被关闭，而是不断的被循环使用，从而节约了启动和关闭连接的时间。
 */
 
 ```
+
+问：JDBC事务与JTA事务的区别？
+JDBC事务缺点：事务的范围局限于一个数据库连接。一个 JDBC 事务不能跨越多个数据库。JTA 事务提供了跨数据库连接（或其他JTA资源）的事务管理能力。这一点是与JDBC Transaction最大的差异。JDBC事务由Connnection管理，也就是说，事务管理实际上是在JDBC Connection中实现。事务周期限于Connection的生命周期。同样，对于基于JDBC的ibatis事务管理机制而言，事务管理在SqlMapClient所依托的JDBC Connection中实现，事务周期限于SqlMapClient 的生命周期。
+
+JTA事务管理则由 JTA容器实现，JTA容器对当前加入事务的众多Connection进行调度，实现其事务性要求。JTA的事务周期可横跨多个JDBC Connection生命周期。
+
 
 
 
@@ -138,7 +153,15 @@ Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一�
 四、继承 HttpServlet 的同时，也继承了一个 service 方法，判断是执行 doPost 还是 doGet，可以直接重写该方法，那么就不需要判断了。三者参数相同。
 五、获取中文，添加：request.setCharacterEncoding("UTF-8"); 
 响应中文，添加：response.setContentType("text/html; charset=UTF-8");
-六、生命周期：实例化（在路径找到对应的servlet后，如发现没有实例，则会调用该类的默认构造方法，且只会执行一次，因为是单例的）、初始化（Servlet是单例的，所以只会初始化一次）、提供服务、销毁、被回收。
+
+六、生命周期：
+servlet接口定义了servlet的生命周期方法：init（）、service（）、destory（）三个方法
+实例化：在路径找到对应的servlet后，如发现没有实例（即第一次调用），则会调用该类的默认构造方法，且只会执行一次，因为是单例的。
+初始化：init 方法是一个实例方法，所以会在构造方法执行后执行。Servlet是单例的，所以只会初始化一次。
+提供服务：在service()中编写业务代码。
+销毁destroy()：如下情况会调用 1该Servlet所在的web应用重新启动，2关闭tomcat的时候 destroy()方法会被调用
+被回收：被销毁后就会很快被回收
+
 七、服务端跳转页面，并返回给客户端：（路径不变，只是将内容传递过去）
 request.getRequestDispatcher("success.html").forward(request, response);
 或者直接通知客户端自己进行跳转：response.sendRedirect("fail.html");
@@ -151,7 +174,16 @@ request.getRequestDispatcher("success.html").forward(request, response);
 4. 服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。
 5. Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。
 
+**问：当多个客户请求一个Servlet时，服务器为每一个客户启动一个进程？**
+1.不一定， Servlet 可以是单线程的，也可以是多线程的。
+3.当多个浏览器终端请求web服务器的时候，服务器为每个客户启动一个线程，不是进程。(选择中喜欢偷换概念，在这个上面做文章。)
+
+**问：在开发servlet继承HttpServlet时如何处理父类的service方法？**
+答：一般我们都是不对service方法进行重载(没有特殊需求的话)，而只是重载doGet()之类的doXxx()方法，减少了开发工作量。但如果重载了service方法，doXXX()方法也是要重载的。即不论是否重载service方法，doXXX()方法都是需要重载的。
+[额外知识补充](https://my.oschina.net/dtkking/blog/89443)
+
 ```java
+//
 import java.io.IOException;
 import java.io.PrintWriter;//response返回html的类
 
@@ -161,7 +193,7 @@ import javax.servlet.http.HttpServletRequest;//处理POST
 import javax.servlet.http.HttpServletResponse;//处理GET
 public class HelloServlet extends HttpServlet{
 
-/*
+/*import javax.servlet.http.httpservletrequest，你看这个包说明servlet是一个特殊的Java类， java和javax都是Java的API包，java是核心包，javax的x是extension的意思，也就是扩展包。
 服务端初始化，肯定在构造函数之后执行
 */
 public void init(ServletConfig config) {//服务器启动初始化
@@ -361,15 +393,11 @@ application：全局作用域
 config：可以获取一些在 web.xml 中初始化的参数。
 exception：只有当前页面的<%@page 指令设置为isErrorPage="true"的时候才可以使用。
 
-
-
 JSP有4个作用域，分别是
 pageContext 当前页面的jsp页面，跳转就访问不到了
 request 一次请求，结束数据即被回收。注意：客户端跳转，浏览器会发生一次新的访问，新的访问会产生一个新的request对象。所以页面间客户端跳转的情况下，是无法通过request传递数据的。（可以使用服务器跳转）
 session 当前会话可以任意访问，但是不能共享不同用户的数据。
 application 全局，所有用户共享
-
-
 --%>
 
 
@@ -415,14 +443,39 @@ application 全局，所有用户共享
 Servlet 相当于在 Java 代码里面写 html，肯定很繁琐，所有html都是字符串拼接起来的。
 JSP 相当于在 HTML 里面写代码，用两个%括起来，所有的变量也要括起来，也很麻烦。
 所以单独用一个做很繁琐，就将两个的优势结合，就是MVC的思想。
-Modle 模型-数据，View 视图-网页JSP，Controller 控制器-Servlet。
+Modle 模型-数据（DAO,Bean），View 视图-网页（JSP），Controller 控制器（Servlet）。
+其中可以看出，是视图是.jsp，控制器和模型都是 .java文件，除了web.xml。接下来学习JSP+Bean
+```java
+/*
+Servlet 只用来从数据库中查询 Hero 对象，然后跳转到 JSP 页面，如果保存在request，需要服务器跳转，因为它的有效期是一次会话。
+*/
+<%-- controlerHero.java --%>
+int id = Integer.parseInt(request.getParameter("id"));
+Hero hero = new HeroDAO().get(id);
+request.setAttribute("hero", hero);
+request.getRequestDispatcher("editHero.jsp").forward(request, response);
+
+```
+
+```jsp
+<%-- viewHero.jsp --%>
+<form action='updateHero' method='post'>
+    名字 ： <input type='text' name='name' value='${hero.name}'> <br>
+    血量 ：<input type='text' name='hp' value='${hero.hp}'> <br>
+    伤害： <input type='text' name='damage' value='${hero.damage}'> <br>
+    <input type='hidden' name='id' value='${hero.id}'>
+    <input type='submit' value='更新'>
+</form>
+```
+
 
 ### Filter
 
 
 
 
-### GUI
+
+### GUI（有兴趣可以自己了解）
 **Swing**
 Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI）器件如：文本框，按钮，分隔窗格和表。
 **五子棋**：1.掌握 JavaGUI 界面设计、2.掌握鼠标事件的监听（MouseListener，MouseMotionListener）
@@ -435,16 +488,18 @@ Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI�
 
 ### Spring
 Spring是一个基于 IOC 和 AOP 结构的 J2EE 系统框架。
+**pojo**(Plain Old Java Object) 简单的Java对象
 
- ** IOC 是反转控制 (Inversion Of Control) **
+
+** IOC 是反转控制 (Inversion Of Control) **
 Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
-传统的方式：通过 new  关键字主动创建一个对象
-IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象，就像控制权从本来在自己手里，交给了 Spring。在主程序调用 xml 文件时，就开始对实例进行初始化构造了，不管是直接写的 bean 还是用注解方式（自动生成一个bean），效果都一样。
+**传统的方式**：通过 new  关键字主动创建一个对象
+**IOC 方式**：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象，就像控制权从本来在自己手里，交给了 Spring。在主程序调用 xml 文件时，就开始对实例进行初始化构造了，不管是直接写的 bean 还是用注解方式（自动生成一个bean），效果都一样。
+**IoC的实现原理**：就是工厂模式加反射机制。
 
 **Spring 注解方式**
 @Autowired：默认按类装配
-@Resource：默认先按名称，找不到按类
-若要按指定名称：@Resource(name="one")
+@Resource(name="one")：默认先按名称，找不到按类
 @Resource注解属性名表示按照属性名来查找类，找到匹配的类后，自动创建一个bean来存放对象，并注入属性，找不到或者找到多个，都会抛出异常。
 @Autowired时先按照出行的类型进行查找类，如果有多个再找属性名，属性名还是有多个就报错。
 @Component：对整个 Bean 进行注解。
@@ -453,49 +508,78 @@ IOC 方式：对象的生命周期由 Spring 来管理，直接从 Spring 那里
 首先，在面向切面编程的思想里面，把功能分为核心业务功能和周边功能。
 所谓的核心业务：比如登陆，增加数据，删除数据都叫核心业务
 所谓的周边功能（切面）：比如性能统计，日志，事务管理等等
-在面向切面编程 AOP 的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 "编织" 在一起，这就叫 AOP。在编写切面功能时，有一个核心功能接口 joinpoin，默认在切面功能里将所有功能完成后，再在 xml 中进行编织。
+在面向切面编程 AOP 的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 "编织" 在一起（在xml文件中编织），这就叫 AOP。在编写切面功能时，有一个核心功能接口 joinpoin（可以调用核心功能），默认在切面方法中将所有功能完成后（如在执行核心功能前后打印开始结束日志），再在 xml 中进行编织（就我理解，这里感觉只是创建两个bean，然后调用，真正的编织感觉在编写切面功能的时候已经做了，xml中负责调用）。
 
+**Spring Scope（作用域）的范围**
+![springScope作用域](../../pics/springScope作用域.jpg)
+
+**问：AOP技术优势在于？**
+答：将核心关注点与横切关注点完全隔离，面相切面编程，与传统oop相比，传统oop编程是自顶向下的编写主业务逻辑，但往往需要参杂着一些与主业务逻辑无关或关系不大的逻辑，这就产生了横切性问题。Aop能很好的隔离和管理这些与主业务逻辑关联不大的业务代码，使得代码的可读性和可维护性大大提高。
+
+**问：在spring中，singleton属性默认是false，每次指定别名取得的Bean时都会产生一个新的实例？**
+答：Bean的创建时会提到Spring的单例模式，就是说默认情况下Spring中定义的Bean是以单例模式创建的。如果以前了解设计模式中的单例模式的话很容易对这种说法产生先入为主的印象。事实上，Spring中的单例模式还有许多需要注意的地方。在GoF中的单例模式是指一个ClassLoader中只存在类一个实例。而在Spring中的单例实际上更确切的说应该是：
+1.每个Spring Container中定义的Bean只存在一个实例
+2.每个Bean定义只存在一个实例。
 
 ```xml
 <!-- spring 反转控制，在xml中产生实例，在主函数中通过 getBean("c") 获取这个实例。 -->
-<bean name="c" class="spring.Category">
+<bean name="c" class="package.Category">
 	<property name="name" value="CategoryOne" />
 </bean>
 
-<!-- spring 注入对象,将上一个实例注入到另一个实例中 -->
-<bean name="p" class="spring.Product">
+<!-- spring 注入对象（DI）,将上一个实例注入到另一个实例中 -->
+<bean name="p" class="package.Product">
 	<property name="name" value="ProductOne" />
 	<property name="category" ref="c" />
 </bean>
 
 <!-- spring 使用注解的方式注入对象 -->
 <!-- 在主配置文件 .xml 中 bean 的前面添加 <content:annotation-config/>  -->
-<!-- 在 product 类中的 Category 属性上面添加 @AutoWired，或者 set 方法上面-->
-<!-- 或者添加 @Resource(name="c") -->
+<!-- 在 product 类中的 Category 属性上面添加 @AutoWired 会自动匹配bean，
+或者 set 方法上面，会自动调用该方法进行匹配。
+而在属性上添加 @Resource(name="c") 则是主动的方式，更容易理解。
+-->
 
-<!-- 更进一步，将 bean 对象本身也通过注解 -->
+<!--   -->
+
+<!-- 更进一步，将 bean 对象本身也通过注解，重要，因为很方便，后面项目经常用到 -->
 <!-- 在主配置文件 .xml 中删除所有的 bean，添加 <content:component-scan base-package="spring"/>  -->
 <!-- 在Product类上添加 @Component("p") 即表明此类是 bean,需要注入对象的属性上面添加@AutoWired-->
 <!-- 同时属性要在类中初始化了 -->
 
-<!-- 这个是在测试的时候调用的 -->
-<bean name="s" class="spring.ProductService"></bean>  
 
-<!-- 将核心业务功能与切面功能整合 -->
+<!-- 将核心业务功能与切面功能整合：
+核心业务类编写照常，切面类需要通过一个核心业务类接口，提前将需要做的任务完成，如在核心业务类前后打印日志等。
+接下来在xml中通过两个类构造两个bean，xml中的调用肯定是通过bean来实现的，只要调用核心类中任意的方法，就会触发切面类的bean，具体看以下实现。
+-->
+<!-- 切面类实例化一个bean -->
 <bean id="loggerAspect" class="spring.LoggerAspect"/>
+
+<!-- 具体的编织过程 -->
 <aop:config>
+<!-- 核心编程的id，自定义的核心bean，调用任意此类的方法就调用切面类 -->
 <aop:pointcut id="loggerCutpoint" 
 expression = "execution(* spring.ProductService.*(..)) "/>
 
+<!-- 切面编程的id，绑定的切面bean -->
 <aop:aspect id="logAspect" ref="loggerAspect">
+<!-- 只要触发了核心bean，那么就调用 log 方法 -->
 <aop:around pointcut-ref="loggerCutpoint" method="log"/>
 </aop:aspect>
 </aop:config>   
+
+<!-- 其实了解了上述构造过程，可以看到，这些只是重复了切面类的功能，用bean来做，
+所以我们可以使用注解的方式，重要，因为较为方便快捷。
+1在xml文件中添加两句
+<context:component-scan base-package="spring"/>
+<aop:aspectj-autoproxy/> 
+2在切面类添加 @Aspect,@Component,@Around即可
+-->
 ```
 
 ### SpringMVC
-通过 Bean 的映射，将指定路径映射到指定的类实例中。通过 Controller 将模型与视图整合起来。
-同样可以使用注解的方式，删除 Bean，在类上添加 @Controller @RequestMapping("/index")
+入口是Servlet。
+springmvc的请求流程，我们以一次用户的数据查询为例: 1，用户通过浏览器发送http请求，web容器接收到相关请求调用springmvc的核心控制器DispatcherServlet ，任何路径的映射都是如此；2，DispatcherServlet请求处理器映射器（HandlerMapping），处理器映射器根据 路径 对应的 配置或注解，找到最终要执行的Handler，并返回处理器执行链（HandlerExecutionChain）给DispatcherServlet。 3，DispatcherServlet接收到处理器执行链后请求处理器适配器,（HandlerAdapter）处理器适配器根据Handler规则执行不同的Handler，即我们编写的Controller，执行完成后返回一个ModelAndView对象给DispatcherServlet 5，DispatcherServlet接收数据并调用视图解析器（ViewResolver），视图解析器将逻辑视图解析成真正的物理视图，并返回View对象 6，DispatcherServlet接收到对应的View对象,对视图进行渲染，将model中的数据转为response响应。 7，DispatcherServlet响应用户的请求。
 ```java
 //使用 Bean 跳转，将模型与视图整合
 public class IndexController implements Controller {
@@ -507,7 +591,10 @@ public class IndexController implements Controller {
     }
 }
 
-//使用注解方式
+/*
+使用注解方式：重点，因为很简洁，用的也很多。
+
+*/
 package springmvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -551,6 +638,47 @@ public class IndexController {
 
 ### MyBatis
 **基础**
+平时我们都用JDBC访问数据库，除了需要自己写SQL之外，还必须操作Connection, Statement, ResultSet 这些其实只是手段的辅助类。 不仅如此，访问不同的表，还会写很多雷同的代码，显得繁琐和枯燥。那么用了Mybatis之后，只需要自己提供SQL语句，其他的工作，诸如建立连接，Statement， JDBC相关异常处理等等都交给Mybatis去做了，那些重复性的工作Mybatis也给做掉了，我们只需要关注在增删改查等操作层面上，而把技术细节都封装在了我们看不见的地方。
+```xml
+<!-- 配置mybatis-config.xml 连接数据库  -->
+
+<typeAliases> <!-- 配置前缀  -->
+   <package name="com.how2java.pojo"/>
+</typeAliases>
+ <!-- 连接数据库  -->
+<property name="driver" value="com.mysql.jdbc.Driver"/>
+<property name="url" value="jdbc:mysql://localhost:3306/school?characterEncoding=UTF-8"/>
+<property name="username" value="root"/>
+<property name="password" value="admin"/>
+ <!-- 映射到执行文件  -->
+<mappers>
+	<mapper resource="mybatis/Category.xml"/>
+</mappers>
+</configuration>
+<!-- 配置 Category.xml  执行sql语句  -->
+<mapper namespace="mybatis">
+<insert id="addCategory" parameterType="Category" >
+insert into category_ ( name ) values (#{name})   
+</insert>
+
+<delete id="deleteCategory" parameterType="Category" >
+delete from category_ where id= #{id}  
+</delete>
+
+<update id="updateCategory" parameterType="Category" >
+update category_ set name=#{name} where id=#{id}   
+</update>
+
+<select id="getCategory" parameterType="_int" resultType="Category">
+select * from   category_  where id= #{id}   
+</select>
+
+<select id="listCategory" resultType="Category">
+select * from   category_     
+</select>    
+</mapper>
+```
+
 
 **动态 SQL **
 if 标签，可以对 SQL 语句进行控制。
@@ -596,5 +724,46 @@ where 标签，可以自动删除多余的 and 和 or。
 **错误提示：java.lang.NoClassDefFoundError？**
 解决：搜索了一下，意思是某个类明明有，但是运行的时候找不到了，即这个类不在 classpath 中，一直不知道这个 classpath 在哪里，真是眼瞎，在导入外部包的时候啊！！有两个选项，Moudlepath、Classpath，我以为都一样，随便点了第一个！，不要这么随意好么？？
 
+### SSM整合
+**Servlet**: WEB-INF/web.xml  通过这个配置文件将浏览器中的 路径 映射到 类，servlet.java类会根据浏览器的不同请求执行 doGet doPost方法。浏览器访问
+功能：接受浏览器的访问提供映射。
 
+**Spring**:src/applicationContext.xml [Spring 的核心配置文件]通过构建不同的 bean 来提供实例，
+注解方式：<context:annotation-config/> @Autowired @Resource(name="c")    .java文件测试
+功能：主要做 IOC 反转控制，通过注解自动生成 bean。
 
+**SpringMVC**: WEB-INF/web.xml 将浏览器中所有的请求 路径 映射指定的 Servlet 和对应的 mvc 配置文件 WEB-INF/springMVC-servlet.xml 。该文件将浏览器不同的 路径 映射到 不同的Controller
+注解方式：<context:component-scan base-package="package">	 @Controller @RequestMapping("/index")
+
+**Mybatis**: src/mybatis-config.xml 连接数据的配置信息并映射到配置SQL语句的文件，
+src/Category.xml 封装SQL语句（DAO）
+
+**ssm**：
+
+1. 首先浏览器上访问路径 /listCategory
+2. tomcat根据web.xml上的配置信息，拦截到了/listCategory，并将其交由DispatcherServlet处理。
+3. DispatcherServlet 根据springMVC的配置，将这次请求交由CategoryController类进行处理，所以需要进行这个类的实例化
+4. 在实例化CategoryController的时候，注入CategoryServiceImpl。 (自动装配实现了CategoryService接口的的实例，只有CategoryServiceImpl实现了CategoryService接口，所以就会注入CategoryServiceImpl)
+5. 在实例化CategoryServiceImpl的时候，又注入CategoryMapper
+6. 根据ApplicationContext.xml中的配置信息，将CategoryMapper和Category.xml关联起来了。
+7. 这样拿到了实例化好了的CategoryController,并调用 list 方法
+8. 在list方法中，访问CategoryService,并获取数据，并把数据放在"cs"上，接着服务端跳转到listCategory.jsp去
+9. 最后在listCategory.jsp 中显示数据
+
+比较难理解的三个文件，三个配置文件：web.xml、applicationContext.xml、springMVC.xml 。
+
+WEB-INF/web.xml：两个作用
+1. 通过ContextLoaderListener在web app启动的时候，获取contextConfigLocation配置文件的文件名applicationContext.xml，并进行Spring相关初始化工作。
+2. 有任何访问，都被DispatcherServlet所拦截，这就是Spring MVC那套工作机制了。
+1映射到applicationContext.xml，2将浏览器中所有的请求 路径 映射指定的 Servlet 和对于的 mvc 配置文件 src/springMVC.xml 。
+
+src/springMVC.xml：主要任务获取数据然后和jsp页面整合返回。
+1. 扫描Controller,并将其生命周期纳入Spring管理
+2. 注解驱动，以使得访问路径与方法的匹配可以通过注解配置
+3. 静态页面，如html,css,js,images可以访问
+4. 视图定位到/WEB/INF/jsp 这个目录下
+
+src/applicationContext.xml：主要任务连接数据库，从数据库获取数据。
+构造一个<bean>连接数据库，并注入到另一个<bean>，连接Category.java类构造ORM，连接Category.xml让其定义的SQL语句方法可以调用数据库。
+
+大致配置过程是从下到上的三个过程，从mybatis数据库，到SpringMVC，到Spring。使用作者的源文件，修改数据库部分即可。为什么我的项目不行？我唯一的修改即是将包都去掉，整合在一个包下，可能在注解的时候会出现问题吧。
