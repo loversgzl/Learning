@@ -5,7 +5,7 @@
 #查看数据库引擎
 show engines;
 /*
-问：查询语句不同元素（where、jion、limit、group by、having 等等）执行先后顺序？
+问：查询语句不同元素（where、jion、on、limit、group by、having 等等）执行先后顺序？
 查询中用到的关键词主要包含六个，并且他们的顺序依次为 select--from--where--group by--having--order by
 其中 select 和 from 是必须的，其他关键词是可选的，这六个关键词的执行顺序 与 sql 语句的书写顺序并不是一样的，而是按照下面的顺序来执行:
 from:需要从哪个数据表检索数据
@@ -14,7 +14,7 @@ group by:如何将上面过滤出的数据分组
 having:对上面已经分组的数据进行过滤的条件
 select:查看结果集中的哪个列，或列的计算结果
 order by :按照什么样的顺序来查看返回的数据
-from 后面的表关联，是自右向左解析 而 where 条件的解析顺序是自下而上的。
+from 后面的表关联，是自右向左解析 而 where 条件的解析顺序是自左而右的。
 也就是说，在写 SQL 文的时候，尽量把数据量小的表放在最右边来进行关联（用小表去匹配大表），而把能筛选出小量数据的条件放在 where 语句的最左边 （用小表去匹配大表）
 */
 ```
@@ -24,24 +24,22 @@ from 后面的表关联，是自右向左解析 而 where 条件的解析顺序�
 #日期+时间，日期，时间
 now();curdate();curtime();
 
-#最大值，最小值，平均值，求和
-max(),min(),avg(),sum(),
+#最大值，最小值，平均值，求和，
+max(),min(),avg(),sum()
+select length(filename) from tablename; #查看某个字段的数据长度，字节记
 ```
 
 创建数据库 和 注释，增、删、改表
 ```mysql
-#注释
 -- 三种注释之一，两杠后加一空格
 #三种注释之二，python语言风格
 /*三种注释之三，C语言风格*/
 #语法：不区分大小写，句末记得添加分号
 
-
 #创建数据库，如果存在则先删除, #数据库名一旦创建好像不好修改，删除重建吧
 drop database if exists `school`;
 create database `school` default character set utf8;
 use `school`;
-
 
 #创建表格，字段可选类型：int、char、varchar、datetime、smallint、
 auto_increment #自增
@@ -66,12 +64,15 @@ ALTER TABLE `student` RENAME TO `students`; #修改表名
 ALTER TABLE `students` add column `age` int not null after `sex`; #为已有表格增加一列
 ALTER TABLE students DROP column nickname; #删除表格格的某一列
 
+#查看创建表格的SQL语句
+show CREATE table table_name;
+
 ```
 
 ### 在一个表中查询
 四种基本操作：INSERT、DELETE、UPDATE、SELECT（主要考察 select，所有后面着重介绍）
 ```mysql
-INSERT INTO students(name,sex,age,in_time) VALUE ('张四',1,25,crudate());
+INSERT INTO students(name,sex,age,in_time) VALUE ('张四',1,25,curdate());
 DELETE FROM students where age = 20;
 UPDATE students set sex = 0 where id = 1;
 
@@ -166,12 +167,25 @@ select stuNum, sum(score) total from course GROUP BY stuNum ORDER BY total DESC;
 
 **问：给定一个表，找出每门成绩（grade）都大于等于80分的学生姓名？**
 [参考博客](https://www.cnblogs.com/chenlin/p/7412253.html)
+
 ```mysql
+#exists
 SELECT * from (select DISTINCT stuNum from course) course1
 where not EXISTS 
-(select * 
-from (select DISTINCT stuNum from course where score < 80) course2 
-WHERE course1.stuNum=course2.stuNum);#？？？不加where语句不可以么？
+(select * from (select DISTINCT stuNum from course where score < 80) course2 
+WHERE course1.stuNum=course2.stuNum);
+#解释一：为什么套两层，因为两个语句处理的是一个表，需要重新命名
+#解释二：where语句不能少，这里是一个等号！解析从左到右，如果表2中存在，则返回true，否则返回false，具体参考下面exists的用法。
+
+#in
+select DISTINCT stuNum from course
+where stuNum not in (select DISTINCT stuNum from course where score < 80);
+
+/*not exists 参考博客：https://www.cnblogs.com/cjm123/p/8177017.html
+把最重要的给忘记了，where表的解析是从左到右。
+exists : 强调的是是否返回结果集，不要求知道返回什么，而 exists 与 in 最大的区别在于 in 引导的子句只能返回一个字段。
+*/
+
 ```
 
 **关键字：limit**
@@ -180,7 +194,7 @@ WHERE course1.stuNum=course2.stuNum);#？？？不加where语句不可以么？
 #问：查找年龄第三小的员工所有信息？
 SELECT * from students ORDER BY age LIMIT 2,1;
 #limit start num;
-SELECT * from students LIMIT 5;#只要前五条数据，0 省略。
+SELECT * from students LIMIT 5;#只要前五条数据，0 省略，表示为0，5。
 SELECT * from students LIMIT 5,10;#从第 6 条开始的 10 条数据。
 SELECT * from students LIMIT -1,5;#最后 5 条数据不要了，其余全要。
 ```
@@ -189,24 +203,28 @@ SELECT * from students LIMIT -1,5;#最后 5 条数据不要了，其余全要。
 * **关键字：union **
 MySQL UNION 操作符用于连接两个以上的 SELECT 语句的结果组合到一个结果集合中。多个 SELECT 语句会删除重复的数据。使用 union 的前后两个查询语句的结构必须是一样的，可以采用字段组合或是不足补空行的方式把前后两个结构调整为一样的。
 ```mysql
-select col1,col2,'' as col3 from t1
-union
-select col1,col2,col3 from t2
+#将两个表的性别汇总，相同性别只记录一次（不包含重复数据），如果要记录所以则使用 union all（包含重复数据）。
+select sex from table1 #两条语句的字段不一定相同，但数量一定要一样，不够的用空格代替。
+union 
+select sex from table2
 ```
 
 * **关键字：join **  [参考博客](https://www.cnblogs.com/fudashi/p/7491039.html)
-即表格的交并补操作，有左连接，右连接，内部连接，外部连接
+即表格的交并补操作，有左连接，右连接，内部连接，外部连接，注意：解析连接的表是从右往左进行
 左连接（left join）：求两个表的交集外加左表剩下的数据；
 右连接（right join）：求两个表的交集外加右表剩下的数据；
 内部连接（inner join）：求两个表的交集；
 外部连接：就是求两个集合的并集，但是 MySQL 不支持 OUTER JOIN，但是我们可以对左右连接做 UNION 操作实现。
 
 ```mysql
-join、left join、right join、
-on、using、
+table1 （inner）join table1 on foreign1Key = foreign2Key;
+#默认是内连接，因为用的比较多，相当于将外键补充出来，说成交集并不是很准确。
+left join; #如果理解了内连接，那么左右连接也好理解了，因为有些字段没有外键，因此左连接就将左表中无外键的数据补充出来，外键设置为空，右连接则补充右表。大部分情况下on后面是外键，不然也不会用到两张表嘛，但也可能是其他字段作为条件，这里只是举例。
+right join;
+
 ```
 
-* **问：查找学生的姓名，年龄，和所对应的班级全称（另一个表的信息）？**
+* **问：查找学生的姓名，年龄和所对应的班级全称（另一个表的信息）？**
 ```mysql
 SELECT stu.name, stu.age, cla.name 
 from students stu inner join class cla 
@@ -227,8 +245,6 @@ using(emp_no)*
 *select e.emp_no 
 from employees e left join dept_manager d on e.emp_no = d.emp_no
 where d.dept_no is null*
-
-
 
 * **问：获取所有部门中当前员工薪水最高的相关信息？有点难理解的，因为东西比较多，我们拆开来看**
 *SELECT d.dept_no, s.emp_no, MAX(s.salary) AS salary

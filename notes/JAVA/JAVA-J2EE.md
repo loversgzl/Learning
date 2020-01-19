@@ -13,8 +13,8 @@ JSP：可以写 java 代码的 html
 ```java
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.SQLException;
 public class test {
 	public static void main(String[] args) {
 		try{
@@ -24,6 +24,7 @@ public class test {
 		}
 		//建立与数据库的连接，获取 statement 对象，执行 SQL 语句
 		//放在try 里面，是关闭流，执行完自动关闭，否则需要手动关闭
+        //3306-mysql专用端口号，school-数据库名称，root-用户名，1234-密码。
 		try (Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/school?characterEncoding=UTF-8",	"root","1234");	Statement s = con.createStatement();){
 			//执行 SQL 语句，字符串用单引号。
 			String insert = "insert into students value(5,'王五',1,26,1,curdate());";
@@ -114,7 +115,15 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 与传统方式不同，连接池在使用之前，就会创建好一定数量的连接。如果有任何线程需要使用连接，那么就从连接池里面借用，而不是自己重新创建.使用完毕后，又把这个连接归还给连接池供下一次或者其他线程使用。倘若发生多线程并发情况，连接池里的连接被借用光了，那么其他线程就会临时等待，直到有连接被归还回来，再继续使用。整个过程，这些连接都不会被关闭，而是不断的被循环使用，从而节约了启动和关闭连接的时间。
 */
 
+/*错误1：如果没有包名，则请删除 module-info.java 这个文件。
+
+
+*/
+
 ```
+**导包**
+访问MySQL数据库需要用到第三方的类，这些第三方的类，都被压缩在一个叫做Jar的文件里。
+为了代码能够使用第三方的类，需要为项目导入mysql的专用Jar包。通常都会把项目用到的jar包统一放在项目的lib目录下，然后在eclipse中导入这个jar包，所以由此可以看出 lib 文件夹下的包其实是作为仓库使用的。
 
 问：JDBC事务与JTA事务的区别？
 JDBC事务缺点：事务的范围局限于一个数据库连接。一个 JDBC 事务不能跨越多个数据库。JTA 事务提供了跨数据库连接（或其他JTA资源）的事务管理能力。这一点是与JDBC Transaction最大的差异。JDBC事务由Connnection管理，也就是说，事务管理实际上是在JDBC Connection中实现。事务周期限于Connection的生命周期。同样，对于基于JDBC的ibatis事务管理机制而言，事务管理在SqlMapClient所依托的JDBC Connection中实现，事务周期限于SqlMapClient 的生命周期。

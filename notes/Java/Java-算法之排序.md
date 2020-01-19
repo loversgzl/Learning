@@ -15,7 +15,7 @@
 
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
-![排序算法时间效率对比图](..\pics\排序算法时间效率对比图.jpg)
+![排序算法时间效率对比图](../../pics/排序算法时间效率对比图.jpg)
 
 
 
@@ -240,12 +240,12 @@ public class test {
     }
     //#递归调用归并排序
     public static void msort(int[] array, int left, int right) {
-    	if(left >= right)
-    		return;
-        int mid = (left+right)/2;
-        msort(array,left,mid);
-        msort(array,mid+1,right);
-        merge(array,left,mid,right);
+    	if(left < right){
+            int mid = (left+right)/2;
+            msort(array,left,mid);
+            msort(array,mid+1,right);
+            merge(array,left,mid,right);
+        }
     }
     
     public static void main(String[] args) {
