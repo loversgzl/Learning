@@ -55,7 +55,6 @@ def search(nums, target):
 /**
 *模板二：查找第一个大于等于 target 值的坐标，或者查找最后一个比 target 小的值的坐标。
 其实上述两个问题的坐标是相邻的，但前者比后者的编码更方便处理一些，可以找前者-1得到后者
-
 */
 public int binarySearchTwo(int[] array, int left, int right,int target){
 //寻找第一个大于等于target的值，找不到返回 -1.

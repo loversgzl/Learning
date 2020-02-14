@@ -4,11 +4,13 @@
 
 链表的各种操作：逆序（部分逆序，按某种条件逆序）、判断是否有环、环的入口节点、删除指定节点等。
 链表的基本操作：1.在链表未插入一个节点，2.删除一个节点，
-注意：存在空的情况，优先处理头结点等，
+注意：链表通常可以衍生出循环链表，静态链表，双链表等。对于链表使用，需要注意头结点的使用，存在空的情况，优先处理头结点等，
+链表与数组的比较：链表在插入的时候可以达到 O(1) 的复杂度，比另一种线性表 —— 顺序表快得多，但是查找一个节点或者访问特定编号的节点则需要O(n) 的时间，而顺序表相应的时间复杂度分别是O(log n) 和 O(1)。
 
-1. 两数相加 - 两个链表的简化操作
-2. <a href="#简单选择排序">简单选择排序</a>
-
+1. <a href="#链表的基本操作">链表的基本操作</a>
+2. <a href="#合并两个单链表">合并两个单链表之 两数相加 和 合并排序链表</a>
+3. <a href="#O(1)时间删除链表结点">O(1)时间删除链表结点</a>
+4. <a href="#双指针操作"> 寻找倒数第 k 个节点 - 双指针操作</a>
 快捷键：Ctrl + Home 快速回到页面顶端查看目录，点击锚点，快速定位到算法。
 
 ### 链表的基本操作
@@ -46,15 +48,17 @@ public void removeNode(ListNode pHead, int value){
         ListNode pNode = pHead;
         while(pNode.next != null && pNode.next.val != value)
             pNode = pNode.next;
-        if(pNode.next != null && pNode.next.val == value)
+        if(pNode.next != null)
             pNode.next = pNode.next.next;
     }
 }
 
-//反转链表
-public ListNode reverseList(ListNode head) {
+//反转链表-迭代方式
+public ListNode reverseList(ListNode pHead) {
+    if(pHead == null || pHead.next == null)
+    		return pHead;
     ListNode prev = null;
-    ListNode curr = head;
+    ListNode curr = pHead;
     while (curr != null) {
         ListNode nextTemp = curr.next;
         curr.next = prev;
@@ -64,12 +68,21 @@ public ListNode reverseList(ListNode head) {
     return prev;
 }
 
+//递归方式
+public ListNode reverseList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode p = reverseList(head.next);
+    head.next.next = head;
+    head.next = null;
+    return p;
+}
 
 ```
 
 
-### 两数相加
-合并两个单链表
+### 两数相加  
+<a name="合并两个单链表">合并两个单链表</a>
+
 ```java
 /**
  * Definition for singly-linked list.
@@ -79,6 +92,7 @@ public ListNode reverseList(ListNode head) {
  *     ListNode(int x) { val = x; }
  * }
  */
+//两个单链表相加
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode root = new ListNode(0);
@@ -100,6 +114,41 @@ class Solution {
         }
         return root.next;
     }
+}
+
+//合并两个单链表，递增排序，递归+迭代的方式
+
+//递归方式
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    if(l1 == null)
+        return l2;
+    if(l2 == null)
+        return l1;
+    if(l1.val <= l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2);
+        return l1;
+    }else {
+        l2.next = mergeTwoLists(l1, l2.next);
+        return l2;
+    }
+}
+
+//迭代方式
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode newHead = new ListNode(-1);
+    ListNode pre = newHead;
+    while(l1 != null && l2 != null) {
+        if(l1.val <= l2.val) {
+            pre.next = l1;
+            l1 = l1.next;
+        }else {
+            pre.next = l2;
+            l2 = l2.next;
+        }
+        pre = pre.next;
+    }
+    pre.next = l1==null ? l2 : l1;
+    return newHead.next;
 }
 ```
 
@@ -135,7 +184,7 @@ public void deleteNode(ListNode pHead, ListNode pDelete) {
 测试用例：空指针、节点小于k个、k小于等于0
 相关题目：求链表的中间节点：双指针，一个一步，一个两步；
 相关题目：判断一个单链表是否有环：同上，如果有环则两个指针会相遇。
-
+<a name="双指针操作"></a>
 ```java
  public ListNode FindKthToTail(ListNode head,int k) {
 	 if(head == null)
@@ -154,6 +203,25 @@ public void deleteNode(ListNode pHead, ListNode pDelete) {
 		 return front;
 	 }
 	 return null;		 
+}
+
+//快慢指针寻找链表的中间节点
+
+
+//只要进入到环内，则两个指针一定会相遇。
+//理解：快指针一定会跑到慢指针后面，如果相邻则下一次相遇，如果空一格，则变第一种情况，依次类推。
+public boolean hasCycle(ListNode head) {
+    if(head == null || head.next==null)
+        return false;
+    ListNode oneStep = head;
+    ListNode twoStep = head.next;
+    while(oneStep != twoStep) {
+        if(twoStep == null || twoStep.next == null)
+            return false;
+        oneStep = oneStep.next;
+        twoStep = twoStep.next.next;
+    }
+    return true;
 }
 ```
 

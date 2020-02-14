@@ -3,16 +3,16 @@
 # JAVA-算法之树
 
 ### 遍历
-**基础知识**：
+**基础知识（树的算法，一看就会，一写就废）**：
 前中后，知道两种，算另外一种。肯定给出中序遍历，否则无法确定一棵树。
 知前中：根据前序遍历寻找根节点，就是最前面的，然后中序遍历判断左右子节点（左右两边）。
 知中后：根据后序遍历寻找根节点，就是最后的，然后在中序遍历根节点的左右两边就是左右子树。
 可参考：前序遍历：ABCDEFGHK，中序遍历：BDCAEHGKF，后序遍历：DCBHKGFEA
 
-**编程题**：一、遍历二叉树（递归+迭代）、求二叉树的高度与宽度、
+**基础知识**：一、遍历二叉树（递归+迭代）、求二叉树的高度与宽度、
 
 ```java
-//先序遍历，递归，迭代要用栈来做
+//先序遍历，递归
 List<Integer> list = new LinkedList<>();
 public List<Integer> preorderTraversal(TreeNode root) {
 	if(root !=null){
@@ -22,7 +22,7 @@ public List<Integer> preorderTraversal(TreeNode root) {
 	}
 	return list;    
 }
-//先序遍历，迭代，用栈做
+//先序遍历，迭代用栈做
 public List<Integer> preorderTraversal(TreeNode root) {
     Stack stack = new Stack();
     List<Integer> nums = new ArrayList<>();
@@ -64,6 +64,11 @@ public int FindWidth(TreeNode root, int k){
     FindWidth(root.lchild,k+1);//这里不要用k++，会改变下面k的值。
     FindWidth(root.rchild,k+1);
 }
+/*BFS
+*/
+
+/*DFS
+*/
 
 ```
 
