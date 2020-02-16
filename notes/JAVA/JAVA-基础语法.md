@@ -24,6 +24,7 @@
 **JDK**：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。
 **JAR**： java 类库的 class 文件。
 [JDK 和 JRE 的区别](https://blog.csdn.net/shaochenshuo/article/details/78507132)
+
 ****
 
 ### 基本概念
@@ -66,9 +67,6 @@ case 语句开始执行，直到 break 语句出现才会跳出 switch 语句。
 ****
 
 ### 输入输出
-按照流是否直接与特定的地方（如磁盘、内存、设备等）相连，分为 节点流 和 处理流 两类。
-**节点流**：可以从或向一个特定的地方（节点）读写数据。
-文 件 FileInputStream FileOutputStrean FileReader FileWriter 文件进行处理的节点流。
 ```java
 //输入
 import java.util.Scanner;
@@ -86,7 +84,7 @@ if(scan.hasNext()){//只读取一次，遇到空格或者回车结束
 System.out.println(); 
 //输出带换行，且输出的是字符串，如果不是，默认调用toString()方法。如果是基本数据类型，则会先进行装箱，再调用。
 
-System.out.print(); //输出不带换行
+System.out.print("front" + variable + "end"); //输出不带换行
 System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进制，%s 字符串
 System.out.println(String.format("%.2f", pi));//浮点数控制精度的方法，最后一位会自动四舍五入。
 System.out.printf(); //C 格式输出
@@ -123,8 +121,8 @@ StringBuffer 线程安全：
 其他都是非线程安全的集合框架
 */
 
-/*Collections 容器的工具类
-1. 在使用Set时，如果存放的不是基本数据类型，而是自定义的类，那么一定要继承Comparable接口，重写compareTo方法，否则Set无法去重，TreeSet也会根据该方法区分大小，并确定二叉树的次序。还要重写equals方法，一般包装类都重写了此方法，否则会调用父类Obeject中的equals方法，比较地址而不是值了。
+/*Collections 容器的工具类，包含操控集合的常用方法
+
 */
 import java.util.Collections;
 Collections.sort(arr);//正序排序
@@ -231,6 +229,8 @@ TreeSet是SortedSet的唯一实现类，红黑树实现，树形结构，它的�
 因为都是有序的，所以相应的就有get，remove和add方法。HashSet看他的源码可以知道，他的底层，是hashmap。
 LinkedHashSet，维护的是插入时的顺序；
 
+注意：在使用Set时，如果存放的不是基本数据类型，而是自定义的类，那么一定要继承Comparable接口，重写compareTo方法，否则Set无法去重，TreeSet也会根据该方法区分大小，进行排序，还要重写equals方法，一般包装类都重写了此方法，否则会调用父类Obeject中的equals方法，比较地址而不是值了。
+
 问：TreeSet 和 HashSet 有什么区别？
 答：HashSet 是基于哈希表实现的，允许存在一个null值，插入一个值时会调用HashCode()方法，生成HashCode值，来进行相同元素的区分，但它却不能保证插入次序与遍历次序的一致性，因此才有了LinkedHashSet，也是采用HashCode值方式存储，但多用了链表的方式来保证插入与遍历次序的一致性。
 TreeSet 是 SortedSet 接口的唯一实现类，它是用二叉树存储数据的方式来保证存储的元素处于有序状态。但是TreeSet不允许插入null值。
@@ -251,8 +251,24 @@ set.subSet(from,true,to,true);//截取某段值，[from,to],两端值看bool函�
 
 /*
 图接口 import java.util.MAP;
-四个实现类 import java.util.HashMap、LinkedHashMap、HashTable、TreeMap
+四个实现类 import java.util.HashMap、HashTable、HashSet
+
+问：你有没有重写过 HashCode 方法和 equals 方法？
+有，有一次在使用HashMap时，key是自定义的类，需要根据ID判断是否是同一个对象而不是根据地址，
+如果我们在HashMap的键部分存放自定义的对象，一定要在这个对象中用自己的equals方法和hashCode方法覆盖掉Object中的同名方法。
 */
+class key{
+    private Integer id;
+    public Integer getId(){return id;}
+    public key(Integer id){this.id = id;}
+    public boolean equals(Object ob){//重写了equals方法
+        if(ob==null || !(ob instanceof key)) return false;
+        return this.getId().equals(((key)ob).getId);
+    }
+    public int hashCode(){ return id.hashCode();}//重写了hashCode方法
+}
+
+
 import java.util.HashMap;
 Map<String,Integer> map = new HashMap<>();
 Map<int[],Integer> map = new HashMap<>();
@@ -262,21 +278,20 @@ clear();remove(x);//清空、删除某个键、
 containsKey("Tom"); //返回Boolean
 get("Tom"); getOrDefault(key, 0);
 
-//四种遍历方式
+//三种遍历方式
 for(String key : map.keySet())
     System.out.println(key+map.get(key));
+for(Integer v : map.values())
+    System.out.println(v);
+
+for(Map.Entry<String, Integer> entry : map.entrySet())
+    System.out.println(entry.getKey()+entry.getValue());
 
 Iterator<Map.Entry<String, Integer>> it = map.entrySet().iterator();
 while(it.hasNext){
     Map.Entry<String, Integer> entry = it.next();
     System.out.println(entry.getKey()+entry.getValue());
 }
-
-for(Map.Entry<String, Integer> entry : map.entrySet())
-    System.out.println(entry.getKey()+entry.getValue());
-
-for(String v : map.values())
-    System.out.println(v);
 
 /*
 在集合框架之前应用的一些类，现在一般用集合框架代替。
@@ -600,23 +615,52 @@ public class test{
 
 ### 异常和调试
 <a name="异常"></a>
-大致分为三类：检查性异常、运行时异常、错误。
-异常分为两类，Error 和 Exception，它们都继承 Throwable。
+异常可以分为三类：检查性异常(Exception)、错误(Error)、运行时异常(RuntimeException)、Error 和 Exception它们都继承 Throwable； RuntimeException 继承 Exception，其还有子类SQLException,IOException。
 
 **问：请问error和exception有什么区别?**
-**error**： 表示恢复不是不可能但很困难的情况下的一种严重问题。比如说内存溢出。不可能指望程序能处理这样的情况。
-**exception**： 表示一种设计或实现问题。也就是说，它表示如果程序运行正常，从不会发生的情况。
+**error**： 不可能指望程序能处理这样的情况，比如说内存溢出等，遇到错误建议中止程序。
+**exception**： 与错误相比，程序一般可以捕获和处理异常，可以对异常进行简单的处理，如无法连接网络，可以十秒后再次尝试，而不是简单的终止程序。
 
-try、catch、finally：无论是否发生异常，最后这个都会被执行。
+**处理异常的常用方法**：try、catch、finally，无论是否发生异常，即使catch块中有return，finally也还是会被执行。
+
+**运行时常见异常（RuntimeException）**
+此类异常不必须包含在try内，因为可能出现在任何地方，下面这些都是。
+
 **异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem？**
 解决：反复看都没有找到错误，是因为缺少了包名，如果有包一定要在首行添加，package test; 这个一定要放在第一句的！
-
-**异常：如果是语法错误，如少了一个分号，则会出现：java.lang.Error**
-
-**异常：java.lang.ArithmeticException，除零异常等**
-
 **异常：xxx cannot be resolved to a type**
 解决：缺少包，xxx不是一个类或接口。
+
+**异常：java.lang.Error**：语法错误如少了一个分号
+**异常：java.lang.ArithmeticException**：除零异常
+**异常：java.lang.ArrayIndexOutOfBoundsException**：数组越界异常
+
+**问：throw,throws,Throwable的区别**
+```java
+//Throwable 是 Error和Exception的父类。
+public class Main {
+    public static void checkData(int data) throws Exception {
+    	if(data < 0) 
+    		throw new Exception("Data Error!");
+    }
+    
+    public static void main(String[] args) {
+    	try {
+    		checkData(-1);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}finally {
+    		System.out.println("every thing is ok");
+    	}
+    }
+}
+/*finally块内应放一些回收内存的代码
+1-如果连接数据库，需要关闭连接。
+2-如果用到了IO对象，则需要关闭。
+3-如果用到了ArrayList,LinkedList,HashMap，则需要clear.
+4-如果有一个对象obj指向一个大的内存，则可以写obj=null。
+*/
+```
 
 **Eclipse调试**
 [参考博客](https://www.cnblogs.com/sjxbg/p/9768597.html)

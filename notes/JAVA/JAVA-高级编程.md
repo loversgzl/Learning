@@ -4,7 +4,7 @@
 **JAVA - 高级编程**
 
 * <a href="#javaReflect">JAVA - 反射</a>
-* <a href="#javaIO">JAVA - I/O</a>
+* <a href="#javaIO">JAVA - I/O-NIO</a>
 * <a href="#javaThreat">JAVA - 多线程编程</a>
 * <a href="#javaJVM">JAVA - 虚拟机</a>
 * <a href="#javaGC">JAVA - 垃圾回收机制</a>
@@ -82,12 +82,18 @@ getDeclaredField 可以获取本类所有的字段，包括 private 的，但是
 
 
 
-### JAVA - I/O
+### JAVA - I/O-NIO
 <a name="javaIO"></a>
-** I/O 文件对象**
-**例题**：一般说来操作系统都会安装在C盘，所以会有一个 C:\WINDOWS目录。遍历这个目录下所有的文件(不用遍历子目录)，找出这些文件里，最大的和最小(非0)的那个文件，打印出他们的名。注: 最小的文件不能是 0 长度。
-知识点：1如何创建文件对象，2返回文件夹下所有子文件的函数，3一个文件的长度
+**I/O 文件对象**
+按照流是否直接与特定的地方（如磁盘、内存、设备等）相连，分为 节点流 和 处理流 两类。
+**节点流**：可以从或向一个特定的地方（节点）读写数据。
+文 件 FileInputStream FileOutputStrean FileReader FileWriter 文件进行处理的节点流。
+
 ```java
+/*代码一：一般说来操作系统都会安装在C盘，所以会有一个 C:\WINDOWS目录。遍历这个目录下所有的文件(不用遍历子目录)，找出这些文件里，最大的和最小(非0)的那个文件，打印出他们的名。注: 最小的文件不能是 0 长度。
+知识点：1如何创建文件对象，2返回文件夹下所有子文件的函数，3一个文件的长度
+*/
+
 import java.io.File; //引入必要的包
 public class test{
 	public static void main(String args[]){
@@ -112,9 +118,37 @@ public class test{
 }
 ```
 
-练习：对 d 盘的一个文件进行读取。
-知识点：1文件输入输出流的创建，
 ```java
+//代码二、输出电子书文件夹下所有的PDF文件，并统计有多少文件。
+import java.io.File;
+public class Main{
+	public static int num = 0;
+	static void getCSVInFolder(String filePath) {
+		File folderName = new File(filePath);
+		File[] flist = folderName.listFiles();
+		if(flist==null || flist.length==0) return;
+		String fileName = null;
+		for(File f : flist) {
+			if(f.isDirectory())
+				getCSVInFolder(f.getAbsolutePath());
+			else {
+				fileName = f.getName();
+				if(fileName.substring(fileName.lastIndexOf('.')+1).equals("pdf")) {
+					System.out.println(f.getName());
+					num++;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) {
+		getCSVInFolder("F:\\办公文档\\计算机工作文档\\生活-阅读");
+		System.out.println(num);
+		System.out.println("我一共有"+num+"本电子书");
+	}
+}
+
+//代码三、练习：对 d 盘的一个文件进行读取。
+知识点：文件输入输出流的创建，
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -131,18 +165,29 @@ public class test{
 			for(byte b : all){
 				System.out.println(b); //输出asc码
 			}
-			fis.close(); //每次使用完需要关闭
 		} catch(IOException e){
 			e.printStackTrace();
 		}
+        finally{
+            fis.close(); //每次使用完需要关闭
+        }
 	}
 }
+
+//需要记住的常用函数
+File folderName = new File(filePath); //创建一个文件对象
+File[] flist = folderName.listFiles(); //返回文件夹下所有的文件
+flist[0].isDirectory(); //判断是否是文件夹
+
 ```
 
-**面试问题**
+**非阻塞性IO**
 ```java
-//包括序列化、BIO、NIO、AIO
-
+/*
+前面介绍的IO是（BIO,阻塞性IO），JDK1.4后增加了NIO。在高并发的情况下很有用，与性能优化和架构设计密切相关。
+与传统的IO相比，NIO有 面向缓存 和 非阻塞 两大特点，还可以通过选择器管理多个读写通道。
+Channel通道、Buffer缓冲器、Selector选择器，是NIO的三大核心组件。
+*/
 
 
 
@@ -375,186 +420,9 @@ JDK1.5，1.6，1.7，1.8，1.9，1.10，1.11的新特性整理
 ### 网络编程
 <a name="javaNet"></a>
 [参考W3C 网络编程](https://www.w3cschool.cn/java/java-networking.html)
-能够实现：如何创建服务器套接字、如何创建客户端套接字、
-知识点：获取本机 IP 地址，使用 Java 执行 ping 命令，
+NIO的Selector实例一般都是Socket网络通信方面，如用户可以在服务端通过一个选择器来管理来自客户端的多个通道，在一些高并发的系统中，会用到选择器来开发各业务模块之间的通信模块，但这是架构师或资深高级程序员要考虑的事情。对于初级程序员，知道一些基本概念即可。
 
 ```java
-/*
-练习：实现查看本网段哪些 IP 地址已被占用，单线程超级慢，要十几分钟。
-进阶：可考虑使用多线程实现。
-*/
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-public class test{
-	public static void main(String[] args) throws IOException{
-	//可执行 exe 程序
-		Process p = Runtime.getRuntime().exec("ping " + "www.baidu.com");
-	//获取 流 到缓存中
-		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		StringBuilder sb = new StringBuilder();
-		String line = null;
-		while((line = br.readLine()) != null){
-			if(line.length() != 0)
-				sb.append(line + "\r\n");
-		}
-		System.out.println(sb.toString());
-	}
-}
+Selector selector = Selector.open(); // 创建一个Selector
 
 ```
-
-实例：编写客户端和服务器端双向通信，多线程实现。
-```java
-// 客户端代码
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
- 
-public class ClientThread {
- 
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        try{
-            Socket socket = new Socket("127.0.0.1",9612);
-            SendServer(socket);
-            ReceiveServer(socket);
-             
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
- 
-    private static void SendServer(Socket socket) {
-        new Thread() {
- 
-            @Override
-            public void run() {
-                //synchronized (socket) {
-                    try (OutputStream os = socket.getOutputStream();
-                            DataOutputStream dos = new DataOutputStream(os);
-                            Scanner scann = new Scanner(System.in);) {
-                        while (true) {
-                            String msg = scann.nextLine();
-                            dos.writeUTF(msg);
-                        }
- 
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            //}
-             
-        }.start();
-    }
- 
-    private static void ReceiveServer(Socket socket) {
-        new Thread() {
- 
-            @Override
-            public void run() {
-                synchronized (socket) {
-                    try (InputStream ins = socket.getInputStream(); DataInputStream dins = new DataInputStream(ins);) {
-                        while (true) {
-                            //System.out.println("从服务器收到的信息：");
-                            String msg = dins.readUTF();
-                            System.out.println("从服务器收到的信息："+msg);
-                        }
- 
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-             
-        }.start();
-    }
- 
-}
- 
-// 服务端代码
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
- 
-public class ServerThread {
- 
-    public static void main(String[] args) {
-        System.out.println("运行中……");
-        try{
-            ServerSocket serversocket = new ServerSocket(9612);
-            System.out.println("服务器等待连接");
-            Socket socket = serversocket.accept();
-            // 设置服务器监听的端口
-            ReceiveClient(socket);
-            SendClient(socket);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
- 
-    private static void ReceiveClient(Socket socket) {
-        new Thread() {
- 
-            @Override
-            public void run() {
-                try (
-                        InputStream ins = socket.getInputStream();
-                        DataInputStream dins = new DataInputStream(ins);
-                ){
-                    while (true) {
-                        String msg = dins.readUTF();
-                        System.out.println("接受客户端的信息："+msg);
-                    }
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-             
-        }.start();
-    }
- 
-    private static void SendClient(Socket socket) {
-        new Thread() {
- 
-            @Override
-            public void run() {
-                //synchronized (socket) {
-                    try (OutputStream os = socket.getOutputStream();
-                            DataOutputStream dos = new DataOutputStream(os);
-                            Scanner scann = new Scanner(System.in);) {
-                        while (true) {
-                            String msg = scann.nextLine();
-                            dos.writeUTF(msg);
-                        }
- 
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                //}
-            }
-             
-        }.start();
-    } 
-}
-```
-
-

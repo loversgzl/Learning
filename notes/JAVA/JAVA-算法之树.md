@@ -49,6 +49,20 @@ public int maxDepth(TreeNode root) {
     }
 }
 
+public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+}
+
+//求根节点到最近叶子节点的距离
+public int minDepth(TreeNode root) {
+    if(root == null) return 0;
+    int leftDepth = minDepth(root.left);
+    int rightDepth = minDepth(root.right);
+    return root.left==null || root.right==null ? leftDepth+rightDepth+1:Math.min(leftDepth, rightDepth)+1;
+}
+
+
 /*
 求二叉树的宽度，即节点数最多的那一层节点数；
 设置100层的数组存储节点数，k表示层数，初始为0；
@@ -64,11 +78,15 @@ public int FindWidth(TreeNode root, int k){
     FindWidth(root.lchild,k+1);//这里不要用k++，会改变下面k的值。
     FindWidth(root.rchild,k+1);
 }
+
+/*DFS：可细分为先序，中序，后序遍历
+*/
+
+
 /*BFS
 */
 
-/*DFS
-*/
+
 
 ```
 
