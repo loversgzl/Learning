@@ -7,14 +7,15 @@
 * <a href="#javaIO">JAVA - I/O-NIO</a>
 * <a href="#javaThreat">JAVA - 多线程编程</a>
 * <a href="#javaJVM">JAVA - 虚拟机</a>
-* <a href="#javaGC">JAVA - 垃圾回收机制</a>
+* <a href="#javaGC">JAVA - 垃圾回收，内存优化机制</a>
 * <a href="#javaNet">JAVA - 网络编程</a>
 
 ### JAVA - 反射
 <a name="javaReflect"></a>
-有啥用：
-使用反射方式，首先准备一个配置文件，就叫做 spring.txt 吧, 放在 src 目录下。 里面存放的是类的名称，和要调用的方法名。在测试类Test中，首先取出类名称和方法名，然后通过反射去调用这个方法。当需要从调用第一个业务方法，切换到调用第二个业务方法的时候，不需要修改一行代码，也不需要重新编译，只需要修改配置文件 spring.txt，再运行即可。
+**有啥用**：使用反射方式，首先准备一个配置文件，就叫做 spring.txt 吧, 放在 src 目录下。 里面存放的是类的名称，和要调用的方法名。在测试类Test中，首先取出类名称和方法名，然后通过反射去调用这个方法。当需要从调用第一个业务方法，切换到调用第二个业务方法的时候，不需要修改一行代码，也不需要重新编译，只需要修改配置文件 spring.txt，再运行即可。
 这也是 Spring 框架的最基本的原理，只是它做的更丰富，安全，健壮。
+
+**反射的常见用法**；去有三类，一是 查看，如输入某个类的属性方法等信患；二是 装载 如装载指定的类到内存中；三是 调用，如通过输入参数调用指定的方法。
 
 **获取类对象的三种方式**
 1. Class.forName（“Hero”） 最常用，通过字符串获取
@@ -133,6 +134,7 @@ public class Main{
 				getCSVInFolder(f.getAbsolutePath());
 			else {
 				fileName = f.getName();
+                //这里如果用 == "pdf"比较，则无法匹配成功，因为会产生新的对象，地址不相等的。
 				if(fileName.substring(fileName.lastIndexOf('.')+1).equals("pdf")) {
 					System.out.println(f.getName());
 					num++;
@@ -160,9 +162,9 @@ public class test{
 		//f.mkdir(); 防止文件路径不存在，可以创建递归目录。
 			File f = new File("F:/test.txt");
 			FileInputStream fis = new FileInputStream(f);
-			byte[] all = new byte[(int)f.length()];
-			fis.read(all);
-			for(byte b : all){
+			byte[] buffer = new byte[(int)f.length()];
+			fis.read(buffer);
+			for(byte b : buffer){
 				System.out.println(b); //输出asc码
 			}
 		} catch(IOException e){
@@ -188,7 +190,22 @@ flist[0].isDirectory(); //判断是否是文件夹
 与传统的IO相比，NIO有 面向缓存 和 非阻塞 两大特点，还可以通过选择器管理多个读写通道。
 Channel通道、Buffer缓冲器、Selector选择器，是NIO的三大核心组件。
 */
-
+public class NIOBufferDemo {
+	public static void main(String[] args) throws IOException {
+		int bufferSize = 10;//字节
+		FileChannel src = new FileInputStream("F:\\EFI\\src.txt").getChannel();
+		FileChannel dest = new FileOutputStream("F:\\EFI\\dest.txt").getChannel();
+		ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+		int times = 0;//看读了几次
+		while(src.read(buffer) != -1) {//一次读满缓存区，10个字节
+			buffer.flip();
+			dest.write(buffer);
+			buffer.clear();
+			System.out.println(++times);
+		}
+		System.out.println("ok");
+	}
+}
 
 
 ```

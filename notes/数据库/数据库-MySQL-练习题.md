@@ -2,7 +2,7 @@
 
 基本命令
 ```mysql
-#查看数据库引擎
+#查看数据库引擎，语法不区分大小写
 show engines;
 /*
 问：查询语句不同元素（where、jion、on、limit、group by、having 等等）执行先后顺序？
@@ -17,16 +17,6 @@ order by :按照什么样的顺序来查看返回的数据
 from 后面的表关联，是自右向左解析 而 where 条件的解析顺序是自左而右的。
 也就是说，在写 SQL 文的时候，尽量把数据量小的表放在最右边来进行关联（用小表去匹配大表），而把能筛选出小量数据的条件放在 where 语句的最左边 （用小表去匹配大表）
 */
-```
-
-基本函数
-```mysql
-#日期+时间，日期，时间
-now();curdate();curtime();
-
-#最大值，最小值，平均值，求和，
-max(),min(),avg(),sum()
-select length(filename) from tablename; #查看某个字段的数据长度，字节记
 ```
 
 创建数据库 和 注释，增、删、改表
@@ -72,18 +62,34 @@ show CREATE table table_name;
 ### 在一个表中查询
 四种基本操作：INSERT、DELETE、UPDATE、SELECT（主要考察 select，所有后面着重介绍）
 ```mysql
-INSERT INTO students(name,sex,age,in_time) VALUE ('张四',1,25,curdate());
-DELETE FROM students where age = 20;
-UPDATE students set sex = 0 where id = 1;
+#VALUES (),();可以一次性插入多条记录，提升性能，但不是每种数据库都支持这种操作。
+INSERT INTO students(name,sex,age,in_time) VALUES ('张四',1,25,curdate());
 
+#where age in (20,21,22); 可以一次删除多条记录，提升性能。
+DELETE FROM students where age = 20;
+
+UPDATE students set sex = 0 where id = 1;
+#一般都用update更新，但有时项目需求为“无则插入，有则更新”，需要用到merge。
+#如何使用还需要好好搜索一下
+merge into 图书表 a
+using 图书进货表 b
+on(a.ISBN = b.ISBN)
+when matched then 
+	update set a.name = b.name
+when not matched then 
+	insert into a(ISBN,name) values(b.ISBN,b.name)
 ```
 
 ### 基本查询语句
 ```mysql
 #基本关键字和函数包括
-函数：max、min、sum、avg、count、
-关键字：group by、having、order by[DESC、ASC]、distinct、limit、regexp、like
+函数：max、min、sum、avg、count、distinct、
+关键字：group by、having、order by[DESC、ASC]、limit、regexp、like
 赋予权限的关键词：GRANT
+select length(filename) from tablename; #查看某个字段的数据长度，字节记
+
+#日期+时间，日期，时间
+now();curdate();curtime();
 
 ```
 
@@ -103,12 +109,12 @@ SELECT * FROM students WHERE age>=20 and age<=23;
 ```mysql
 #关键字：count，group by，having
 SELECT sex,count(*) num FROM students GROUP BY sex;
-SELECT age,count(*) as num FROM students GROUP BY age HAVING num >= 2;
+SELECT age,count(id) as num FROM students GROUP BY age HAVING num >= 2;
 ```
 
 * **问：将学生按照年龄倒序排，按照 id 升序排？**
 ```mysql
-#关键字 order by, DESC,AESC
+#关键字 order by, DESC,ASC
 SELECT * FROM students ORDER BY age DESC, id ASC;
 ```
 
@@ -215,6 +221,7 @@ select sex from table2
 右连接（right join）：求两个表的交集外加右表剩下的数据；
 内部连接（inner join）：求两个表的交集；
 外部连接：就是求两个集合的并集，但是 MySQL 不支持 OUTER JOIN，但是我们可以对左右连接做 UNION 操作实现。
+交叉连接：笛卡尔积
 
 ```mysql
 table1 （inner）join table1 on foreign1Key = foreign2Key;

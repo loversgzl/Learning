@@ -61,9 +61,21 @@ F3 :可以查看某个函数的源码
 **Java标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。
 
 **问：switch(x)语句中，x可以是哪些类型？**
-答：包括：byte、short、int、char、java7后开始支持String、
-case 语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。
-case 语句开始执行，直到 break 语句出现才会跳出 switch 语句。
+答：包括：byte/short/int/char、enum枚举、java7后开始支持String、
+注意事项：1、case 语句中的值的数据类型必须与变量的数据类型相同.
+2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了break或者整体结束为止。
+3、多个case后面的数值不可以重复。
+4、注意try-catch-finally的语法。
+```java
+//return 和 比 break 效果更强，直接退出。
+switch(1) {
+    case 1: System.out.println(1);return;
+    case 2: System.out.println(2);return;
+    case 3: System.out.println(3);return;
+    case 4: System.out.println(4);return;
+    default:System.out.println("default");return;
+}
+```
 ****
 
 ### 输入输出
@@ -95,8 +107,8 @@ System.out.printf(); //C 格式输出
 <a name="集合框架"></a>
 ![集合框架](../../pics/集合框架.jpg)
 
-由图可见，集合框架主要包括两种类型的容器，以Collection为基类的线性表、以Map为基类的键值对类，前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。List 具体实现类有 ArrayList、LinkedList；Set具体实现的类有SortedSet、TreeSet、HashSet、LinkedHashSet；Map的具体实现类有：HashMap、HashTable、LinkedHashMap、HashTree。
-图解：虚线框表示接口、实线框表示类、直线+空心三角形=继承，虚线+空心三角形=实现接口，虚线+箭头=依赖，
+由图可见，集合框架主要包括两种类型的容器，以Collection为基类的线性表、以Map为基类的键值对类，前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。List 具体实现类有 Vector、ArrayList、LinkedList；Set具体实现的类有SortedSet、TreeSet、HashSet、LinkedHashSet；Map的具体实现类有：HashMap、HashTable、LinkedHashMap、HashTree。
+图解：虚线框表示接口、实线框表示类、直线+空心三角形=实现接口/继承，虚线+空心三角形=扩展接口，虚线+箭头=依赖，
 [详细参考此链接](https://www.jianshu.com/p/57620b762160)
 接口：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象。
 还有一些在集合框架出现以前的数据结构：stack
@@ -122,20 +134,18 @@ StringBuffer 线程安全：
 */
 
 /*Collections 容器的工具类，包含操控集合的常用方法
-
+//Collection是  List Set Queue 的接口，不要混淆
 */
-import java.util.Collections;
-Collections.sort(arr);//正序排序
-Collections.reverse(arr);//排完之后再倒转一下
-//Collection是  List Set Queue 的接口 
+
 //Collections是一个类，容器的工具类，只能是容器，无返回值，改变原List
 import java.util.Collections;
 List<Integer> numbers = new ArrayList<>();
+Collections.sort(numbers);//正序排序
 Collections.reverse(numbers); //倒转数组,
 Collections.shuffle(numbers);//混淆
-Collections.sort(numbers);
 Collections.swap(numbers,0,1);
 Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
+Collections.synchronizedList(numbers);//将线程不安全的改为安全的，还有Set,Map等
 
 /*
 普通数组
@@ -173,6 +183,7 @@ ArrayList动态数组
 List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
 问：为什么ArrayList常用，Vector不常用？
 Vector是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector需要一定开销来维护线程安全，而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下ArrayList 的性能要优于 Vector。
+Vector和ArrayList一样都是基于数组的。
 */
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -270,6 +281,7 @@ class key{
 
 
 import java.util.HashMap;
+HashMap hm = new HashMap(); //这个可以存放多种不同类型的键值对
 Map<String,Integer> map = new HashMap<>();
 Map<int[],Integer> map = new HashMap<>();
 
@@ -630,10 +642,10 @@ public class test{
 解决：反复看都没有找到错误，是因为缺少了包名，如果有包一定要在首行添加，package test; 这个一定要放在第一句的！
 **异常：xxx cannot be resolved to a type**
 解决：缺少包，xxx不是一个类或接口。
-
-**异常：java.lang.Error**：语法错误如少了一个分号
-**异常：java.lang.ArithmeticException**：除零异常
+**异常：java.lang.Error**：语法错误，如少了一个分号
+**异常：java.lang.ArithmeticException**：算术异常，例如除零异常
 **异常：java.lang.ArrayIndexOutOfBoundsException**：数组越界异常
+**异常：java.lang.NullPointerException**：空指针异常
 
 **问：throw,throws,Throwable的区别**
 ```java

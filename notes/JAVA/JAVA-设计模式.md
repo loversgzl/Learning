@@ -118,9 +118,9 @@
 * <a name="工厂模式">工厂模式（Factory Pattern）</a>：定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个，工厂方法让类把实例化推迟到子类。即一个工厂类，管理其余的所有子类，要想实例化子类，需通过工厂类的方法。
 
 ```java
-/*工厂模式
+/*工厂模式-
 注意事项：作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。
-
+缺点：简单工场，违背了开闭原则，当添加新形状时需要修改代码，后面介绍满足开闭原则的修改。
 */
 public interface Shape{//定义一个接口
 	public void draw();
@@ -147,16 +147,14 @@ class Rectangle implements Shape{
 	}
 }
 
-class ShapeFactory{ //工厂用于管理形状的生产
+class ShapeFactory{ //工厂用于管理形状的生产-不满足开闭原则
 	public Shape getShape(String shape){
-		if(shape == "CIRCLE"){
-			return new Circle();
-		}else if(shape == "SQUARE"){
-			return new Square();
-		}else if(shape == "RECTANGLE"){
-			return new Rectangle();
-		}
-		return null;
+        switch(shape){
+            case "CIRCLE": return new Circle();
+            case "SQUARE": return new Square();
+            case "RECTANGLE": return new Rectangle();
+            default:return null;
+        }
 	}
 }
 
@@ -170,6 +168,15 @@ public class test{
 		shape2.draw();
 		shape3.draw();
 	}
+}
+
+//满足开闭原则的修改
+interface ShapesFactory{public shape getShape();}
+class CircleFactory implements ShapesFactory{
+    public shape getShape(){return new Circle();}
+}
+class SquareFactory implements ShapesFactory{
+    public shape getShape(){return new Square();}
 }
 ```
 
@@ -259,20 +266,22 @@ public class test{
 <a name="单例模式">单例模式（Singleton Pattern）</a>：单例类只能有一个实例、单例类必须自己创建自己的唯一实例、单例类必须给所有其他对象提供这一实例。
 
 ```java
-/*单例模式，普通的类就可以调用内部的静态函数。
+/*单例模式-懒汉式-多线程不安全
 意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
 主要解决：一个全局使用的类频繁地创建与销毁。
 何时使用：当您想控制实例数目，节省系统资源的时候。
 如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。
-关键代码：构造函数是私有的。
+关键代码：1、构造函数是私有的。
 */
 class SingleObject{
     //创建 SingleObject 的一个对象
-	private static SingleObject instance = new SingleObject();
+	private static SingleObject instance = null;
     //让构造函数为 private，这样该类就不会被实例化
 	private SingleObject(){}
     //获取唯一可用的对象
 	public static SingleObject getInstance(){
+        if(instance == null)
+            instance = new SingleObject();
 		return instance;
 	}
 	public void showMessage(){
@@ -282,16 +291,49 @@ class SingleObject{
 
 public class test{
 	public static void main(String args[]){
-	//唯一的实例，不用创建，直接用。是不是想知道，那么这个实例啥时候创建的呢？
 	SingleObject single = SingleObject.getInstance();
 	single.showMessage();
 	}
 }
-/*
-因为有上面的问题，所以单例模式有多种，其中我写的这种叫做 饿汉式，instance 在类装载时就实例化。
-还有 private static Singleton instance; 这种叫 懒汉式，但是在多线程下不能正常工作，其他形式请参考 W3C
+/*单例模式-懒汉式-多线程安全
+在获取 instance 时实例化。但是在多线程下不能正常工作，需要添加Synchronized锁，下面是懒汉式线程安全。
 */
-
+class SingleObject{
+    //创建 SingleObject 的一个对象
+	private static SingleObject instance = null;
+    //让构造函数为 private，这样该类就不会被实例化
+	private SingleObject(){}
+    //获取唯一可用的对象
+	public static synchronized SingleObject getInstance(){
+        if(instance == null)
+            instance = new SingleObject();
+		return instance;
+	}
+	public void showMessage(){
+		System.out.println("普通函数");
+	}
+}
+/*单例模式-懒汉式-多线程安全-双重锁
+*/
+class SingleObject{
+    //创建 SingleObject 的一个对象
+	private static SingleObject instance = null;
+    //让构造函数为 private，这样该类就不会被实例化
+	private SingleObject(){}
+    //获取唯一可用的对象
+	public static synchronized SingleObject getInstance(){
+        if(instance == null)
+            synchronized(SingleObject.class){
+            if(instance == null)
+                instance = new SingleObject();
+        	}
+		return instance;
+	}
+	public void showMessage(){
+		System.out.println("普通函数");
+	}
+}
+//饿汉式单、多线程都安全，因此使用也较多。饿汉式：private static Singleton instance = new SingleObject();在类装载时实例化，其它不变。
 ```
 
 <a name="建造者模式">建造者模式（Builder Pattern）</a>：使用多个简单的对象一步一步构建成一个复杂的对象。

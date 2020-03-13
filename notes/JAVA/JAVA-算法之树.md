@@ -62,7 +62,6 @@ public int minDepth(TreeNode root) {
     return root.left==null || root.right==null ? leftDepth+rightDepth+1:Math.min(leftDepth, rightDepth)+1;
 }
 
-
 /*
 求二叉树的宽度，即节点数最多的那一层节点数；
 设置100层的数组存储节点数，k表示层数，初始为0；

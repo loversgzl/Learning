@@ -3,13 +3,17 @@
 [参考博客](https://blog.csdn.net/Neuf_Soleil/article/details/80962686)
 JavaEE 号称有十三种核心技术。它们分别是：**JDBC、Servlet、JSP**、JNDI、EJB、RMI、XML、JMS、Java IDL、JTS、JTA、JavaMail 和 JAF。一般来讲，初学者应该遵循路径
 JDBC -> Servlet -> JSP -> Spring -> 组合框架。
+Java Web包括四大核心知识点：1.Spring的IOC和AOP等知识点、2.Spring MVC框架的基本流程、3.ORM技术（了解 Hibernate与MyBatis的基本开发流程）、4.Spring MVC+MyBatis、
+Java Web可以延后学习的知识点：JSP、Struts MVC、JS、CSS等前端知识
 
-JDBC：JAVA 操作数据库
-Tomcat：常见的免费 web 服务器
-Servlet：用于处理用户提交的数据
-JSP：可以写 java 代码的 html
+<a href="#JDBC">JDBC：JAVA 操作数据库</a>
+<a href="#Tomcat">Tomcat：常见的免费 web 服务器</a>
+<a href="#Servlet">Servlet：用于处理用户提交的数据</a>
+<a href="#JPS">JSP：可以写 java 代码的 html</a>
+
 
 ### JDBC
+<a name="JDBC"></a>
 ```java
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -41,6 +45,7 @@ public class test {
 		} 
 	}
 }
+
 //SELECT	由于 select 语句会有返回值，所以单独列出
 import java.sql.ResultSet;
 ResultSet rs = s.executeQuery(select);
@@ -134,24 +139,86 @@ JTA事务管理则由 JTA容器实现，JTA容器对当前加入事务的众多C
 
 
 ### TomCat
+<a name="TomCat"></a>
 [安装 TomCat](https://www.cnblogs.com/limn/p/9358657.html)
 简介：常见的免费 web 服务器。
 启动：F:\JavaWorkSpace\apache-tomcat-9.0.26\bin\startup.bat
 注意：每次修改源文件或者其他文件都要重新启动。
 修改：F:\JavaWorkSpace\apache-tomcat-9.0.26\conf\server.xml
-里面的 Context 会将访问的 ip 地址指向一个项目的 web 文件夹下，然后通过里面的 web.xml 找到对应 classes/Servlet.class 文件进行相应的处理。记住不是.java 文件，服务器会找到.class文件进行处理，开始创建这个项目更改了 .class 文件的路径，所以需要重新编译这个项目，重新生成 .class文件（找了老半天的错误，总是404，后来才发现是没有 .class 文件）：
+[server.xml文件详解](https://blog.csdn.net/qq_35713827/article/details/82585539)
+1、可以修改里面的端口号，ctrl+f，找到8080，改为80后，访问网页不需要显示给出。
+2、可以添加Context，里面的 Context 会将访问的 ip 地址指向一个项目的 web 文件夹下（可以是本地的任意文件夹里面有对应的网页即可.html），（或者一个Web项目然后通过里面的 web.xml 找到对应 classes/Servlet.class 文件进行相应的处理。记住不是.java 文件，服务器会找到.class文件进行处理，开始创建这个项目更改了 .class 文件的路径，所以需要重新编译这个项目，重新生成 .class文件（找了老半天的错误，总是404，后来才发现是没有 .class 文件））
 右击工程 -> properties -> java compiler -> Enable project specific settings[打钩] -> compiler compliance level 改成11。之后，eclipse会问你是否重新编译，当然选是，要得就是这个问题。
 
+```xml
+<!-- 这里要访问就需要写127.0.0.1:8080/tomcat/login.html，或者其他网页，但是前面的路径不可以改动，端口号可以改。
+docBase:即使网页存放的文件夹路径，可以是普通文件夹，或者是一个web项目。
+-->
+<Context path="/tomcat/" docBase="F:\\JavaWorkSpace\\apache-tomcat-9.0.26\\webapps\\ROOT" debug="0" reloadable="false" />  
+```
 
 ### Servlet
+<a name="Servlet"></a>
 <img src="../../pics/servlet.png" align="center">
 [ 参考博客](https://learner.blog.csdn.net/article/details/81091580)
 
-简介：Servlet用于处理用户提交的数据，熟悉 request 和 response 两种方法，了解不同的跳转方式。
-熟悉 servlet 对数据库的基本操作。
-Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一个 web 应用是部署在 tomcat 中的，所以开发一个 servlet 需要如下几个步骤：
-1.创建 web 应用项目；2.编写 servlet 代码；3.部署到 tomcat 中
-浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 classes  文件的路径，即通过浏览器可以访问到的文件夹），在 java 项目的.classes 文件夹中包含 .xml 文件，分析 浏览器的 ip 地址访问的是哪个页面，然后根据不同的页面，映射对应的 Servlet。
+简介：Servlet用于处理用户提交的数据，熟悉 request 和 response 两种方法，了解不同的跳转方式。熟悉 servlet 对数据库的基本操作。
+Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一个 web 应用是部署在 tomcat 中的，所以开发一个 servlet 需要如下三个步骤：
+
+一、创建 web 应用项目（练习中使用创建单纯的java项目的方式）；
+1.1、创建一个单纯的JavaProject，里面只包含：
+1、JRE System Library文件夹：包含各种jar包
+2、src：空文件夹
+1.2、确实servlet必须的包，需要导入包，导入之后多了一个Referenced Libraties。
+（可以创建一个bin文件夹，把需要的jar包放里面，再加载，这样移动项目不容易出错）
+右键点击项目 -> properties -> Java Build Path ->Libraries -> Add External JAR
+里面有两个路径：一个是Modulepath，一个是Classpath。ModulePath 的概念和ClassPath 类似，不过 ModulePath 中的 Jar 包或 Jmod 文件被当作 Module 来处理，而 ClassPath 中的的 Jar 包，无论是否模块化都会被当作传统 Jar 包处理，所以要加在Classpath下面。
+1.3、创建一个HelloServlet.java文件，不写包名，用default package即可。
+1.4、创建两个个web文件夹，web/WEB-INF文件夹，再在WEB-INF文件夹中创建web.xml文件。
+1.5、在web/WEB-INF创建classes文件夹，把项目的class文件输出由原来的 j2ee/bin 设置到 j2ee/web/WEB-INF/classes下。项目右键->properties->Java Build Path->Source->右下角的 Brower-> 指定位置是 j2ee/web/WEB-INF/classes。
+经历上面一步后，classes文件夹默认不显示了，想看的话可以到源文件中查看。
+
+二、编写HelloServlet.java代码和web.xml代码；
+```java
+import java.io.IOException;
+import java.util.Date;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class HelloServlet extends HttpServlet{
+	public void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			response.getWriter().println("<h1>Hello 111 Servlet Hello!</h1>");
+			response.getWriter().println(new Date().toLocaleString());
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+```
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+	<servlet-name>HelloServlet</servlet-name>
+	<servlet-class>HelloServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>HelloServlet</servlet-name>
+	<url-pattern>/hello</url-pattern>
+        <!-- 如果里面的是/hello.html，则访问的时候必须加后缀！ -->
+	</servlet-mapping>
+</web-app>
+```
+
+三、部署到 tomcat 中；（本地项目中j2ee为示范项目，可以参考如何将java项目部署到tomcat中，其实是在server.xml文件中增加一个Context标签，标明路径）
+四、过程：浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 WEB-INF 文件的路径，即通过浏览器可以访问到的文件夹），文件夹中包含web.xml，里面设置了不同访问路径所对应的不同servlet，找到后回去classes 文件夹中寻找指定的class文件，即编译后的java文件，然后返回给浏览器。
+
+四、奇怪的一点是每次修改java项目里面的.java文件，都要重新启动Tomcat，浏览器读取的是上一次修改的.class文件，不明白。如果使用hello.html访问，则也会无法访问。因为访问路径要和web.xml里面的映射完全一致。
+
+
 
 一、开发 Servlet，打开 TomCat，访问地址为：http://127.0.0.1:8080/hello
 对应的servlet中有doGet方法，即执行 web 浏览器的请求的get方法。
@@ -163,8 +230,8 @@ Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一�
 五、获取中文，添加：request.setCharacterEncoding("UTF-8"); 
 响应中文，添加：response.setContentType("text/html; charset=UTF-8");
 
-六、生命周期：
-servlet接口定义了servlet的生命周期方法：init（）、service（）、destory（）三个方法
+六、Servlet的生命周期：
+servlet接口定义了servlet的生命周期方法：init（）、service（）、destory（）三个方法，具体下见代码。
 实例化：在路径找到对应的servlet后，如发现没有实例（即第一次调用），则会调用该类的默认构造方法，且只会执行一次，因为是单例的。
 初始化：init 方法是一个实例方法，所以会在构造方法执行后执行。Servlet是单例的，所以只会初始化一次。
 提供服务：在service()中编写业务代码。
@@ -202,8 +269,11 @@ import javax.servlet.http.HttpServletRequest;//处理POST
 import javax.servlet.http.HttpServletResponse;//处理GET
 public class HelloServlet extends HttpServlet{
 
+//构造函数，当有浏览器访问该Servlet时，会调用此构造函数实例化，且只会执行一次。
+public HelloServlet(){}
+    
 /*import javax.servlet.http.httpservletrequest，你看这个包说明servlet是一个特殊的Java类， java和javax都是Java的API包，java是核心包，javax的x是extension的意思，也就是扩展包。
-服务端初始化，肯定在构造函数之后执行
+服务端初始化，肯定在构造函数之后执行，且只会执行一次
 */
 public void init(ServletConfig config) {//服务器启动初始化
 		for(int i=0; i<10; i++)
@@ -224,7 +294,7 @@ form 默认的提交方式，通过 ip 地址访问，处理请求
 */
 public void doGet(HttpServletRequest request, HttpServletResponse response)throw ServletException,IOException{//返回响应
 		//响应构造 html 编码,如果有中文第一句不能省。
-		response.setContentType("text/html; charset=UTF-8"); 
+	    response.setContentType("text/html; charset=UTF-8"); 
   	    response.getWriter().println("<h1>three test!</h1>");
     }
 //处理发送的表单，一般在 form 上显示设置 method="post" 的时候
@@ -243,7 +313,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)t
 	}
 	
 /*
-进行页面间的跳转
+进行页面间的跳转：两种，服务端跳转，客户端跳转
 服务端跳转：浏览器地址不会变，
 发命令让客户端跳转：浏览器地址会改变，
 */
@@ -285,23 +355,25 @@ response.getWriter().println(html);//获取返回html的对象
 response.sendRedirect("fail.html");//客户端跳转网页
 ```
 
-### web.xml 
-浏览器通过服务器会访问到此文件，根据里面对应的路径进行
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app>
-    <servlet>
-        <servlet-name>HelloServlet</servlet-name>
-        <servlet-class>HelloServlet</servlet-class>
-    </servlet>
- 
-    <servlet-mapping>
-        <servlet-name>HelloServlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
- 
-</web-app>
-```
+**采用动态Web项目-Dynamic Web Project的方式将Servlet和Tomcat组合在一起**
+一、新建Dynamic Web Project，反正里面一大堆东西，看也看不懂，一共六个大的文件。
+File->New->Other->Web->Dynamic Web Project
+
+二、常规的新建HelloServlet，引入JAR包，会多出来一个Reference Libraries文件夹，存放引入的包。创建HelloServlet.java，创建web.xml，常规操作，代码不变。
+
+三、接下来就是在eclipse中配置Tomcat并启动，这个需要好几个步骤完成。
+首先右键项目 -> Run As -> Run on Server。原来只有动态web项目才有 这个选项，普通java项目是没有这个选项的。
+注意：需要注意的是，因为在上一步部署的时候，使用的是j2ee这个配置，所以这里访问的时候有路径名称j2ee,与 前面的独立Tomcat部署方式不一样，那个没有j2ee这个路径。所以这里需要
+127.0.0.1:8080/j2ee/hello，才可以访问。
+错误-无法启动Tomcat：我的web.xml竟然写错了，翻看了错误提示看到的！
+错误-可以启动但无法找到servlet：果然还是我的web.xml写错了，但我不知道哪里错了！！！！
+
+四、注意
+1. 类文件会被输出到build里，而不是WEB-INF/classes目录下
+2. 当有类或者配置文件变化时，会自动重启，无需手动重启Tomcat. 但是不稳定，当很许多类改动，新加了jar包，新增加了配置文件等等，都有可能导致自动重启失效，所以最好还是手动重启，确保重启成功。
+3. WebContent会被整个复制到 E:\project\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\j2ee 这个位置下面去，Eclipse中启动的tomcat其实是访问的这个位置。所以当WebContent里的内容比较多的时候，就会花较长时间复制。
+4. 因为第3条的原因，第1条在build里生成的类和配置文件，也会被复制到第3条所说的位置
+
 
 ### Servlet 的 CRUD操作
 ```java
@@ -314,9 +386,19 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 
 ```
 
+
+
+
+
+
 ### JSP
+<a name="JPS"></a>
 到这里，大家对使用 Servlet 进行CRUD开发就有比较全面感性认识了。 其中一个比较明显的弊端就是在 Servlet 编写 html 代码很痛苦，效率不高，可读性差，难以维护。最好可以在 html 文件里面写html 代码，同时又能在里面调用 java 的变量，那么这样就需要学习 JSP 了。
-  全称（Java Server Pages）是一种动态网页开发技术。它使用 JSP 标签在 HTML 网页中插入 Java 代码。标签通常以 <%开头以%> 结束。与 JavaScript 相比：虽然 JavaScript 可以在客户端动态生成 HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。 **执行过程**：把 hello.jsp 转译为 hello_jsp.java 文件，这个文件继承了 HttpServlet，所以它就是一个Servlet，之后的处理就都是一样的了，编译为 class 文件，处理响应等等。
+全称（Java Server Pages）是一种动态网页开发技术。它使用 JSP 标签在 HTML 网页中插入 Java 代码。标签通常以 <%开头以%> 结束。与 JavaScript 相比：虽然 JavaScript 可以在客户端动态生成 HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。 
+
+**如何写.jsp文件**：在JSP页面里，剥离与显示无关的代码，一个好的JSP页面，应该少用甚至不用<%%>包含起来的代码。
+
+**执行过程**：把 hello.jsp 转译为 hello_jsp.java 文件，这个文件继承了 HttpServlet，所以它就是一个Servlet，之后的处理就都是一样的了，编译为 class 文件，处理响应等等。
 
 **JSP 和 Servlet 的区别**
 从网络三层结构的角度看 JSP 和 Servlet 的区别，一个网络项目最少分三层：data layer(数据层)，business layer(业务层)，presentation layer(表现层)。当然也可以更复杂。Servlet 用来写 business layer 是很强大的，但是对于写  presentation layer  就很不方便。JSP 则主要是为了方便写 presentation layer 而设计的。综上所述，Servlet 是一个早期的不完善的产品，写 business layer 很好，写 presentation layer 就很臭，并且两层混杂。
@@ -331,6 +413,8 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 
 <%-- 日期，相当于 response.getWriter()，前面带 = 的属于需要输出的内容，不用分号结尾
 如果没有则表示正常的 java 代码，需要用分号结尾 --%>
+<%-- JSP中有不少内嵌对象，不用定义可以直接使用，如request，response，Session，out --%>
+
 <%= new Date().toLocaleString() %>
 
 
@@ -476,18 +560,6 @@ request.getRequestDispatcher("editHero.jsp").forward(request, response);
     <input type='submit' value='更新'>
 </form>
 ```
-
-
-### Filter
-
-
-
-
-
-### GUI（有兴趣可以自己了解）
-**Swing**
-Swing 是一个为Java设计的GUI工具包。包括了图形用户界面（GUI）器件如：文本框，按钮，分隔窗格和表。
-**五子棋**：1.掌握 JavaGUI 界面设计、2.掌握鼠标事件的监听（MouseListener，MouseMotionListener）
 
 
 ### 框架
