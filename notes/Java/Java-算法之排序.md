@@ -160,14 +160,14 @@ public static void shellSort(int[]array){
 1. 三角形的最大周长：给定一个长度数组，返回三条构成三角形的最大周长。
 解题思路：不一定要将数组全部排序，构造大顶堆，边排序边判断两边之和大于第三边即可。
 */
-public static void heapadjust(int[]array, int root, int end){
+public static void heapAdjust(int[]array, int root, int end){
     int leaf = root*2+1;
     int temp = array[root];
     while(leaf <= end){
         //比较两个子节点
         if(leaf < end  && array[leaf+1] > array[leaf])
             leaf += 1;
-        // 迭代后不是和父节点比较，因为我没有交换，和保存父节点值的tmp比较
+        // 迭代后不是和父节点比较，因为没有交换，和保存父节点值的tmp比较
         if(array[leaf] > temp){
             array[root] = array[leaf];//# 将父节点替换成新的子节点的值，这里就完成了转换
             root = leaf;//赋坐标，为下一步迭代做好准备，子节点变成父节点
@@ -182,15 +182,19 @@ public static void heapSort(int[]array){
     int length = array.length;
     // 创建堆，和下面排序不同的是，我们转换的范围永远是整个数组n-1
     for(int not_leaf=length/2-1; not_leaf>=0; not_leaf--)
-        heapadjust(array, not_leaf, length-1);
+        heapAdjust(array, not_leaf, length-1);
     // 挨个出数，创建堆已经完成了第一次排序
     for(int end=length-1; end>=0; end--){
         int temp = array[end];
         array[end] = array[0];
         array[0] = temp;
-        heapadjust(array, 0, end-1);
+        heapAdjust(array, 0, end-1);
     }
 }
+
+/*
+这个题很简单，排序、堆、quickselect，都可以做，面试的时候问了一道第k大，和这个题没啥区别的，我直接喷快选了，毕竟O(n)，然后一面就挂了。因为做题时候没好好沟通，面试经验太欠缺了！
+*/
 ```
 
 <a name="归并排序"></a>
@@ -294,6 +298,7 @@ while(l >= left && r > mid){
 基本思想:选一个数作为中间枢纽，进行列表的划分，递归。
 时间复杂度：最差O(n2)，最好O(nlogn)，平均O(nlogn) -由分区的好坏决定。
 空间复杂度：O(n)，主要为递归造成的空间栈的使用
+题目：可以考察最快找出小于等于某个值的所有数。
 */
 public static int partition(int[] array, int left, int right) {
     int key = left;
@@ -312,11 +317,11 @@ public static int partition(int[] array, int left, int right) {
     return left;
 }
 public static void quickSort(int[] array, int left, int right) {
-    if(left >= right)
-        return;
-    int mid = partition(array, left, right);
-    quickSort(array, left, mid-1);
-    quickSort(array, mid+1, right);
+    if(left < right){
+       int mid = partition(array, left, right);
+       quickSort(array, left, mid-1);
+       quickSort(array, mid+1, right); 
+    }  
 }
 public static void main(String[] args) {
     int[] array = {1,9,2,8,3,7};

@@ -1,8 +1,7 @@
 # JAVA-EE
 ### J2EE 主要技术
 [参考博客](https://blog.csdn.net/Neuf_Soleil/article/details/80962686)
-JavaEE 号称有十三种核心技术。它们分别是：**JDBC、Servlet、JSP**、JNDI、EJB、RMI、XML、JMS、Java IDL、JTS、JTA、JavaMail 和 JAF。一般来讲，初学者应该遵循路径
-JDBC -> Servlet -> JSP -> Spring -> 组合框架。
+JavaEE 号称有十三种核心技术。一般来讲，初学者应该遵循路径 JDBC -> Servlet -> JSP -> Spring -> 组合框架。
 Java Web包括四大核心知识点：1.Spring的IOC和AOP等知识点、2.Spring MVC框架的基本流程、3.ORM技术（了解 Hibernate与MyBatis的基本开发流程）、4.Spring MVC+MyBatis、
 Java Web可以延后学习的知识点：JSP、Struts MVC、JS、CSS等前端知识
 
@@ -151,8 +150,7 @@ JTA事务管理则由 JTA容器实现，JTA容器对当前加入事务的众多C
 右击工程 -> properties -> java compiler -> Enable project specific settings[打钩] -> compiler compliance level 改成11。之后，eclipse会问你是否重新编译，当然选是，要得就是这个问题。
 
 ```xml
-<!-- 这里要访问就需要写127.0.0.1:8080/tomcat/login.html，或者其他网页，但是前面的路径不可以改动，端口号可以改。
-docBase:即使网页存放的文件夹路径，可以是普通文件夹，或者是一个web项目。
+<!-- 这里要访问就需要写127.0.0.1:8080/tomcat/login.html，或者其他网页，但是前面的路径不可以改动，端口号可以改。docBase:即网页存放的文件夹路径，可以是普通文件夹，或者是一个web项目。
 -->
 <Context path="/tomcat/" docBase="F:\\JavaWorkSpace\\apache-tomcat-9.0.26\\webapps\\ROOT" debug="0" reloadable="false" />  
 ```
@@ -169,16 +167,16 @@ Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一�
 1.1、创建一个单纯的JavaProject，里面只包含：
 1、JRE System Library文件夹：包含各种jar包
 2、src：空文件夹
-1.2、确实servlet必须的包，需要导入包，导入之后多了一个Referenced Libraties。
+1.2、确定servlet必须的包，需要导入包，导入之后多了一个Referenced Libraties。
 （可以创建一个bin文件夹，把需要的jar包放里面，再加载，这样移动项目不容易出错）
 右键点击项目 -> properties -> Java Build Path ->Libraries -> Add External JAR
-里面有两个路径：一个是Modulepath，一个是Classpath。ModulePath 的概念和ClassPath 类似，不过 ModulePath 中的 Jar 包或 Jmod 文件被当作 Module 来处理，而 ClassPath 中的的 Jar 包，无论是否模块化都会被当作传统 Jar 包处理，所以要加在Classpath下面。
+里面有两个路径：一个是Modulepath，一个是Classpath。ModulePath 的概念和ClassPath 类似，不过 ModulePath 中的 Jar 包或 Jmod 文件被当作 Module 来处理，而 ClassPath 中的 Jar 包，无论是否模块化都会被当作传统 Jar 包处理，所以要加在Classpath下面。
 1.3、创建一个HelloServlet.java文件，不写包名，用default package即可。
-1.4、创建两个个web文件夹，web/WEB-INF文件夹，再在WEB-INF文件夹中创建web.xml文件。
+1.4、创建两个web文件夹，web/WEB-INF文件夹，再在WEB-INF文件夹中创建web.xml文件。
 1.5、在web/WEB-INF创建classes文件夹，把项目的class文件输出由原来的 j2ee/bin 设置到 j2ee/web/WEB-INF/classes下。项目右键->properties->Java Build Path->Source->右下角的 Brower-> 指定位置是 j2ee/web/WEB-INF/classes。
 经历上面一步后，classes文件夹默认不显示了，想看的话可以到源文件中查看。
 
-二、编写HelloServlet.java代码和web.xml代码；
+二、编写HelloServlet.java代码和web.xml代码
 ```java
 import java.io.IOException;
 import java.util.Date;
@@ -214,9 +212,9 @@ public class HelloServlet extends HttpServlet{
 ```
 
 三、部署到 tomcat 中；（本地项目中j2ee为示范项目，可以参考如何将java项目部署到tomcat中，其实是在server.xml文件中增加一个Context标签，标明路径）
-四、过程：浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 WEB-INF 文件的路径，即通过浏览器可以访问到的文件夹），文件夹中包含web.xml，里面设置了不同访问路径所对应的不同servlet，找到后回去classes 文件夹中寻找指定的class文件，即编译后的java文件，然后返回给浏览器。
+四、过程：浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 WEB-INF 文件的路径，即通过浏览器可以访问到的文件夹），文件夹中包含web.xml，里面设置了不同访问路径所对应的不同servlet，找到后到classes 文件夹中寻找指定的class文件（即编译后的java文件），然后返回给浏览器。
 
-四、奇怪的一点是每次修改java项目里面的.java文件，都要重新启动Tomcat，浏览器读取的是上一次修改的.class文件，不明白。如果使用hello.html访问，则也会无法访问。因为访问路径要和web.xml里面的映射完全一致。
+四、奇怪的一点是每次修改java项目里面的.java文件，都要重新启动Tomcat，浏览器读取的是上一次修改的.class文件，不明白（应该读取的是缓存的文件）。如果使用hello.html访问，则也会无法访问。因为访问路径要和web.xml里面的映射完全一致。
 
 
 
@@ -244,6 +242,7 @@ request.getRequestDispatcher("success.html").forward(request, response);
 八、Servlet 自启动
 
 **问：Java Servlet 与使用 CGI（Common Gateway Interface，公共网关接口）有什么优势**：
+
 1. 性能明显更好。
 2. Servlet 在 Web 服务器的地址空间内执行。这样它就没有必要再创建一个单独的进程来处理每个客户端请求。
 3. Servlet 是独立于平台的，因为它们是用 Java 编写的。
@@ -411,7 +410,7 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 ```jsp
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*" %>
 
-<%-- 日期，相当于 response.getWriter()，前面带 = 的属于需要输出的内容，不用分号结尾
+<%-- 日期，相当于 response.getWriter()，前面带 = 属于需要输出的内容，不用分号结尾
 如果没有则表示正常的 java 代码，需要用分号结尾 --%>
 <%-- JSP中有不少内嵌对象，不用定义可以直接使用，如request，response，Session，out --%>
 

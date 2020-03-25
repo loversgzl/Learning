@@ -73,3 +73,19 @@ class Solution {
 }
 ```
 
+* **打家劫舍**
+题目概述：给定一个数组，不能选取两个相邻的家庭，计算所能偷到的最大值
+解题思路：只有一户，f(1)=A1，两户f(2)=max(A1,A2),三户（第三户不抢，保留最大值，），f(k)=max(f(k-2)+AK,f(k-1))
+```java
+public int rob(int[] nums) {
+    if(nums == null) return 0;
+    int prevMax = 0;
+    int currMax = 0;
+    for(int x : nums){
+        int temp = currMax;
+        currMax = Math.max(prevMax+x, currMax);
+        prevMax = temp;
+    }
+    return currMax;
+}
+```
