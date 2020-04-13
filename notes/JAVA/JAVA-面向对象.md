@@ -20,7 +20,7 @@
 **默认的【default 】**：在同一包内可见，不使用任何修饰符。
 **私有的【private】**：在同一类内可见。主要用来隐藏类的实现细节和保护类的数据。类和接口不能声明为 private。
 访问范围：【public】> 【protected】> 【default 】> 【private】
-![访问修饰符](../../pics/java访问修饰符.png)
+![访问修饰符](../../pics/java访问修饰符.png) ![访问修饰符](../../pics/UML用例图.png) 
 
 **非访问修饰符：static、final**
 为了实现一些其他的功能，Java也提供了许多非访问修饰符。

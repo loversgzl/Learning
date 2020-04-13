@@ -39,11 +39,11 @@
 空间复杂度：O(1)
 */
 public static void bobleSort(int[] array){
-    int length = array.length-1;
+    int length = array.length;
     boolean state;
-    for(int i=0; i<length; i++){
+    for(int i=0; i<length-1; i++){
         state = false;
-        for(int j=0; j<length-i; j++){
+        for(int j=0; j<length-1-i; j++){
             if(array[j] > array[j+1]){
                 int temp = array[j];
                 array[j] = array[j+1];
@@ -92,10 +92,10 @@ public static void insertSort(int[] array){
 空间复杂度：O(1)
 */
 public static void selectSort(int[] array){
-    int length = array.length-1;
-    for(int i=0; i<length; i++){//定义待交换的数
+    int length = array.length;
+    for(int i=0; i<length-1; i++){//定义待交换的数
         int minindex = i;
-        for(int j=i+1; j<=length; j++){
+        for(int j=i+1; j<length; j++){
             if(array[j] < array[minindex])
                 minindex = j;
         }
@@ -325,10 +325,10 @@ public static void quickSort(int[] array, int left, int right) {
 }
 public static void main(String[] args) {
     int[] array = {1,9,2,8,3,7};
-    int length = array.length - 1;
-    if(length <= 0)
+    int length = array.length;
+    if(length == 0)
         return;
-    quickSort(array, 0, length);
+    quickSort(array, 0, length-1);
     for(int x : array)
         System.out.println(x);
 }

@@ -163,7 +163,7 @@ JTA事务管理则由 JTA容器实现，JTA容器对当前加入事务的众多C
 简介：Servlet用于处理用户提交的数据，熟悉 request 和 response 两种方法，了解不同的跳转方式。熟悉 servlet 对数据库的基本操作。
 Servlet 本身不能独立运行，需要在一个 web 应用中运行，而一个 web 应用是部署在 tomcat 中的，所以开发一个 servlet 需要如下三个步骤：
 
-一、创建 web 应用项目（练习中使用创建单纯的java项目的方式）；
+**一、创建 web 应用项目（练习中使用创建单纯的java项目的方式）**；
 1.1、创建一个单纯的JavaProject，里面只包含：
 1、JRE System Library文件夹：包含各种jar包
 2、src：空文件夹
@@ -212,11 +212,34 @@ public class HelloServlet extends HttpServlet{
 ```
 
 三、部署到 tomcat 中；（本地项目中j2ee为示范项目，可以参考如何将java项目部署到tomcat中，其实是在server.xml文件中增加一个Context标签，标明路径）
-四、过程：浏览器输入 ip 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 WEB-INF 文件的路径，即通过浏览器可以访问到的文件夹），文件夹中包含web.xml，里面设置了不同访问路径所对应的不同servlet，找到后到classes 文件夹中寻找指定的class文件（即编译后的java文件），然后返回给浏览器。
+
+四、过程：浏览器输入 http://127.0.0.1:8080/pureProject/helloOne 地址，通过 TomCat 免费服务器（里面的 cof/server.xml 文件设置访问的 WEB-INF 文件的路径，即通过浏览器可以访问到的文件夹），文件夹中包含web.xml，里面设置了不同访问路径所对应的不同servlet，找到后到classes 文件夹中寻找指定的class文件（即编译后的java文件），然后返回给浏览器。
 
 四、奇怪的一点是每次修改java项目里面的.java文件，都要重新启动Tomcat，浏览器读取的是上一次修改的.class文件，不明白（应该读取的是缓存的文件）。如果使用hello.html访问，则也会无法访问。因为访问路径要和web.xml里面的映射完全一致。
 
+**采用动态Web项目-Dynamic Web Project的方式将Servlet和Tomcat组合在一起**
+一、新建Dynamic Web Project，反正里面一大堆东西，看也看不懂，一共六个大的文件。
+File->New->Other->Web->Dynamic Web Project
 
+二、常规的新建HelloServlet，引入JAR包，会多出来一个Reference Libraries文件夹，存放引入的包。创建HelloServlet.java，创建web.xml，常规操作，代码不变。
+
+三、接下来就是在eclipse中配置Tomcat并启动（记住，这里和servert.xml文件无关了，不需要配置），这个需要好几个步骤完成。
+首先右键项目 -> Run As -> Run on Server。原来只有动态web项目才有 这个选项，普通java项目是没有这个选项的（这里好像不需要配置server.xml文件）。
+注意：需要注意的是，因为在上一步部署的时候，使用的是j2ee这个配置，所以这里访问的时候有路径名称j2ee,与 前面的独立Tomcat部署方式不一样，那个没有j2ee这个路径。所以这里需要
+127.0.0.1:8080/j2ee/hello，才可以访问。
+错误-无法启动Tomcat：我的web.xml竟然写错了，翻看了错误提示看到的！
+错误-可以启动但无法找到servlet：果然还是我的web.xml写错了，但我不知道哪里错了！！！！
+
+四、注意
+1. 类文件会被输出到build里，而不是WEB-INF/classes目录下
+
+2. 当有类或者配置文件变化时，会自动重启，无需手动重启Tomcat. 但是不稳定，当很许多类改动，新加了jar包，新增加了配置文件等等，都有可能导致自动重启失效，所以最好还是手动重启，确保重启成功。
+
+3. WebContent会被整个复制到 E:\project\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\j2ee 这个位置下面去，Eclipse中启动的tomcat其实是访问的这个位置。所以当WebContent里的内容比较多的时候，就会花较长时间复制。
+
+4. 因为第3条的原因，第1条在build里生成的类和配置文件，也会被复制到第3条所说的位置
+
+   
 
 一、开发 Servlet，打开 TomCat，访问地址为：http://127.0.0.1:8080/hello
 对应的servlet中有doGet方法，即执行 web 浏览器的请求的get方法。
@@ -249,9 +272,8 @@ request.getRequestDispatcher("success.html").forward(request, response);
 4. 服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。
 5. Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。
 
-**问：当多个客户请求一个Servlet时，服务器为每一个客户启动一个进程？**
-1.不一定， Servlet 可以是单线程的，也可以是多线程的。
-3.当多个浏览器终端请求web服务器的时候，服务器为每个客户启动一个线程，不是进程。(选择中喜欢偷换概念，在这个上面做文章。)
+**问：当多个请求同时到达时，会启动一个还是多个Servlet？**
+Servlet是单实例，多线程。1、可以有多个Servlet来处理请求，2、Servlet是单实例的，所以对于同一种业务请求，只有一个实例。3、同一个Sevlet可以同时处理多个客户端的请求，如多个登录同时到达，可以启动多个Servlet线程进行处理。Servlet线程不安全。
 
 **问：在开发servlet继承HttpServlet时如何处理父类的service方法？**
 答：一般我们都是不对service方法进行重载(没有特殊需求的话)，而只是重载doGet()之类的doXxx()方法，减少了开发工作量。但如果重载了service方法，doXXX()方法也是要重载的。即不论是否重载service方法，doXXX()方法都是需要重载的。
@@ -354,24 +376,7 @@ response.getWriter().println(html);//获取返回html的对象
 response.sendRedirect("fail.html");//客户端跳转网页
 ```
 
-**采用动态Web项目-Dynamic Web Project的方式将Servlet和Tomcat组合在一起**
-一、新建Dynamic Web Project，反正里面一大堆东西，看也看不懂，一共六个大的文件。
-File->New->Other->Web->Dynamic Web Project
 
-二、常规的新建HelloServlet，引入JAR包，会多出来一个Reference Libraries文件夹，存放引入的包。创建HelloServlet.java，创建web.xml，常规操作，代码不变。
-
-三、接下来就是在eclipse中配置Tomcat并启动，这个需要好几个步骤完成。
-首先右键项目 -> Run As -> Run on Server。原来只有动态web项目才有 这个选项，普通java项目是没有这个选项的。
-注意：需要注意的是，因为在上一步部署的时候，使用的是j2ee这个配置，所以这里访问的时候有路径名称j2ee,与 前面的独立Tomcat部署方式不一样，那个没有j2ee这个路径。所以这里需要
-127.0.0.1:8080/j2ee/hello，才可以访问。
-错误-无法启动Tomcat：我的web.xml竟然写错了，翻看了错误提示看到的！
-错误-可以启动但无法找到servlet：果然还是我的web.xml写错了，但我不知道哪里错了！！！！
-
-四、注意
-1. 类文件会被输出到build里，而不是WEB-INF/classes目录下
-2. 当有类或者配置文件变化时，会自动重启，无需手动重启Tomcat. 但是不稳定，当很许多类改动，新加了jar包，新增加了配置文件等等，都有可能导致自动重启失效，所以最好还是手动重启，确保重启成功。
-3. WebContent会被整个复制到 E:\project\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\j2ee 这个位置下面去，Eclipse中启动的tomcat其实是访问的这个位置。所以当WebContent里的内容比较多的时候，就会花较长时间复制。
-4. 因为第3条的原因，第1条在build里生成的类和配置文件，也会被复制到第3条所说的位置
 
 
 ### Servlet 的 CRUD操作
@@ -537,6 +542,7 @@ JSP 相当于在 HTML 里面写代码，用两个%括起来，所有的变量也
 所以单独用一个做很繁琐，就将两个的优势结合，就是MVC的思想。
 Modle 模型-数据（DAO,Bean），View 视图-网页（JSP），Controller 控制器（Servlet）。
 其中可以看出，是视图是.jsp，控制器和模型都是 .java文件，除了web.xml。接下来学习JSP+Bean
+
 ```java
 /*
 Servlet 只用来从数据库中查询 Hero 对象，然后跳转到 JSP 页面，如果保存在request，需要服务器跳转，因为它的有效期是一次会话。
@@ -560,84 +566,127 @@ request.getRequestDispatcher("editHero.jsp").forward(request, response);
 </form>
 ```
 
-
-### 框架
-**SSH**：Structs + Spring + Hibernate
-**SSM**：Spring + SpringMVC + MyBatis（先学习这种）
-
-
 ### Spring
-Spring是一个基于 IOC 和 AOP 结构的 J2EE 系统框架。
-**pojo**(Plain Old Java Object) 简单的Java对象
+Spring三大块知识：
+一、常规知识点：IOC/DI
+二、常规知识点：AOP
+二、web应用方面：Spring MVC
+三、框架整个技术
 
 
-** IOC 是反转控制 (Inversion Of Control) **
+**一、IOC 是反转控制 (Inversion Of Control) **
 Spring 框架是一个开源的 Java 平台，它为容易而快速的开发出耐用的 Java 应用程序提供了全面的基础设施。
 **传统的方式**：通过 new  关键字主动创建一个对象
 **IOC 方式**：对象的生命周期由 Spring 来管理，直接从 Spring 那里去获取一个对象，就像控制权从本来在自己手里，交给了 Spring。在主程序调用 xml 文件时，就开始对实例进行初始化构造了，不管是直接写的 bean 还是用注解方式（自动生成一个bean），效果都一样。
+该对象默认是单例的，一般用单例模式创造无状态的Bean，而有状态的Bean则不使用单例模式。
+无状态的Bean：是指没有能够标识它目前状态属性的Bean，如连接数据库。
+有状态的Bean：而如果是登录等，保存个人信息的Bean，则为有状态的Bean。
+
+**问：有状态的Bean和无状态的Bean？**
+答：IOC创建的对象默认是单例的，一般用单例模式创造无状态的Bean，而有状态的Bean则不使用单例模式。这里要注意的是singleton作用域和GOF设计模式中的单例是完全不同的，单例设计模式表示一个ClassLoader中只有一个class存在，而这里的singleton则表示一个容器对应一个bean，也就是说当一个bean被标识为singleton时候，spring的IOC容器中只会存在一个该bean。
+
+无状态的Bean：是指没有能够标识它目前状态属性的Bean，如连接数据库。
+特点：可以在缓冲池里只维护一个实例，无须创建和销毁操作，性能高，但线程不安全。
+有状态的Bean：而如果是登录等，保存个人信息的Bean，则为有状态的Bean。
+特点：每次调用创建一个实例，一旦调用结束，如用户离开网站，则该Bean就会被销毁。
+
+**问：Bean的生命周期？**
+
+
 **IoC的实现原理**：就是工厂模式加反射机制。
 
-**Spring 注解方式**
-@Autowired：默认按类装配
-@Resource(name="one")：默认先按名称，找不到按类
-@Resource注解属性名表示按照属性名来查找类，找到匹配的类后，自动创建一个bean来存放对象，并注入属性，找不到或者找到多个，都会抛出异常。
-@Autowired时先按照出行的类型进行查找类，如果有多个再找属性名，属性名还是有多个就报错。
-@Component：对整个 Bean 进行注解。
+**注解方式的IOD和DI：@Autowired**
+位置：1、可以在bean里面（通过byName，byType）
+2、可以在类的属性上面添加（注解，等同于byType）缺点：1、代码可读性不好，不容易维护，不得不在代码里找依赖关系，2、通用性不好，如果哪天不用Spring了得一个一个删除。
 
-**AOP 即 Aspect Oriented Program 面向切面编程**
+IOC是反转控制 (Inversion Of Control)的缩写，就像控制权从本来在自己手里，交给了Spring。没有使用new，就意味着低耦合，假设有三个团队在开发维护三个类，如果用常规的new方法创造类，那么一旦这个团队修改了调用接口，如构造函数需要带参数，那么导致其他团队也要修改本身的代码。要知道在公司里，修改代码并且发布到生产环境，要经过很繁琐且很严格的审批流程，必须要经历代码审查、代码提交、测试人员测试、领导审批、最终发布等步骤。
+依赖注入强调类的注入是由Spring容器在运行时完成，而控制反转强调类之间的关系是由Spring容器控制。
+
+**Spring Scope（作用域）的范围**
+![springScope作用域](../../pics/springScope作用域.jpg)
+
+```java
+public static void main(String[] args) {
+/*三种获取配置文件的方式：
+* 一、Resource resource = new ClassPathResource("applicationContext.xml");
+* BeanFactory factory = new XmlBeanFactory(resource);
+* 二、如下
+* 三、ApplicationContext factory = new FileSystemXmlApplicationContext("classpath:applicationContext.xml");
+* 
+* */
+    ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml" });
+
+    //Category c = (Category) context.getBean("c");
+    Product p = (Product) context.getBean("p");
+    Category c = p.getCategory();
+    System.out.println(c.getName());
+
+    SingleTon s1 = (SingleTon) context.getBean("s");
+    SingleTon s2 = (SingleTon) context.getBean("s");
+    s1.printRandom();
+    s1.printRandom();
+}
+```
+
+```xml
+<!-- spring 反转控制，在xml中产生实例，在主函数中通过 getBean("c") 获取这个实例。 -->
+    <bean name="category" class="com.how2java.pojo.Category">
+        <property name="name" value="category 1" />
+    </bean>
+    
+ 	<!-- spring 注入对象（DI）,将上一个实例注入到另一个实例中
+ 	<bean name = "p" class="com.how2java.pojo.Product">
+ 		<property name="name" value="product 1" />
+ 		<property name="category" ref="category" />
+ 	</bean>
+ 	-->
+ 	
+ 	<!-- 通过注解方式,那么类中的属性名要和注入bean的name相同（category）  -->
+ 	<bean name = "p" class="com.how2java.pojo.Product" autowire="byName">
+ 		<property name="name" value="product 1" />
+ 	</bean>
+ 	
+ 	<!-- scope可以不写，默认是单例的 -->
+ 	<bean name = "s" class="com.how2java.pojo.SingleTon" scope="singleton">
+ 	</bean>
+
+
+<!-- 只通过注解方式 applicationContext.xml 文件中只需要写两句-->
+<!-- 包括bean，属性注入啊等等 -->
+@Component("p") 表示一个bean
+@Autowired 会自己匹配，容易报错
+@Resource("c") 主动匹配bean，也可以
+<context:annotation-config/> <!-- 表示通过注解方式 -->
+<context:component-scan base-package="com.how2java.pojo"/> <!-- 默认扫描的包 -->
+```
+
+**二、AOP 即 Aspect Oriented Program 面向切面编程**
 首先，在面向切面编程的思想里面，把功能分为核心业务功能和周边功能。
 所谓的核心业务：比如登陆，增加数据，删除数据都叫核心业务
 所谓的周边功能（切面）：比如性能统计，日志，事务管理等等
 在面向切面编程 AOP 的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 "编织" 在一起（在xml文件中编织），这就叫 AOP。在编写切面功能时，有一个核心功能接口 joinpoin（可以调用核心功能），默认在切面方法中将所有功能完成后（如在执行核心功能前后打印开始结束日志），再在 xml 中进行编织（就我理解，这里感觉只是创建两个bean，然后调用，真正的编织感觉在编写切面功能的时候已经做了，xml中负责调用）。
 
-**Spring Scope（作用域）的范围**
-![springScope作用域](../../pics/springScope作用域.jpg)
+辅助功能，又叫做切面，这种能够选择性的，低耦合的把切面和核心业务功能结合在一起的编程思想，就叫做切面编程。在xml文件里：
+首先构造一个核心功能的CutPointBean：这是给主函数调用的。
+之后构造一个切面的LoggerAspectBean：方便后面交织，给<aop:config>用的，所以表面上你看不到。之后就在<aop:config>里面构造<aop:pointcut>和<aop:aspect>。
 
 **问：AOP技术优势在于？**
 答：将核心关注点与横切关注点完全隔离，面相切面编程，与传统oop相比，传统oop编程是自顶向下的编写主业务逻辑，但往往需要参杂着一些与主业务逻辑无关或关系不大的逻辑，这就产生了横切性问题。Aop能很好的隔离和管理这些与主业务逻辑关联不大的业务代码，使得代码的可读性和可维护性大大提高。
 
-**问：在spring中，singleton属性默认是false，每次指定别名取得的Bean时都会产生一个新的实例？**
-答：Bean的创建时会提到Spring的单例模式，就是说默认情况下Spring中定义的Bean是以单例模式创建的。如果以前了解设计模式中的单例模式的话很容易对这种说法产生先入为主的印象。事实上，Spring中的单例模式还有许多需要注意的地方。在GoF中的单例模式是指一个ClassLoader中只存在类一个实例。而在Spring中的单例实际上更确切的说应该是：
-1.每个Spring Container中定义的Bean只存在一个实例
-2.每个Bean定义只存在一个实例。
-
 ```xml
-<!-- spring 反转控制，在xml中产生实例，在主函数中通过 getBean("c") 获取这个实例。 -->
-<bean name="c" class="package.Category">
-	<property name="name" value="CategoryOne" />
-</bean>
-
-<!-- spring 注入对象（DI）,将上一个实例注入到另一个实例中 -->
-<bean name="p" class="package.Product">
-	<property name="name" value="ProductOne" />
-	<property name="category" ref="c" />
-</bean>
-
-<!-- spring 使用注解的方式注入对象 -->
-<!-- 在主配置文件 .xml 中 bean 的前面添加 <content:annotation-config/>  -->
-<!-- 在 product 类中的 Category 属性上面添加 @AutoWired 会自动匹配bean，
-或者 set 方法上面，会自动调用该方法进行匹配。
-而在属性上添加 @Resource(name="c") 则是主动的方式，更容易理解。
--->
-
-<!--   -->
-
-<!-- 更进一步，将 bean 对象本身也通过注解，重要，因为很方便，后面项目经常用到 -->
-<!-- 在主配置文件 .xml 中删除所有的 bean，添加 <content:component-scan base-package="spring"/>  -->
-<!-- 在Product类上添加 @Component("p") 即表明此类是 bean,需要注入对象的属性上面添加@AutoWired-->
-<!-- 同时属性要在类中初始化了 -->
-
-
 <!-- 将核心业务功能与切面功能整合：
 核心业务类编写照常，切面类需要通过一个核心业务类接口，提前将需要做的任务完成，如在核心业务类前后打印日志等。
 接下来在xml中通过两个类构造两个bean，xml中的调用肯定是通过bean来实现的，只要调用核心类中任意的方法，就会触发切面类的bean，具体看以下实现。
 -->
+<!-- 核心类实例化一个bean，给测试类调用的，此处用不到 -->
+<bean name="s" class="spring.ProductService"/>
+
 <!-- 切面类实例化一个bean -->
 <bean id="loggerAspect" class="spring.LoggerAspect"/>
 
 <!-- 具体的编织过程 -->
 <aop:config>
-<!-- 核心编程的id，自定义的核心bean，调用任意此类的方法就调用切面类 -->
+<!-- 切面类的触发条件，自定义的核心bean，调用任意此类的方法就调用切面类 -->
 <aop:pointcut id="loggerCutpoint" 
 expression = "execution(* spring.ProductService.*(..)) "/>
 
@@ -660,44 +709,97 @@ expression = "execution(* spring.ProductService.*(..)) "/>
 ### SpringMVC
 入口是Servlet。
 springmvc的请求流程，我们以一次用户的数据查询为例: 1，用户通过浏览器发送http请求，web容器接收到相关请求调用springmvc的核心控制器DispatcherServlet ，任何路径的映射都是如此；2，DispatcherServlet请求处理器映射器（HandlerMapping），处理器映射器根据 路径 对应的 配置或注解，找到最终要执行的Handler，并返回处理器执行链（HandlerExecutionChain）给DispatcherServlet。 3，DispatcherServlet接收到处理器执行链后请求处理器适配器,（HandlerAdapter）处理器适配器根据Handler规则执行不同的Handler，即我们编写的Controller，执行完成后返回一个ModelAndView对象给DispatcherServlet 5，DispatcherServlet接收数据并调用视图解析器（ViewResolver），视图解析器将逻辑视图解析成真正的物理视图，并返回View对象 6，DispatcherServlet接收到对应的View对象,对视图进行渲染，将model中的数据转为response响应。 7，DispatcherServlet响应用户的请求。
+
+```xml
+web.xml
+<!-- 用户通过浏览器发送http请求，web容器接收到相关请求调用springmvc的核心控制器DispatcherServlet ，任何路径的映射都是如此 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup> 
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+        <!-- 用来显示中文编码 -->
+    <filter> 
+    <filter-name>CharacterEncodingFilter</filter-name> 
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> 
+    <init-param> 
+        <param-name>encoding</param-name> 
+        <param-value>utf-8</param-value> 
+    </init-param> 
+    </filter> 
+    <filter-mapping> 
+        <filter-name>CharacterEncodingFilter</filter-name> 
+        <url-pattern>/*</url-pattern> 
+    </filter-mapping>  
+</web-app>
+
+
+springmvc-servlet.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <!-- 视图定位功能，定位WEB-INF下某个文件夹中的文件，且以.jsp结尾,路径只需要文件名即可
+ http://localhost:8080/springmvc/index -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+   <property name="prefix" value="/WEB-INF/page/" />
+   <property name="suffix" value=".jsp" />
+</bean>
+    
+
+ <!-- 不用注解的方式，指定映射 -->
+    <bean id="simpleUrlHandlerMapping"
+        class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+<!-- 这是Spring MVC的 映射配置文件，表示访问路径/index会交给id=indexController的bean处理  -->
+                <prop key="/index">indexController</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="indexController" class="controller.IndexController"></bean>
+</beans>
+
+<!-- 使用注解的方式，@Controller,@RequestMapping(/index); -->
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <!-- 只增加了这一句，下面是视图定位 -->
+    <context:component-scan base-package="controller" />
+    <bean id="irViewResolver"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/page/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+</beans>
+```
+
 ```java
 //使用 Bean 跳转，将模型与视图整合
+//使用注解方式：重点，因为很简洁，用的也很多。
+@Controller //使用注解的方式
 public class IndexController implements Controller {
+    @RequestMapping("/index") //和上面的配套使用，不需要再servlet.xml中指定了
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//如果要进行客户端跳转，则修改为：ModelAndView("redirect:/index.jsp");
-        ModelAndView mav = new ModelAndView("index.jsp");
+        System.out.println("已启动");
+        //因为有了视图定位（在servlet.xml文件中），所以不需要写后缀，且可以识别指定文件夹的页面
+        //默认是访问WEB-INF下的jsp文件的
+        //如果要进行客户端跳转，则修改为：ModelAndView("redirect:/index.jsp");
+    	ModelAndView mav = new ModelAndView("index");
         mav.addObject("message", "Hello Spring MVC");
         return mav;
     }
 }
-
-/*
-使用注解方式：重点，因为很简洁，用的也很多。
-
-*/
-package springmvc;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
- 
-@Controller
-public class IndexController {
-    @RequestMapping("/index")
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ModelAndView mav = new ModelAndView("index");
-        mav.addObject("message", "Hello Spring MVC");
-        return mav;
-    }
- 
-    @RequestMapping("/jump")//客户端跳转
-    public ModelAndView jump() {
-        ModelAndView mav = new ModelAndView("redirect:/index");
-        return mav;
-    }
  
     @RequestMapping("/check")//session的访问次数
     public ModelAndView check(HttpSession session) {
@@ -709,8 +811,11 @@ public class IndexController {
         ModelAndView mav = new ModelAndView("check");
         return mav;
     }
- 
 }
+
+//如何获取表单数据？前面介绍的都是基于Get返回某个页面，如何获取POST请求？
+
+
 ```
 
 
@@ -719,17 +824,26 @@ public class IndexController {
 ### MyBatis
 **基础**
 平时我们都用JDBC访问数据库，除了需要自己写SQL之外，还必须操作Connection, Statement, ResultSet 这些其实只是手段的辅助类。 不仅如此，访问不同的表，还会写很多雷同的代码，显得繁琐和枯燥。那么用了Mybatis之后，只需要自己提供SQL语句，其他的工作，诸如建立连接，Statement， JDBC相关异常处理等等都交给Mybatis去做了，那些重复性的工作Mybatis也给做掉了，我们只需要关注在增删改查等操作层面上，而把技术细节都封装在了我们看不见的地方。
+
+**基本原理**
+1. 应用程序找Mybatis要数据
+2. mybatis从数据库中找来数据
+2.1 通过mybatis-config.xml 定位哪个数据库
+2.2 通过Category.xml执行对应的select语句
+2.3 基于Category.xml把返回的数据库记录封装在Category对象中
+2.4 把多个Category对象装在一个Category集合中
+3. 返回一个Category集合
 ```xml
 <!-- 配置mybatis-config.xml 连接数据库  -->
 
 <typeAliases> <!-- 配置前缀  -->
-   <package name="com.how2java.pojo"/>
+   <package name="pojo"/>
 </typeAliases>
  <!-- 连接数据库  -->
 <property name="driver" value="com.mysql.jdbc.Driver"/>
 <property name="url" value="jdbc:mysql://localhost:3306/school?characterEncoding=UTF-8"/>
 <property name="username" value="root"/>
-<property name="password" value="admin"/>
+<property name="password" value="1234"/>
  <!-- 映射到执行文件  -->
 <mappers>
 	<mapper resource="mybatis/Category.xml"/>
@@ -757,6 +871,43 @@ select * from   category_  where id= #{id}
 select * from   category_     
 </select>    
 </mapper>
+```
+**控制器的代码**
+```java
+
+//这里需要在springMVC.xml中添加指定的映射，使用注解参考下一个实例
+public class IndexController implements Controller {
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("已启动");
+        //因为有了视图定位，所以不需要写后缀，且可以识别指定文件夹的页面
+        //默认是访问WEB-INF下的jsp文件的
+    	ModelAndView mav = new ModelAndView("index");
+        mav.addObject("message", "Hello Spring MVC");
+        return mav;
+    }
+}
+
+
+//使用注解的方式，指定控制器和映射
+@Controller
+public class ProductController {
+	@RequestMapping("/addProduct")
+	public ModelAndView add(Product product) throws Exception{
+		System.out.println("增加商品已启动");
+        //在构造函数中添加网页
+		ModelAndView mav = new ModelAndView("addProduct"); 
+		return mav;
+	}
+	
+	@RequestMapping("/showProduct")
+	public ModelAndView show(Product product) throws Exception{
+		System.out.println("显示商品");
+		ModelAndView mav = new ModelAndView("showProduct");
+		mav.addObject("product",product);
+		return mav;
+	}
+}
+
 ```
 
 
@@ -796,29 +947,21 @@ where 标签，可以自动删除多余的 and 和 or。
 </mapper>
 ```
 
-**注解 **
-将原来配置在 XML 中的数据库命令，转移到新建的接口类文件中，并以装饰器的方式，插入 sql 语句，方法名就是原来 xml 指令的 id，参数就是原来的参数。
-
-
-### 错误集锦
-**错误提示：java.lang.NoClassDefFoundError？**
-解决：搜索了一下，意思是某个类明明有，但是运行的时候找不到了，即这个类不在 classpath 中，一直不知道这个 classpath 在哪里，真是眼瞎，在导入外部包的时候啊！！有两个选项，Moudlepath、Classpath，我以为都一样，随便点了第一个！，不要这么随意好么？？
-
 ### SSM整合
-**Servlet**: WEB-INF/web.xml  通过这个配置文件将浏览器中的 路径 映射到 类，servlet.java类会根据浏览器的不同请求执行 doGet doPost方法。浏览器访问
-功能：接受浏览器的访问提供映射。
+创建过程：由于项目有点大，且不容易理解。
+首先按照主体部分是springMVC，然后往里面添加了mybatis+spring。
+开始web.xml->pringerMVC->controller。从这里开始，控制器是通过mybatis获取数据库的数据，而不是自己创造或者返回的数据，在使用mybatis获取数据时，又用到了Spring的注解方式的IOC，方便获取数据。然后给Controller，最后控制器添加到页面并显示。
 
-**Spring**:src/applicationContext.xml [Spring 的核心配置文件]通过构建不同的 bean 来提供实例，
-注解方式：<context:annotation-config/> @Autowired @Resource(name="c")    .java文件测试
-功能：主要做 IOC 反转控制，通过注解自动生成 bean。
 
-**SpringMVC**: WEB-INF/web.xml 将浏览器中所有的请求 路径 映射指定的 Servlet 和对应的 mvc 配置文件 WEB-INF/springMVC-servlet.xml 。该文件将浏览器不同的 路径 映射到 不同的Controller
-注解方式：<context:component-scan base-package="package">	 @Controller @RequestMapping("/index")
+**SpringMVC：SSM框架的主体结构**: WEB-INF/web.xml 将浏览器中所有的请求 路径 映射指定的 springerMVC.xml文件中，该文件中使用注解的方式扫描指定的包，调用指定的Controller。到目前为止SSpringMVC框架里的文件是没有动过的。
+然后需要看Controller里面，有Springer的注解，需要找Spring的配置文件applicationContext.xml。
+找到对应的Bean后，又发现Bean里面有MyBatis的mapper存在，也是通过文件映射的方式调用的。
 
-**Mybatis**: src/mybatis-config.xml 连接数据的配置信息并映射到配置SQL语句的文件，
-src/Category.xml 封装SQL语句（DAO）
+**Spring**:src/applicationContext.xml [Spring 的核心配置文件]。里面指定了包，通过注解方式为Controller提供对应的Bean。
 
-**ssm**：
+**Mybatis**: 连接数据的配置信息放在了src/applicationContext.xml [Spring 的核心配置文件]，包括实体类，数据库连接，DAO方法调用文件，因此，只要有[Spring 的核心配置文件]，就可以调用DAO的方法。
+
+**基本流程**
 
 1. 首先浏览器上访问路径 /listCategory
 2. tomcat根据web.xml上的配置信息，拦截到了/listCategory，并将其交由DispatcherServlet处理。

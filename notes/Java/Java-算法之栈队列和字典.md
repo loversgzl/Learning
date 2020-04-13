@@ -20,6 +20,7 @@
 队满：front == rear，与队空冲突：1 设置一个 flag，0 为空，1 为满。2 空一个元素，队满：rear + 1 = front
 因此，空队列不变，满队列可以进行设置。
 例子：如果一个队列 queueSize = 5，队空：front = rear = 0， 队满：rear + 1 = front
+元素个数为 (rear - fron + max)%max，注意如果有些题目指明位置就需要注意了，如问：大小为MAX的循环队列中，f为当前对头元素位置，r为当前队尾元素位置(最后一个元素的位置)，则任意时刻，队列中的元素个数为？ 那么就应该是(rear - fron + 1 + max)%max，队尾位置不同。
 
 **记忆小技巧**：栈和队列，删除元素肯定需要 top 和 front 指向第一个元素。因此空 top = -1，front == rear。
 
@@ -82,9 +83,25 @@ public class Solution {
 }
 ```
 
+### 折木棍
+问题：给定一个数组，里面是木棍长度，要求木棍长度不递减，可以折断木棍放在原来的位置。求最少的折断次数。
+方法：采用递减栈的策略，优化后用一个参数代替栈。
 <a name=""></a>
 ```java
-
+public void breakNum(List<Integer> nums){
+    int compareLast = Integer.MAX_VALUE;
+    int ans = 0;
+    for(int i = nums.size()-1; i >= 0; i--){
+    //非常棒的三句代码，很厉害！
+        if(nums.get(i) > compareLast) {
+            int t = (nums.get(i)-1)/compareLast;
+            ans += t;
+            compareLast = nums.get(i)/(t+1);
+        }else {
+            compareLast = nums.get(i);
+        }
+    }
+}
 ```
 
 <a name=""></a>

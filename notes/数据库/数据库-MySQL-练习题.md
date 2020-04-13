@@ -2,8 +2,6 @@
 
 基本命令
 ```mysql
-#查看数据库引擎，语法不区分大小写
-show engines;
 /*
 问：查询语句不同元素（where、jion、on、limit、group by、having 等等）执行先后顺序？
 查询中用到的关键词主要包含六个，并且他们的顺序依次为 select--from--where--group by--having--order by
@@ -25,6 +23,13 @@ from 后面的表关联，是自右向左解析 而 where 条件的解析顺序�
 #三种注释之二，python语言风格
 /*三种注释之三，C语言风格*/
 #语法：不区分大小写，句末记得添加分号
+
+#查看数据库引擎，语法不区分大小写
+show engines;
+#查看表结构
+DESC tableName;
+#查看创建表格的SQL语句
+show CREATE table table_name;
 
 #创建数据库，如果存在则先删除, #数据库名一旦创建好像不好修改，删除重建吧
 drop database if exists `school`;
@@ -54,8 +59,7 @@ ALTER TABLE `student` RENAME TO `students`; #修改表名
 ALTER TABLE `students` add column `age` int not null after `sex`; #为已有表格增加一列
 ALTER TABLE students DROP column nickname; #删除表格格的某一列
 
-#查看创建表格的SQL语句
-show CREATE table table_name;
+
 
 ```
 

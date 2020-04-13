@@ -12,7 +12,7 @@
 **基础知识**：一、遍历二叉树（递归+迭代）、求二叉树的高度与宽度、
 
 ```java
-//先序遍历，递归
+//先序遍历，递归,inorder,postorder
 List<Integer> list = new LinkedList<>();
 public List<Integer> preorderTraversal(TreeNode root) {
 	if(root !=null){
@@ -40,6 +40,11 @@ public List<Integer> preorderTraversal(TreeNode root) {
 
 //求二叉树的深度，递归，迭代用队列来做，入队记录每一层的节点数，出队。
 public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+}
+
+public int maxDepth(TreeNode root) {
     if (root == null) {
       return 0;
     } else {
@@ -47,11 +52,6 @@ public int maxDepth(TreeNode root) {
       int right_height = maxDepth(root.right) + 1;
       return Math.max(left_height, right_height);
     }
-}
-
-public int maxDepth(TreeNode root) {
-    if (root == null) return 0;
-    return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
 }
 
 //求根节点到最近叶子节点的距离
@@ -77,14 +77,6 @@ public int FindWidth(TreeNode root, int k){
     FindWidth(root.lchild,k+1);//这里不要用k++，会改变下面k的值。
     FindWidth(root.rchild,k+1);
 }
-
-/*DFS：可细分为先序，中序，后序遍历
-*/
-
-
-/*BFS
-*/
-
 
 
 ```

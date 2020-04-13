@@ -14,7 +14,8 @@
 *二分查找
 条件：只能对已经排序好的列表进行查找
 需求：对搜索时间要求为O(logn)一般都是二分查找。
-模板一：用于查找数组中的某个确定值，经典用法，考察一般。
+模板一：用于查找数组中的某个确定值，经典用法，考察一般。如果这个值不存在，则left会指向第一个比它大的值。
+这样就和下面一样了！
 模板二：有条件查找，如寻找第一个比5大的值，考察较多。
 模板三：有双重条件的查找。
 */
@@ -70,16 +71,65 @@ public int binarySearchTwo(int[] array, int left, int right,int target){
         if(array[left] >= target)
             return left;
         return -1;
-/*
-同理，该语句也可改为寻找最后一个小于target的值，如果更改while语句可能造成死循环，
-即判断条件改为如下，最后得到left=3，right=4都小于target，则陷入死循环。
-if(array[mid] < target) 
-	left = mid; 
-else 
-	right = mid-1;
-所以可以在还是找第一个最大值，return left - 1，即可
-*/
+
+//如果有多位目标值的情况。
+class Solution {
+    public int search(int[] nums, int target) {
+        return rightBound(nums, target) - leftBound(nums, target) + 1;
+    }
+
+    // 第一次出现的下标或者第一个比target大的下标
+    private int leftBound(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = (left + right) >>> 1;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] >= target) {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
+    // 最后一次出现的下标或者第一个比target小的下标
+    private int rightBound(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = (left + right) >>> 1;
+            if (nums[mid] <= target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            }
+        }
+        return right;
+    }
 }
+
+
+//查找左右边界，计算目标值的数量，可以为0。
+class Solution {
+    public int search(int[] nums, int target) {
+        return binarySearch(nums, target + 0.5) - binarySearch(nums, target - 0.5);
+    }
+
+    private int binarySearch(int[] nums, double target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = (right + left) >>> 1;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+}
+
+
+
 
 //Tencent2018秋招
 /*

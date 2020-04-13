@@ -82,4 +82,27 @@ class Solution{
 }
 ```
 
+### 二叉树中和为某一值的路径
+注意：路径必须是根到叶子节点。
+学习：可以参考里面参数的构成，不要总是在递归函数里面写过多的参数。还有判断条件的位置选择。
+```java
+class Solution {
+    List<List<Integer>> res = new LinkedList<>();
+    LinkedList<Integer> path = new LinkedList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        dfs(root, sum);
+        return res;
+    }
+    public void dfs(TreeNode root, int sum){
+        if(root == null) return;
+        path.add(root.val);
+        sum -= root.val;
+        if(sum == 0 && root.left == null && root.right == null)
+            res.add(new LinkedList(path));
+        dfs(root.left, sum);
+        dfs(root.right, sum);
+        path.removeLast(); 
+    }
+}
+```
 

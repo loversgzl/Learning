@@ -81,6 +81,30 @@ getDeclaredField 可以获取本类所有的字段，包括 private 的，但是
 
 ```
 
+### 泛型
+<a name="泛型"></a>
+```java
+ArrayList heros = new ArrayList(); //如果不使用泛型约束，heros里可以存放任意类型，都以Obeject存储，造成记忆和使用困难。
+ArrayList<APHero> heros = new ArrayList<>();//加入泛型约束，那么限制只能某一类存入heros。
+
+//构造一个支持存入多种类型的类，使用泛型T，Java的源代码可以看见很多。
+public class MyStack<T>{
+LinkedList<T> values = new LinkedList<T>();
+    public void push(T t) {
+        values.addLast(t);
+    }
+}
+
+//extends Hero 表示这是一个Hero泛型的子类泛型，只要是其子类，就认为是同一种类型，如List和ArrayList。
+ArrayList<? extends Hero> heroList = apHeroList;
+
+//? super Hero 表示 heroList的泛型是Hero或者其父类泛型
+ArrayList<? super Hero> heroList = new ArrayList<Object>();
+          
+/*如果希望只取出，不插入，就使用? extends Hero
+如果希望只插入，不取出，就使用? super Hero
+如果希望，又能插入，又能取出，就不要用通配符？*/
+```
 
 
 ### JAVA - I/O-NIO
@@ -216,15 +240,33 @@ public class NIOBufferDemo {
 **一、创建线程 和 线程常用方法**
 创建多线程有 3 种方式，分别是 继承线程类，实现 Runnable 接口，匿名类。
 1、继承线程类（需要重写 run 方法）：创建一个对象就是一个线程。
-2、实现 Runnable 接口（需要重写 run 方法）：和上面相似，只是在实例化的时候有区别。
+2、实现 Runnable 接口（需要重写 run 方法）：一般会问如果已经继承了一个类，该如何实现多线程。
 3、匿名类（不需要额外增加一个类）：和匿名函数相似，在用的时候才写，而且直接写在主函数里面。
 注： 创建线程是start()方法，run()并不能创建一个新的线程
 ![多线程方法](../../pics/java多线程.png)
 
 ```java
-Thread t1 = new Thread(){
-	@Override
-	public void run(){}//匿名函数修改 run 函数
+/*
+实现的三种方法
+*/
+//方法一：继承Thread类
+public class SimpleThread extends Thread{
+    SimpleThread t = new SimpleThread();
+    t.start();
+}
+
+//方法二：实现Runnable方法
+public class SimpleThread implements Runnable{
+    Thread t = new Thread(new SimpleThread());
+    t.start();
+}
+
+//方法三：匿名内部类
+public class SimpleThread{
+    Thread t = new Thread(){
+        public void run(){}
+    };
+    t.start();
 }
 
 /*
@@ -232,11 +274,9 @@ Thread t1 = new Thread(){
 */
 t1.start(); //启动线程是start()方法，run()并不能启动一个新的线程
 Thread.sleep(1000); //线程阻塞 1 秒
-t1.join();
-//在主线程中加入该线程，一般是 main 嘛，当 t1 执行完后，才会继续执行主函数
+t1.join();//在主线程中加入该线程，一般是 main 嘛，当 t1 执行完后，才会继续执行主函数
 t1.yield(); //临时暂停，回到就绪状态，让位给同等优先级的其他线程。
-t1.setPriority(Thread.MAX_PRIORITY);
-//为线程 t1 设置优先级，优先级越高，有越大的几率获得 CPU 资源。
+t1.setPriority(Thread.MAX_PRIORITY);//为线程 t1 设置优先级，优先级越高，有越大的几率获得 CPU 资源。
 t1.setDaemon(true); //如果一个进程只剩下守护线程，则该进程会自动结束。守护线程通常会被用来做日志，性能统计等工作。
 
 /*问：多线程问题
@@ -246,7 +286,7 @@ Thread.sleep(100);
 作用：让当前正在运行的占用 cpu 的线程，阻塞 100 ms，其余线程自己竞争获取 cpu，如果被停止，会抛出 InterruptedException，需要的注意的是就算线程的睡眠时间到了，他也不是立即会被运行，只是从阻塞状态变为了就绪状态，是不会由阻塞状态直接变为运行状态的。
 
 this.wait()
-自动释放对象锁，挂起，等待this.notify()唤醒，进入就绪状态。注意 wait和notify 两个方法都属于Object类，不是Thread线程上的，
+自动释放对象锁，挂起，等待this.notify()唤醒，进入就绪状态。注意 wait和notify 两个方法都属于Object类，不是Thread线程上的，生产者-消费者问题。
 
 **比较：sleep 方法 和 wait 方法**
 对于sleep()方法，我们首先要知道该方法是属于Thread类中的，而wait()方法，则是属于Object类中的。sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持着，当指定的时间到了又会自动恢复运行状态。
@@ -257,6 +297,15 @@ Thread.yield();
 
 t1.Join()
 把线程t1加入到当前线程，最主要的功能其实是防止主线程执行结束了，子线程还在没执行完成。如果加入这一句，则一定等到t1执行完成后才继续往后（主线程中）执行。如果前面有多个线程在执行了，则也会加入到执行队伍中（顺序不定），并且也是只有到t1结束后，程序才会继续往后执行。
+
+问：Synchronized关键字的作用？
+答：synchronized，可以作用在方法上，代码块上，类上（即静态方法）。synchronized关键字不能继承，虽然可以使用synchronized来定义方法，但synchronized并不属于方法定义的一部分，因此，synchronized关键字不能被继承。如果在父类中的某个方法使用了synchronized关键字，而在子类中覆盖了这个方法，在子类中的这个方法默认情况下并不是同步的，而必须显式地在子类的这个方法中加上synchronized关键字才可以。当然，还可以在子类方法中调用父类中相应的方法，这样虽然子类中的方法不是同步的，但子类调用了父类的同步方法，因此，子类的方法也就相当于同步了。
+注意：
+静态方法是属于类的而不属于对象的。同样的，synchronized修饰的静态方法锁定的是这个类的所有对象。
+synchronized关键字不能继承，所以在定义接口方法时不能使用synchronized关键字。
+构造方法不能使用synchronized关键字，但可以使用synchronized代码块来进行同步。 
+缺点：然后引入与lock的区别。
+
 
 **问：关于 volatile 的一些面试问题**
 参考博客1：https://blog.csdn.net/u011277123/article/details/72235927
