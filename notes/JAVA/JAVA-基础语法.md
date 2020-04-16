@@ -11,7 +11,7 @@
 
 ****
 ### 简介
-<a name="简介"></a>
+<a name="简介" />
 由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。
 它既有能开发桌面应用的 Java SE（Java Platform，Standard Edition）
 也有开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）
@@ -28,8 +28,9 @@
 ****
 
 ### 基本概念
-<a name="基本概念"></a>
+<a name="基本概念"/>
 **第一个 Java 程序**
+
 ```java
 package test; //如果有包需要在第一行注明
 import java.util.Scanner; //引入 JAVA 输入包
@@ -104,7 +105,7 @@ System.out.printf(); //C 格式输出
 ****
 
 ### 集合框架
-<a name="集合框架"></a>
+<a name="集合框架"/>
 ![集合框架](../../pics/集合框架.jpg)
 
 由图可见，集合框架主要包括两种类型的容器，以Collection为基类的线性表、以Map为基类的键值对类，前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。List 具体实现类有 Vector、ArrayList、LinkedList；Set具体实现的类有SortedSet、TreeSet、HashSet、LinkedHashSet；Map的具体实现类有：HashMap、HashTable、LinkedHashMap。
@@ -275,7 +276,6 @@ LinkedHashSet，维护的是插入时的顺序；
 答：HashSet 是基于哈希表实现的，允许存在一个null值，插入一个值时会调用HashCode()方法，生成HashCode值，来进行相同元素的区分，但它却不能保证插入次序与遍历次序的一致性，因此才有了LinkedHashSet，也是采用HashCode值方式存储，但多用了链表的方式来保证插入与遍历次序的一致性。
 TreeSet 是 SortedSet 接口的唯一实现类，它是用二叉树存储数据的方式来保证存储的元素处于有序状态。但是TreeSet不允许插入null值。
 */
-
 import java.util.HashSet;
 Set<Integer> set = new HashSet();  //实例化一个set集合  
 for (int x : arr)//增
@@ -292,7 +292,6 @@ set.subSet(from,true,to,true);//截取某段值，[from,to],两端值看bool函�
 /*
 图接口 import java.util.MAP;
 四个实现类 import java.util.HashMap、HashTable、HashSet
-
 问：你有没有重写过 HashCode 方法和 equals 方法？
 有，有一次在使用HashMap时，key是自定义的类，需要根据ID判断是否是同一个对象而不是根据地址，
 如果我们在HashMap的键部分存放自定义的对象，一定要在这个对象中用自己的equals方法和hashCode方法覆盖掉Object中的同名方法。
@@ -334,12 +333,10 @@ while(it.hasNext){
     System.out.println(entry.getKey()+entry.getValue());
 }
 
-/*
-在集合框架之前应用的一些类，现在一般用集合框架代替。
-Dictionary、Vector、Stack、Properties、
-*/
 
-//栈 Stack
+/*在集合框架之前应用的一些类，现在一般用集合框架代替。
+Dictionary、Vector、Stack、Properties、*/
+/*栈 Stack*/
 Stack stack = new Stack(); //初始化，对象默认是 Obejct
 Stack<Integer> stack1 = new Stack<Integer>();  //指定类型的初始化
 stack.empty(); //判断是否为空，返回true/false
@@ -347,9 +344,7 @@ stack.peek(); //取栈顶值（不出栈），返回 Object
 stack.push(Object);//进栈，返回 Object
 stack.pop();//出栈，返回的是 Object 对象，需要类型转换
 
-/*
-队列queue
-*/
+/*队列queue*/
 import java.util.Queue;
 Queue<String> q = new LinkedList<>();//也实现了队列的接口
 q.offer("inQueue");//入队列
@@ -357,12 +352,15 @@ q.poll();//出队
 q.isEmpty();//判断是否队空
 q.peek();//查看队首，但不取出
 
-//Java中PriorityQueue通过二叉小顶堆实现，可以用一棵完全二叉树表示。本文从Queue接口函数出发，结合生动的图解，深入浅出地分析PriorityQueue每个操作的具体过程和时间复杂度，将让读者建立对PriorityQueue建立清晰而深入的认识。
+/*Java中PriorityQueue通过二叉小顶堆实现，可以用一棵完全二叉树表示。
+LinkedBlockingQueue是一个可选有界队列，不允许null值
+PriorityQueue是一个无界队列，不允许null值，入队和出队的时间复杂度是O（log(n)）
+*/
 ```
 ****
 
 ### 字符串
-<a name="字符串"></a>
+<a name="字符串"/>
 问：字符串拼接，StringBuffer，StringBuilder，concat 和 + 的区别。
 答：[参考博客](https://www.cnblogs.com/lojun/articles/9664794.html)
 
@@ -374,67 +372,69 @@ String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它�
 /*问：java字符串如何比较是否相等？
 答：java中字符串的比较：== 是比较地址，equals比较值。
 */
+
+/*是否是同一变量的分析：
+和Integer不同，String只要是对象，== 就一定返回false。
+注意 + 号，有对象，也会转为对象关系。
+String str = "1" + new String("00"); 会产生一个对象。
+*/
 String s1 = "abc"; //定义的是一个常量，在常量池中。
-String s2 = "abc"; 
 String s3 = new String("abc"); //定义的是一个变量，在堆中，值是常量不可变。
 String s4 = new String("abc"); 
-true:s1 == s2;
-false:s1 == s3; true:s3.equals(s1);
+false:s1 == s3; 
+true:s3.equals(s1);
 false:s3 == s4;
 
-//对于 + 号的字符串分析
-String a = "abc";
 String c = "a";
 String d = c + "bc";//会产生新对象
 String e = "a" + "bc"; //两个常量的连接操作，还是常量
 false: a==d
 true: a==e
 
-//注意！因为String字符串是常量，所以下面的所有操作都需要另外声明一个String变量接收，否则等于无效。
+/*
+String str = "";
+*/
+/*增：*/
+String s = strs[0]+11+"22"; 
+String s = s2.concat(String.valueOf(11));
 
-//String类型是常量，但下面不是，可以更改，内置类型，无需引包
-String str;
-str.length(); 
-str.charAt(int index);
-str.trim(); //消除两端的空格
-int gap = '9' - '0'; //会返回一个整数
+/*删：消除两端的空格*/
+str.strip(); 
 
+/*改（无论什么操作，请用变量接收，字符串是常量，不会改变）：返回长度、返回某个字符、返回拼接num次的字符串、*/
+str.length(); str.charAt(int index);
+String newStr = str.repeat(num);
+String subStr = str.subString();
+String[] strs = preStr.split("\\.");
+String.join("",strs);
+/*改：将List转换为String[] 数组、数组转ArrayList*/
 List<String> res = new LinkedList<>();
-res.toArray(new String[res.size()]);//将List转换为String[] 数组。
-List<String> list = Arrays.asList(array);  //数组转ArrayList
+res.toArray(new String[res.size()]);
+List<String> list = Arrays.asList(array); 
 
+/*查：*/
+char ch = str.charAt(index);
+int index = str.indexOf(obj);
+
+
+/*
 StringBuilder sb = new StringBuilder();
-StringBuffer br = new StringBuffer();
+*/
+/*增：在末尾添加串、在指定位置添加字符串*/
+sb.append("abcd"); sb.insert(0,9);
 
-sb.append("abcd");//在末尾添加串
-sb.delete(0,1);//删除一个字符，[0,1)，左闭右开，显示 bcd
-sb.reverse(); //倒转字符串，dcba
-sb.insert(0,9); //首位插入 9，9abcd
-sb.replace(0,1,"e");//替换[0,1)，左闭右开
-//注意这里的区别，sb截取的字符串返回的是String，不会更改sb的值和String一样和上面不同。
-String s = sb.substring(beginIndex, endIndex); //[)返回此坐标开始后的字符串
-String newS = s.repeat(num); //重复字符串s，num次。
+/*删：删除一个字符 [0,1) 左闭右开、*/
+sb.delete(0,1);
 
-//字符串，整数，互换
-String preStr = "192.168.1.1"; 
-String[] strs = preStr.split("\\."); //正确写法。对小圆点进行转义
+/*改：倒转字符串、替换[0,1) 左闭右开、*/
+sb.reverse(); sb.replace(0,1,"e");
+/*改：[) 左闭右开 返回截取的字符串*/
+String s = sb.substring(beginIndex, endIndex); //
 
-//拼接字符串
-String s = strs[0]+11+"22"; //一开始就可以确定的量，使用 + 更快
-//循环中切忌使用+来拼接字符串，StringBuilder 最好。
-String s2 = s2.concat(String.valueOf(i));
-//list 拼接
-List<String> list = new ArrayList<>();
-for (int i = 0; i < 10000; i++)
-	list.add(String.valueOf(i));  //装箱
-//将字符串数组拼接
-String[] strs = {"abc","efs"};
-String.join("",strs));
-//StringBuffer 拼接
-StringBuffer sb = new StringBuffer(); //StringBuilder 类似
-for (int i = 0; i < 100000; i++)
-	sb.append(String.valueOf(i));
-sb.toString();
+/*查：*/
+
+
+
 ```
 
 **正则表达式**
@@ -495,65 +495,9 @@ public static void main(String[] args) {
 ```
 ****
 
-### Java常用包
-<a name="Java常用包"></a>
-```java
-/*
-java.util 包
-*/
-import java.util.Arrays;
-import java.util.ArrayList;//动态数组
-import java.util.List;//接口
-import java.util.LinkedList;//链表
-import java.util.Hashtable;
-import java.util.HashMap;//字典
-import java.util.HashSet;//集合
-import java.util.Collections;//方法调用,容器的工具类
-import java.util.Scanner;//输入
-import java.util.Random;//随机数
-
-/*
-java.io 包
-*/
-import java.io.File // I/O文件对象接口
-import java.io.FileInputStream; //输入流
-import java.io.FileOutputStream; //输出流
-import java.io.ObjectOutputStream;
-import java.io.DataOutputStream;
-import java.io.Serializable; //序列化接口
-
-/*
-java.net 多线程编程
-*/
-
-/*
-java.net 网络编程常用包
-*/
-import java.net.Socket;
-
-/*
-java.lang 包，每个程序自动载入的
-*/
-import java.lang.Math;
-```
-
 ### Java常用内置类
-<a name="Java常用内置类"></a>
+<a name="Java常用内置类"/>
 **Math、Number、Character、Random、StringBuilder、StringBuffer**
-
-**Math类**
-```java
-Math.max(a,b); //选取最大值，参数为 2.
-//利用三目运算符，三数取最大值。
-Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); 
-int n = Math.pow(a,b); //a 的 b 次方。
-//向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
-Math.ceil(11.6); //12.0
-Math.floor(11.6); //11.0
-Math.round(-11.6); //-12 整数
-Math.sqrt(x); //求平方根
-
-```
 
 **Number类**
 Java 语言是一个面向对象的语言，但是 Java 中的基本数据类型（原生类）却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样八个和基本数据类型对应的类统称为包装类(Wrapper Class)，其中六个包装类都是抽象类 Number 的子类。byte（8）、short（16）、int（32）、long（64）、float（32）、double（64）、boolean、char（16）
@@ -574,22 +518,21 @@ Java不是纯的面向对象的语言，不纯的地方就是这些基本数据�
 答：是，八个基本数据类型不能看作对象（这点很特殊）。栈内操作速度快，创建销毁很容易。八个基本数据类型都有对应的包装类，包装类就是对象了。比如Integer j = new Integer（10）。j属于对象的引用，引用放在栈中，而实际的数据10 则放在堆中。 （堆区适合存放大的数据对象，但是操作速度远远不及栈中）（提示：对象的销毁---对象的引用放在栈中，所以使用完引用就被从栈中销毁了，但是实际的对象仍然存放在堆中，只有在没有任何的引用使用它的时候才被垃圾回收器销毁掉）
 注意：局部变量是在栈上分配的，且没有默认值，必须初始化才可以使用！
 
+问：count = 0; count = count++ 时，count是多少？
+答：0，赋值操作是最后执行的，那么赋值之前的一步是将0给count，count++是在将0给count之后再加，所以编译器不再执行++。
+
 */
 
-//基本数据类型 和 包装类
+/*基本数据类型 和 包装类*/
 byte;short;int;long;float;double;char;boolean;
 Byte;Short;Integer;Long;Float;Double;Character;Boolean;
 
-//包装类的常量，每个都有
-Byte.SIZE; //二进制位数
-Byte.MIN_VALUE; //最小值
-Byte.MAX_VALUE; //最大值127
-
-//基本数据类型赋值，虽然每个数据类型都有一个默认值，但最好主动为每个初始值设置默认值。
+/*基本数据类型赋值，虽然每个数据类型都有一个默认值，但最好主动为每个初始值设置默认值。*/
 final double PI = 3.1415927; //常量 final 通常常量全部大写
 float one = 3.0f; //默认是double，要加f。
 int octal = 011;//八进制
 int hexa = 0x11;//十六进制
+int gap = 'z' - 'a';
 boolean b = true; //小写，默认false
 char c1 = 'a'; char c2 = 97 //c1和c2都表示一个字符a
 String st = "this is a line"; //双引号
@@ -599,21 +542,7 @@ Object ob = null; //空表示
 /*注意boolean和int类型不可相互转化和使用，不管在if语句或其他什么地方，但是char可以。
 自动类型转换：低  ------------------------------------>  高*/
 byte,short,char—> int —> long—> float —> double 
-
-/*装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
-只要是两个对象（都是箱子），那么 == 肯定返回false；
-只要有一个是数字，那么另一个肯定会自动拆箱，== 肯定返回true；*/
-Integer x = 5; x = x +10;
-int a = 99; 
-Integer c = new Integer(a);//装箱，对象形式
-Integer b = Integer.valueOf(a);//装箱，该方法返回参数的原生Number对象。
-int d = b.intValue(); //拆箱，可以拆成任意 Number 类
-a = Integer.parseInt("1024");//字符串转整数
-
-/*强制类型转换，包装类的方法以Integer为例，其它类似：
-Integer.parseInt()、Integer.toString()
-注意：Integer.valueOf()是装箱，返回的是包装类。*/
-
+/*强制类型转换*/
 long a = 100; 
 int b = (int)a;//强制类型转换通常的方法一，大 转 小。
 char ch = 'G';
@@ -623,6 +552,20 @@ String str = "123";
 int intVal = Integer.valueOf(str); //通过封装类进行数据转换,(int)str 这种方式会报错，这种适用于Number类
 String str = Integer.toString(intVal); //将整数转为字符串
 String st = String.valueOf(intVal); //通过封装类进行数据转换
+
+
+/*装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
+只要是两个对象（都是箱子），那么 == 肯定返回false；
+只要有一个是数字，那么另一个肯定会自动拆箱，== 肯定返回true；*/
+Integer a = 99; //等价于int a = 99;
+Integer c = new Integer(a);//装箱，对象形式
+Integer b = Integer.valueOf(a);//装箱，该方法返回参数的原生Number对象。
+int d = b.intValue(); //拆箱，可以拆成任意 Number 类
+a = Integer.parseInt("1024");//字符串转整数
+
+/*区别一：超过-128 - 127的值，都会新建一个对象，所以x1 == x2 false*/
+Integer x1 = 128;
+Integer x2 = 128; 
 
 //增强型 for 循环
 for(String str :strs)
@@ -636,16 +579,33 @@ while(iterator.hasNext())
 
 //返回系统时间
 long start = System.currentTimeMillis();
-```
 
-**Character 类**
-```java
+/*Character 类*/
 import java.lang.Character;
 char ch = 'a';
 Character.isDigit(ch);
 Character.isLetter(ch);
 Character.isUpperCase(ch);
 Character.isLowerCse(ch);
+
+/*包装类的常量，每个都有,二进制位数、最小值、最大值127*/
+Byte.SIZE; 
+Byte.MIN_VALUE; 
+Byte.MAX_VALUE; 
+```
+
+**Math类**
+```java
+Math.max(a,b); //选取最大值，参数为 2.
+//利用三目运算符，三数取最大值。
+Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); 
+int n = Math.pow(a,b); //a 的 b 次方。
+//向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
+Math.ceil(11.6); //12.0
+Math.floor(11.6); //11.0
+Math.round(-11.6); //-12 整数
+Math.sqrt(x); //求平方根
+
 ```
 
 **Random 类**
@@ -656,37 +616,8 @@ int i = rand.nextInt(100);//产生[0,100) 的随机数
 int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
 ```
 
-
-枚举（Enumeration）、位集合（BitSet）、向量（Vector）、栈（Stack）、字典（Dictionary）、哈希表（Hashtable）、属性（Properties）
-```java
-/*
-这种传统接口已被迭代器取代，虽然Enumeration 还未被遗弃，但在现代代码中已经被很少使用了。
-*/
-import java.util.Vector;
-import java.util.Enumeration;
-
-public class test{
-	public static void main(String args[]){
-		Enumeration days;
-		Vector dayNames = new Vector();
-		dayNames.add("Sunday");
-		dayNames.add("Monday");
-		dayNames.add("Tuesday");
-		dayNames.add("Wednesday");
-		dayNames.add("Thursday");
-		dayNames.add("Friday");
-		dayNames.add("Saturday");
-		days = dayNames.elements();
-		while(days.hasMoreElements()){
-			System.out.println(days.nextElement());
-		}
-	}
-}
-```
-
-
 ### 异常和调试
-<a name="异常"></a>
+<a name="异常"/>
 异常可以分为三类：检查性异常(Exception)、错误(Error)、运行时异常(RuntimeException)、Error 和 Exception它们都继承 Throwable； RuntimeException 继承 Exception，其还有子类SQLException,IOException。
 
 **问：请问error和exception有什么区别?**
@@ -732,11 +663,20 @@ public class Main {
 3-如果用到了ArrayList,LinkedList,HashMap，则需要clear.
 4-如果有一个对象obj指向一个大的内存，则可以写obj=null。
 */
+
+
+/*try catch finally 中包含return的几种情况，及返回结果*/
+参考链接：https://www.cnblogs.com/sunshineweb/p/7656463.html
+第一种：try发生异常时，立即跳转到catch，执行里面的return操作。
+第二种：上面情况下，finally里有对上述返回值的操作，但返回值不变（基本数据类型，如果是引用则另说）。
+第三种：finally里面也有return语句，则会截图先登先返回。try-catch中的语句也会执行，只是存起来，未返回
+
 ```
-问：当某个线程抛出OutOfMemoryError时，其他线程有可能不受影响？
+* **问：当某个线程抛出OutOfMemoryError时，其他线程有可能不受影响？**
 答：是的，在程序内存溢出之后，溢出内存的线程所占的内存会被快速释放。
 
-
+* **问：下面哪个行为被打断不会导致InterruptedException？**
+答：API里面写的：当线程在活动之前或活动期间处于正在等待、休眠或占用状态且该线程被中断时，抛出该异常。Thread.suspend不会。
 
 **Eclipse调试**
 [参考博客](https://www.cnblogs.com/sjxbg/p/9768597.html)
@@ -748,3 +688,46 @@ public class Main {
 6.表示当前线程的堆栈，从中可以看出在运行哪些代码，并且整个调用过程，以及代码行号。
 
 
+
+### Java常用包
+<a name="Java常用包"/>
+
+```java
+/*
+java.util 包
+*/
+import java.util.Arrays;
+import java.util.ArrayList;//动态数组
+import java.util.List;//接口
+import java.util.LinkedList;//链表
+import java.util.Hashtable;
+import java.util.HashMap;//字典
+import java.util.HashSet;//集合
+import java.util.Collections;//方法调用,容器的工具类
+import java.util.Scanner;//输入
+import java.util.Random;//随机数
+
+/*
+java.io 包
+*/
+import java.io.File // I/O文件对象接口
+import java.io.FileInputStream; //输入流
+import java.io.FileOutputStream; //输出流
+import java.io.ObjectOutputStream;
+import java.io.DataOutputStream;
+import java.io.Serializable; //序列化接口
+
+/*
+java.net 多线程编程
+*/
+
+/*
+java.net 网络编程常用包
+*/
+import java.net.Socket;
+
+/*
+java.lang 包，每个程序自动载入的
+*/
+import java.lang.Math;
+```

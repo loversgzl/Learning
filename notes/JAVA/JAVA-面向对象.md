@@ -1,7 +1,13 @@
 # JAVA-面向对象
 
 **下面先介绍一下基本概念，然后再从我们熟知的封装、继承、多态三大部分进行讲解，不要死记概念，多多思考举出的问题**
+1、<a href="#基本概念">基本概念</a>
+2、<a href="#封装">封装</a>
+3、<a href="#继承">继承</a>
+4、<a href="#多态">多态</a>
 
+**1、基本概念**
+<a name="基本概念"></a>
 **源文件声明**
 一个源文件中只能有一个 public 类且源文件的名称应该和此类名相同，可以有多个非 public 类。此源文件属于哪个包，就在首行标明 package 包名；
 
@@ -32,6 +38,9 @@
 
 **final  修饰符**：用来修饰类、方法和变量，final修饰的类不能够被继承，如String类是不可变类，修饰的方法不能被继承类重新定义，修饰的变量为常量，是不可修改的。
 
+**问：static class 对么？**
+static 不能用来修饰类，除非类是内部类，此时该类作为外部类的成员变量，可以用 static 修饰，否则一般类（class）只有四种访问控制修饰符 + abstract，final。
+
 ```java
 public static final int BOXWIDTH = 10; 
 //声明一个常量，不可变，默认关键字是 default
@@ -60,12 +69,8 @@ private static void addInstance(){ //构造一个私有的静态函数
 **接口中的方法**：接口中的方法必须是抽象方法，且默认都是public和类不同（没有实现的方法如：public abstract void addPrice();其中abstract可以省略，方法前有其他修饰符都是错误的），这是和抽象类重要的区别之一；
 **接口中的变量**接口不能包含成员变量（除了public static final），不要觉得可以像继承父类那样使用接口；**接口不应叫被继承，而应叫被实现；一个类可以同时实现多个接口，关键字是（implements）。
 
-**问：static class 对么？**
-static 不能用来修饰类，除非类是内部类，此时该类作为外部类的成员变量，可以用 static 修饰，否则一般类（class）只有四种访问控制修饰符 + abstract，final。
-
 **问：不能用来修饰 接口 里 方法的有哪些关键字？**
 答：不能用 private、protected，常用关键字public、abstract，当然 java8 新增 default 与 static 方法。
-
 
 **abstract 修饰符**：用来创建抽象类和抽象方法。抽象类不能用来实例化对象，声明抽象类的唯一目的是为了将来对该类进行扩充。**如果一个类包含抽象方法，那么该类一定要声明为抽象类，但是一个抽象类不一定含有抽象方法**。抽象方法是一种没有任何实现的方法，该方法的的具体实现由子类提供。**任何继承抽象类的子类必须实现父类的所有抽象方法**，除非该子类也是抽象类。抽象类中也可以包含已经实现的方法，这是和接口的一个重要区别。抽象类中的抽象方法要加 abstract 关键字声明，但是接口中可以省略。
 
@@ -74,19 +79,56 @@ abstract class Caravan{ //抽象类
 	private double price;
 	public abstract void addPrice(); //抽象方法
 }
-```
+
+//接口之间应该也是继承，而不是实现implements
+public interface interfaceOne extends interfaceTwo{}
 
 
-**synchronized 和 volatile 修饰符**：主要用于线程的编程。synchronized 关键字声明的方法同一时间只能被一个线程访问。Synchronized 修饰符可以应用于四个访问修饰符。
-volatile 修饰的成员变量在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，两个不同的线程总是看到某个成员变量的同一个值。一个 volatile 对象引用可能是 null。
-```java
-public synchronized void showDetails(){} 
+/*等价于:public static final String NAME=”default”;
+为什么是public：因为接口必然是要被实现的，如果不是public，这个属性就没有意义了；
+为什么是static：因为如果不是static，那么由于每个类可以继承多个接口，那就会出现重名的情况；
+为什么是final：这是为了体现java的开闭原则，因为接口是一种模板，既然是模板，那就对修改关闭，对扩展开放。*/
+public interface IService {
+	String NAME="default";
+}
+
 ```
+
 
 
 ### 继承（extends 或者 implements）
 类继承是用 extends，而接口是用 implements，**虽然只能继承一个类，但是接口可以多继承**。
 继承是 JAVA 面向对象编程技术的一块基石，因为它允许创建分等级层次的类。继承可以理解为一个对象从另一个对象获取属性的过程。在 JAVA 中，类的继承是单一继承，也就是说，一个子类只能拥有一个父类。B 是 A 的子类，B 的实例拥有 A 所有的成员变量，但对于 private 的成员变量 B 却没有访问权限，这保障了 A 的封装性。
+
+```java
+/*
+在继承中代码的执行顺序为：
+1.父类静态对象，父类静态代码块
+2.子类静态对象，子类静态代码块
+3.父类非静态对象，父类非静态代码块
+4.父类构造函数
+5.子类非静态对象，子类非静态代码块
+6.子类构造函数
+对于本题来说：在只想new Sub(5)的时候，父类先初始化了 int flag = 1，然后执行父类的构造函数Super（），父类构造函数中执行的test（）方法，因子类是重写了test（）方法的，因此父类构造函数中的test（）方法实际执行的是子类的test（）方法，所以输出为Sub.test() flag=1，接着执行子类构造函数Sub(5) 将flag赋值为5，因此输出结果Sub.Sub() flag=5。输出：Sub.test() flag=1
+Sub.Sub() flag=5
+*/
+public class Demo { class Super{  int flag=1;
+         Super(){
+             test();
+         }  void test(){
+            System.out.println("Super.test() flag="+flag);
+         }
+    } class Sub extends Super{
+        Sub(int i){  flag=i;
+            System.out.println("Sub.Sub()flag="+flag);
+        }  void test(){
+            System.out.println("Sub.test()flag="+flag);
+        }
+    }  public static void main(String[] args) {  new Demo().new Sub(5);
+     }
+}
+```
+
 
 **面：重载与重写的区别？**[参考博客](https://blog.csdn.net/linzhaojie525/article/details/55213010)
 答：**重载**：1-是面向对象多态的一种主要实现方式。2-Java的方法重载，它们具有相同的函数名，但是参数或者返回值会不同，这就是我们常说的多态。**只修改返回值是无效的**。3-构造函数可以被重载但是不能被重写。
