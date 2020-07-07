@@ -1,7 +1,7 @@
 # JAVA-基础知识
 
 * <a href="#简介">简介</a>
-* <a href="#基本概念">基本概念</a>
+* <a href="#基础知识">基础知识</a>
 * <a href="#输入输出">输入输出</a>
 * <a href="#集合框架">集合框架</a>
 * <a href="#字符串">字符串</a>
@@ -27,12 +27,15 @@
 
 ****
 
-### 基本概念
-<a name="基本概念"/>
+### 基础知识
+<a name="基础知识"/>
 **第一个 Java 程序**
 
 ```java
-package test; //如果有包需要在第一行注明
+package test; 
+/*如果有包需要在第一行注明，注意：导包只可以导当前层，如果里面有包，则包中的类不会导入。
+如：import java.*; 和 import java.util.*; 第一个不可能把所有的包中类全导入。
+*/
 import java.util.Scanner; //引入 JAVA 输入包
 public class test {
     public static void main(String args[]) {//所有的 Java 程序主方法入口
@@ -40,17 +43,13 @@ public class test {
     	System.out.println(name);
     }
 }
-/*
-1.创建源文件 .java
+/*1.创建源文件 .java
 2.javac 将 .java 源代码转换为 JVM 能够识别的字节码 .class
 3.通过 JVM 执行 .class 文件
-编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc
-*/
+编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc */
 
-/*
-F3 :可以查看某个函数的源码
-放在某个函数上，F2 可以查看具体的使用方法
-*/
+/*F3 :可以查看某个函数的源码
+放在某个函数上，F2 可以查看具体的使用方法*/
 
 ```
 
@@ -66,16 +65,23 @@ F3 :可以查看某个函数的源码
 注意事项：1、case 语句中的值的数据类型必须与变量的数据类型相同.
 2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了break或者整体结束为止。
 3、多个case后面的数值不可以重复。
-4、注意try-catch-finally的语法。
+4、注意：这里的匹配相当于映射，而不是遍历的查找，因此，case 和 deault 语句顺序无所谓，当匹配后，无break语句，则会从当前位置往后执行。
+
 ```java
-//return 和 比 break 效果更强，直接退出。
+//return 比 break 效果更强，直接退出。
 switch(1) {
     case 1: System.out.println(1);return;
     case 2: System.out.println(2);return;
     case 3: System.out.println(3);return;
     case 4: System.out.println(4);return;
-    default:System.out.println("default");return;
+    default:System.out.println("default");return; //这一句放在第一行也是可以的。
 }
+
+//逻辑运算符
+&：不管&的左边是true还是false，右边都会进行运算 
+&&： 只要左边是false，右边就不会进行运算 
+一半情况下都会选择&&，因为这样可以提高效率，也可以进行异常处理，当右边产生异常的时候，同样可以跳过。
+
 ```
 ****
 
@@ -96,10 +102,12 @@ if(scan.hasNext()){//只读取一次，遇到空格或者回车结束
 //输出
 System.out.println(); 
 //输出带换行，且输出的是字符串，如果不是，默认调用toString()方法。如果是基本数据类型，则会先进行装箱，再调用。
+System.out.format("%d %d",1,2); //某些需要有格式的输出，优先使用C++的方式。
+//%d 十进制，%s 字符串，%.2f 浮点数控制精度
 
 System.out.print("front" + variable + "end"); //输出不带换行
-System.out.println(String.format("x:%d,y:%d,radius:%d",x,y,radius)); //%d 十进制，%s 字符串
-System.out.println(String.format("%.2f", pi));//浮点数控制精度的方法，最后一位会自动四舍五入。
+System.out.format("x:%d,y:%d,radius:%d",x,y,radius); //%d 十进制，%s 字符串
+System.out.format("%.2f", pi);//浮点数控制精度的方法，最后一位会自动四舍五入。
 System.out.printf(); //C 格式输出
 ```
 ****
@@ -116,6 +124,28 @@ System.out.printf(); //C 格式输出
 
 数组缺点：固定长度，数据多了不够，少了浪费空间。
 容器类：为了解决数组的缺点，如  ArrayList、LinkedList、
+
+**Collections、Arrays常用方法**
+```java
+/*Collections 容器的工具类，只能是容器，无返回值，改变原List
+Collection是  List Set Queue 的接口，不要混淆
+*/
+import java.util.Collections;
+List<Integer> numbers = new ArrayList<>();
+Collections.max(numbers);//最大值
+Collections.min(numbers);//最小值
+Collections.indexOf(100);//定位
+Collections.sort(numbers);//正序排序
+Collections.reverse(numbers); //倒转数组,
+Collections.shuffle(numbers);//混淆
+Collections.swap(numbers,0,1);
+Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
+Collections.synchronizedList(numbers);//将线程不安全的改为安全的，还有Set,Map等，但是没有String
+
+/*Arrays 是数组的工具类*/
+Arrays.sort(arr); //给数组排序
+```
+
 ```java
 /*
 易混淆点
@@ -134,27 +164,12 @@ StringBuffer 线程安全：
 其他都是非线程安全的集合框架
 */
 
-/*Collections 容器的工具类，包含操控集合的常用方法
-//Collection是  List Set Queue 的接口，不要混淆
-*/
-
-//Collections是一个类，容器的工具类，只能是容器，无返回值，改变原List
-import java.util.Collections;
-List<Integer> numbers = new ArrayList<>();
-Collections.sort(numbers);//正序排序
-Collections.reverse(numbers); //倒转数组,
-Collections.shuffle(numbers);//混淆
-Collections.swap(numbers,0,1);
-Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
-Collections.synchronizedList(numbers);//将线程不安全的改为安全的，还有Set,Map等，但是没有String
-
-/*
-普通数组
+/*普通数组
 1、值相同的数组，引用也不相同。
-*/
-//排序函数
+2、排序函数
+3、数组赋值*/
 import java.util.Arrays;
-Arrays.sort(nums);
+Arrays.sort(nums);//排序函数
 
 String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
 return new int[]{1,2,3}; //直接返回一个匿名数组
@@ -259,6 +274,9 @@ triangle.get(0).set(0,99);
 /*查：获取第一个数组的第一个值、动态数组的大小，注意和静态数组长度的区分*/
 triangle.get(0).get(0); 
 triangle.size(); 
+
+
+
 
 
 /* 集合 Set
@@ -377,6 +395,7 @@ String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它�
 和Integer不同，String只要是对象，== 就一定返回false。
 注意 + 号，有对象，也会转为对象关系。
 String str = "1" + new String("00"); 会产生一个对象。
+str = str + 100; 也是成立的。
 */
 String s1 = "abc"; //定义的是一个常量，在常量池中。
 String s3 = new String("abc"); //定义的是一个变量，在堆中，值是常量不可变。
@@ -510,9 +529,12 @@ Java不是纯的面向对象的语言，不纯的地方就是这些基本数据�
 问：Boolean属于关键字么？
 答：不属于，只是java中的包装类，关键字应该更广泛一些，属于某种类型，这个应该和标识符类似，只是系统已经构造好的类的名称。
 
+问：int i = null?
+错误，null 表示没有地址，可以赋值给引用变量，不能赋值给基本类型。
+
 问：java中的变量不一定要初始化？
-答：错误，一定会初始化，有些是系统自动做的，对应基本类型顺序，0，0，0，0L，0.0f，0，'u0000',false
-所有引用类型都是null。
+答：错误，一定会初始化，全局变量是系统自动做的，对应基本类型顺序，0，0，0，0L，0.0f，0，'u0000',false
+所有引用类型都是null。局部变量要手动，否则直接报错。
 
 问：基本数据类型在堆栈上分配？
 答：是，八个基本数据类型不能看作对象（这点很特殊）。栈内操作速度快，创建销毁很容易。八个基本数据类型都有对应的包装类，包装类就是对象了。比如Integer j = new Integer（10）。j属于对象的引用，引用放在栈中，而实际的数据10 则放在堆中。 （堆区适合存放大的数据对象，但是操作速度远远不及栈中）（提示：对象的销毁---对象的引用放在栈中，所以使用完引用就被从栈中销毁了，但是实际的对象仍然存放在堆中，只有在没有任何的引用使用它的时候才被垃圾回收器销毁掉）
@@ -521,11 +543,14 @@ Java不是纯的面向对象的语言，不纯的地方就是这些基本数据�
 问：count = 0; count = count++ 时，count是多少？
 答：0，赋值操作是最后执行的，那么赋值之前的一步是将0给count，count++是在将0给count之后再加，所以编译器不再执行++。
 
+问：byte b1=1,b2=2,b3; b3 = b1 + b2; 报错？
+答：java中byte,short,char进行计算都会自动提升为int，所以需要强制类型转换，不能赋给b3。
 */
 
 /*基本数据类型 和 包装类*/
 byte;short;int;long;float;double;char;boolean;
 Byte;Short;Integer;Long;Float;Double;Character;Boolean;
+48个关键字，2个保留字[goto,const]，3个特殊直接量[true,false,null]
 
 /*基本数据类型赋值，虽然每个数据类型都有一个默认值，但最好主动为每个初始值设置默认值。*/
 final double PI = 3.1415927; //常量 final 通常常量全部大写
@@ -538,10 +563,30 @@ char c1 = 'a'; char c2 = 97 //c1和c2都表示一个字符a
 String st = "this is a line"; //双引号
 Object ob = null; //空表示
 && || ! //逻辑运算符，与或非
+    
+/*Character 类*/
+import java.lang.Character;
+char ch = 'a';
+Character.isDigit(ch);
+Character.isLetter(ch);
+Character.isUpperCase(ch);
+Character.isLowerCse(ch);
+
+/*包装类的常量，每个都有,二进制位数、最小值、最大值127*/
+Byte.SIZE; 
+Byte.MIN_VALUE; 
+Byte.MAX_VALUE; 
 
 /*注意boolean和int类型不可相互转化和使用，不管在if语句或其他什么地方，但是char可以。
-自动类型转换：低  ------------------------------------>  高*/
+自动类型转换：低  ------------------------------------>  高
 byte,short,char—> int —> long—> float —> double 
+java核心卷I中43页有如下表述：两个数值进行二元操作时，会有如下的转换操作： 
+  如果两个操作数其中有一个是double类型，另一个操作就会转换为double类型。 
+  否则，如果其中一个操作数是float类型，另一个将会转换为float类型。 
+  否则，如果其中一个操作数是long类型，另一个会转换为long类型。 
+  否则，两个操作数都转换为int类型。 
+  故，x==f1[0]中，x将会转换为float类型。*/
+
 /*强制类型转换*/
 long a = 100; 
 int b = (int)a;//强制类型转换通常的方法一，大 转 小。
@@ -553,19 +598,15 @@ int intVal = Integer.valueOf(str); //通过封装类进行数据转换,(int)str 
 String str = Integer.toString(intVal); //将整数转为字符串
 String st = String.valueOf(intVal); //通过封装类进行数据转换
 
-
 /*装箱与拆箱，将基本数据类型包装为包装类，相加时再转为基本数据类型。
-只要是两个对象（都是箱子），那么 == 肯定返回false；
-只要有一个是数字，那么另一个肯定会自动拆箱，== 肯定返回true；*/
-Integer a = 99; //等价于int a = 99;
+1、int == Integer/new Integer() ,永远都是true，会自动拆箱；
+2、new Integer() == new Integer(), 永远是false，两个对象的地址永远不同；
+3、Integer == Integer，这种没有显示调用装箱，因此在[-128,127]之间为true，之外会自动构建对象为false；*/
+Integer a = 99; //等价于int a = 99; 超过[-128,127]，等价于new Integer();
 Integer c = new Integer(a);//装箱，对象形式
 Integer b = Integer.valueOf(a);//装箱，该方法返回参数的原生Number对象。
 int d = b.intValue(); //拆箱，可以拆成任意 Number 类
 a = Integer.parseInt("1024");//字符串转整数
-
-/*区别一：超过-128 - 127的值，都会新建一个对象，所以x1 == x2 false*/
-Integer x1 = 128;
-Integer x2 = 128; 
 
 //增强型 for 循环
 for(String str :strs)
@@ -579,19 +620,6 @@ while(iterator.hasNext())
 
 //返回系统时间
 long start = System.currentTimeMillis();
-
-/*Character 类*/
-import java.lang.Character;
-char ch = 'a';
-Character.isDigit(ch);
-Character.isLetter(ch);
-Character.isUpperCase(ch);
-Character.isLowerCse(ch);
-
-/*包装类的常量，每个都有,二进制位数、最小值、最大值127*/
-Byte.SIZE; 
-Byte.MIN_VALUE; 
-Byte.MAX_VALUE; 
 ```
 
 **Math类**
@@ -616,8 +644,39 @@ int i = rand.nextInt(100);//产生[0,100) 的随机数
 int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法，生成[0.0,1.0)的double数
 ```
 
+**引用**
+1、强引用：一个对象赋给一个引用就是强引用，比如new一个对象，一个对象被赋值一个对象。    2、软引用：用SoftReference类实现，一般不会轻易回收，只有内存不够才会回收。    
+3、弱引用：用WeekReference类实现，一旦垃圾回收已启动，就会回收。   
+4、虚引用：不能单独存在，必须和引用队列联合使用。主要作用是跟踪对象被回收的状态。
+对于一个对象来说，只要有强引用的存在，它就会一直存在于内存中；如果一个对象仅持有虚引用，那么它就和没有引用一样，在任何时候都可能被垃圾回收机回收；如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收，如果内存空间不足了，就会回收这些对象的内存；一旦发现只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的空间。
+
+**泛型**
+泛型仅仅是java的语法糖，它不会影响java虚拟机生成的汇编代码，在编译阶段，虚拟机就会把泛型的类型擦除，还原成没有泛型的代码，顶多编译速度稍微慢一些，执行速度是完全没有什么区别的.
+
+**正则表达式**
+ ^：起始符号，^x表示以x开头
+ $：结束符号，x$表示以x结尾
+ [n-m]：表示从n到m的数字
+ \d：表示数字，等同于[0-9]
+ X{m}：表示由m个X字符构成，\d{4}表示4位数字
+
+ 15位身份证的构成：六位出生地区码+六位出身日期码+三位顺序码
+ 18位身份证的构成：六位出生地区码+八位出生日期码+三位顺序码+一位校验码
+
+ C选项的构成：
+ [1-9]\d{5}：六位出生地区码，出生地区码没有以0开头，因此第一位为[1-9]。
+ [1-9]\d{3}：八位出生日期码的四位年份，同样年份没有以0开头。
+ ((0\d)|(1[0-2]))：八位出生日期码的两位月份，| 表示或者，月份的形式为0\d或者是10、11、12。
+ (([0|1|2]\d)|3[0-1])：八位出生日期码的两位日期，日期由01至31。
+ \d{4}：三位顺序码+一位校验码，共四位。
+ A选项的构成：
+ [1-9]\d{7}：六位出生地区码+两位出生日期码的年份，这里的年份指后两位，因此没有第一位不能为0的限制，所以合并了。
+ 后面的与C选项类似了。
+ 好吧其实我也是第一次知道身份证还有15位的。
+
+
 ### 异常和调试
-<a name="异常"/>
+<a name="异常"></a>
 异常可以分为三类：检查性异常(Exception)、错误(Error)、运行时异常(RuntimeException)、Error 和 Exception它们都继承 Throwable； RuntimeException 继承 Exception，其还有子类SQLException,IOException。
 
 **问：请问error和exception有什么区别?**
@@ -669,7 +728,7 @@ public class Main {
 参考链接：https://www.cnblogs.com/sunshineweb/p/7656463.html
 第一种：try发生异常时，立即跳转到catch，执行里面的return操作。
 第二种：上面情况下，finally里有对上述返回值的操作，但返回值不变（基本数据类型，如果是引用则另说）。
-第三种：finally里面也有return语句，则会截图先登先返回。try-catch中的语句也会执行，只是存起来，未返回
+第三种：finally里面也有return语句，则会捷足先登先返回。try-catch中的语句也会执行，只是存起来，未返回
 
 ```
 * **问：当某个线程抛出OutOfMemoryError时，其他线程有可能不受影响？**

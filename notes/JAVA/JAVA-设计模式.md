@@ -1,11 +1,23 @@
+@[TOC](目录)
+
 # JAVA-设计模式
 
-**简介**
+### 简介
 设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。设计模式是软件开发人员在软件开发过程中面临的一般问题的解决方案。这些解决方案是众多软件开发人员经过相当长的一段时间的试验和错误总结出来的。使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性。以下代码示例均引用 [ W3C 设计模式 ](https://www.w3cschool.cn/shejimoshi/design-pattern-tutorial.html)也可参考[菜鸟教程](https://www.runoob.com/design-pattern/singleton-pattern.html)，
 [更深层次的理解设计模式-难](https://blog.csdn.net/LoveLion/article/details/17517213?utm_source=app)
-* 对接口编程而不是对实现编程：哪种原则？
-* 优先使用对象组合而不是继承：哪种原则？
-* 开发人员的共同平台：设计模式提供了一个标准的术语系统，当你说单例模式时，别人都能理解使用了单个对象。
+
+### 设计模式常见问题
+**问：需要重点了解的设计模式**
+答：创建型：单例模式、工厂模式、 抽象工厂、
+结构型：装饰器模式、适配器模式、代理模式、
+行为型：观察者模式、责任链模式、迭代器模式、
+
+**问：对接口编程而不是对实现编程：哪种原则？**
+
+**问：优先使用对象组合而不是继承：哪种原则？**
+
+**问：开发人员的共同平台：设计模式提供了一个标准的术语系统，当你说单例模式时，别人都能理解使用了单个对象？**
+
 **问：请说出你所熟悉的几种设计模式。并举例说明？**
 某某设计模式，体现了某某原则的形式。
 
@@ -14,11 +26,9 @@
 2.模版模式，这个也很明显，在各种BeanFactory以及ApplicationContext实现中也都用到了；
 3.代理模式，在Aop实现中用到了JDK的动态代理；
 4.单例模式，这个比如在创建bean的时候。
+****
 
-
-
-
-**设计模式的七大原则**
+### 设计模式的七大原则
 
 1、开闭原则（Open Close Principle）
 开闭原则的意思是：对扩展开放，对修改关闭。在程序需要进行拓展的时候，不能去修改原有的代码，实现一个热插拔的效果。简言之，是为了使程序的扩展性好，易于维护和升级。想要达到这样的效果，我们需要使用接口和抽象类，后面的具体设计中我们会提到这点。
@@ -38,65 +48,56 @@
 最少知道原则是指：一个实体应当尽量少地与其他实体之间发生相互作用，使得系统功能模块相对独立。高内聚 低耦合 – high cohesion low coupling
 
 7、组合/聚合复用原则（Composition/Aggregation Reuse Principle，CARP)）：尽量使用组合和聚合少使用继承的关系来达到复用的原则。
+****
 
-
-
-**24 种设计模式**
-三大类：创建型模式（Creational Patterns）、结构型模式（Structural Patterns）、行为型模式（Behavioral Patterns）。
+### 24 种设计模式
+三大类：创建型模式（Creational Patterns）、结构型模式（Structural Patterns）、行为型模式（Behavioral Patterns）。知道所有的设计模式不如精通掌握（结合项目，可以实际使用）几类常见的模式。
 
 ### 一、创建型模式
-这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用新的运算符直接实例化对象。这使得程序在判断针对某个给定实例需要创建哪些对象时更加灵活。
+*这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用新的运算符直接实例化对象。这使得程序在判断针对某个给定实例需要创建哪些对象时更加灵活。*
 
-1. <a href="#工厂模式">工厂模式（Factory Pattern）</a>：定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个，工厂方法让类把实例化推迟到子类。即一个工厂类，管理其余的所有子类，要想实例化子类，需通过工厂类的方法。
+1. <a href="#单例模式">单例模式（Singleton Pattern）</a>： 确保一个类只有一个实例，可以直接访问，不需要实例化该类的对象。
 
-2. <a href="#抽象工厂模式">抽象工厂模式（Abstract Factory Pattern）</a>：可以简单理解为如果有多个工厂模式，那么需要用抽象工厂来管理。
+2. <a href="#工厂模式">工厂模式（Factory Pattern）</a>：定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个，工厂方法让类把实例化推迟到子类。即一个工厂类，管理其余的所有子类，要想实例化子类，需通过工厂类的方法。
 
-3. <a href="#单例模式">单例模式（Singleton Pattern）</a>： 确保一个类只有一个实例，可以直接访问，不需要实例化该类的对象。
+3. <a href="#抽象工厂模式">抽象工厂模式（Abstract Factory Pattern）</a>：可以简单理解为如果有多个工厂模式，那么需要用抽象工厂来管理。
 
 4. <a href="#建造者模式">建造者模式（Builder Pattern）</a>：使用多个简单的对象一步一步构建成一个复杂的对象（有点复杂）。
 
 5. <a href="#原型模式">原型模式（Prototype Pattern）</a>：当需要创建重复的对象时，为了保证性能和效率，它提供了一种创建对象的最佳方式。这种模式是实现了一个原型接口，该接口用于创建当前对象的克隆。当直接创建对象的代价比较大时，则采用这种模式。例如，一个对象需要在一个高代价的数据库操作之后被创建。我们可以缓存该对象，在下一个请求时返回它的克隆，在需要的时候更新数据库，以此来减少数据库调用。
 
-6. <a href="#生成器模式">生成器模式（Builder pattern）</a>： 使用生成器模式封装一个产品的构造过程, 并允许按步骤构造. 将一个复杂对象的构建与它的表示分离, 使得同样的构建过程可以创建不同的表示。
-
-7. <a href="#简单工场模式">简单工场模式</a>
-
-8. <a href="#多例模式">多例模式（Multition pattern）</a>： 在一个解决方案中结合两个或多个模式，以解决一般或重复发生的问题。
-
 
 ### 二、结构型模式
-这些设计模式关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。
+*这些设计模式关注类和对象的组合，继承的概念被用来组合接口和定义组合对象获得新功能的方式。*
 
-1、<a href="#适配器模式">适配器模式（Adapter Pattern）</a>：将一个类的接口, 转换成客户期望的另一个接口. 适配器让原本接口不兼容的类可以合作无间. 对象适配器使用组合, 类适配器使用多重继承.
+1、<a href="#装饰器模式">装饰器模式（Decorator Pattern）</a>：动态地将责任附加到对象上, 若要扩展功能, 装饰者提供了比继承更有弹性的替代方案.
 
-2、<a href="#桥接模式">桥接模式（Bridge Pattern）</a>： 使用桥接模式通过将实现和抽象放在两个不同的类层次中而使它们可以独立改变.
+2、<a href="#适配器模式">适配器模式（Adapter Pattern）</a>：将一个类的接口, 转换成客户期望的另一个接口. 适配器让原本接口不兼容的类可以合作无间. 对象适配器使用组合, 类适配器使用多重继承.
 
-3、<a href="#组合模式">组合模式（Composite Pattern）</a>：允许你将对象组合成树形结构来表现”整体/部分”层次结构. 组合能让客户以一致的方式处理个别对象以及对象组合.
+3、<a href="#代理模式">代理模式（Proxy Pattern）</a>：为另一个对象提供一个替身或占位符以控制对这个对象的访问.
 
-4、<a href="#装饰器模式">装饰器模式（Decorator Pattern）</a>：动态地将责任附加到对象上, 若要扩展功能, 装饰者提供了比继承更有弹性的替代方案.
+****
+5、<a href="#桥接模式">桥接模式（Bridge Pattern）</a>： 使用桥接模式通过将实现和抽象放在两个不同的类层次中而使它们可以独立改变.
+
+5、<a href="#组合模式">组合模式（Composite Pattern）</a>：允许你将对象组合成树形结构来表现”整体/部分”层次结构. 组合能让客户以一致的方式处理个别对象以及对象组合.
 
 5、<a href="#外观模式">外观模式（Facade Pattern）</a>：提供了一个统一的接口, 用来访问子系统中的一群接口. 外观定义了一个高层接口, 让子系统更容易使用.
 
-6、<a href="#享元模式">享元模式（Flyweight Pattern）</a>：如想让某个类的一个实例能用来提供许多”虚拟实例”, 就使用蝇量模式.
+5、<a href="#享元模式">享元模式（Flyweight Pattern）</a>：如想让某个类的一个实例能用来提供许多”虚拟实例”, 就使用蝇量模式.
 
-7、<a href="#代理模式">代理模式（Proxy Pattern）</a>：为另一个对象提供一个替身或占位符以控制对这个对象的访问.
+
 
 ### 三、行为型模式
-这些设计模式特别关注对象之间的通信。
+*这些设计模式特别关注对象之间的通信。*
+1、<a href="#观察者模式">观察者模式（Observer Pattern）</a>： 在对象之间定义一对多的依赖, 这样一来, 当一个对象改变状态, 依赖它的对象都会收到通知, 并自动更新.
 
-1、<a href="#责任链模式">责任链模式（Chain of Responsibility Pattern）</a>： 通过责任链模式, 你可以为某个请求创建一个对象链. 每个对象依序检查此请求并对其进行处理或者将它传给链中的下一个对象.
+2、<a href="#责任链模式">责任链模式（Chain of Responsibility Pattern）</a>： 通过责任链模式, 你可以为某个请求创建一个对象链. 每个对象依序检查此请求并对其进行处理或者将它传给链中的下一个对象.
 
-2、<a href="#命令模式">命令模式（Command Pattern）</a>： 将”请求”封闭成对象, 以便使用不同的请求,队列或者日志来参数化其他对象. 命令模式也支持可撤销的操作.
-
-3、<a href="#解释器模式">解释器模式（Interpreter Pattern）</a>：使用解释器模式为语言创建解释器.
-
-4、<a href="#迭代器模式">迭代器模式（Iterator Pattern）</a>：提供一种方法顺序访问一个聚合对象中的各个元素, 而又不暴露其内部的表示.
-
+3、<a href="#迭代器模式">迭代器模式（Iterator Pattern）</a>：迭代器模式（Iterator Pattern）是 Java 和 .Net 编程环境中非常常用的设计模式。这种模式用于顺序访问集合对象的元素，不需要知道集合对象的底层表示。
+****
 5、<a href="#中介者模式">中介者模式（Mediator Pattern）</a>：使用中介者模式来集中相关对象之间复杂的沟通和控制方式.
 
-6、<a href="#备忘录模式">备忘录模式（Memento Pattern）</a>：当你需要让对象返回之前的状态时(例如, 你的用户请求”撤销”), 你使用备忘录模式.？？
-
-7、<a href="#观察者模式">观察者模式（Observer Pattern）</a>： 在对象之间定义一对多的依赖, 这样一来, 当一个对象改变状态, 依赖它的对象都会收到通知, 并自动更新.
+6、<a href="#备忘录模式">备忘录模式（Memento Pattern）</a>：当你需要让对象返回之前的状态时(例如, 你的用户请求”撤销”), 你使用备忘录模式.
 
 8、<a href="#状态模式">状态模式（State Pattern）</a>：允许对象在内部状态改变时改变它的行为, 对象看起来好象改了它的类.
 
@@ -110,18 +111,16 @@
 
 ****
 
-
-
-
-
-
-* <a name="工厂模式">工厂模式（Factory Pattern）</a>：定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个，工厂方法让类把实例化推迟到子类。即一个工厂类，管理其余的所有子类，要想实例化子类，需通过工厂类的方法。
+<a name="工厂模式">工厂模式（Factory Pattern）</a>
 
 ```java
-/*工厂模式-
+/*意图：定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。
+主要解决：主要解决接口选择的问题。
+何时使用：我们明确地计划不同条件下创建不同实例时。
+如何解决：让其子类实现工厂接口，返回的也是一个抽象的产品。
+关键代码：创建过程在其子类执行。
 注意事项：作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。
-缺点：简单工场，违背了开闭原则，当添加新形状时需要修改代码，后面介绍满足开闭原则的修改。
-*/
+缺点：简单工场，违背了开闭原则，当添加新形状时需要修改代码，后面介绍满足开闭原则的修改。*/
 public interface Shape{//定义一个接口
 	public void draw();
 }
@@ -134,14 +133,12 @@ class Circle implements Shape{
 }
 
 class Square implements Shape{
-    @Override
 	public void draw(){
 		System.out.println("Square method()!");
 	}
 }
 
 class Rectangle implements Shape{
-    @Override
 	public void draw(){
 		System.out.println("Rectangle method()!");
 	}
@@ -180,9 +177,9 @@ class SquareFactory implements ShapesFactory{
 }
 ```
 
- <a name="抽象工厂模式">抽象工厂模式（Abstract Factory Pattern）</a>：可以简单理解为管理多个工厂的制造。
+ <a name="抽象工厂模式">抽象工厂模式（Abstract Factory Pattern）</a>
 ```java
-//抽象工厂模式
+//抽象工厂模式,可以简单理解为管理多个工厂的制造。
 interface Shape{
 	public void draw();
 }
@@ -263,16 +260,19 @@ public class test{
 }
 ```
 
-<a name="单例模式">单例模式（Singleton Pattern）</a>：单例类只能有一个实例、单例类必须自己创建自己的唯一实例、单例类必须给所有其他对象提供这一实例。
+<a name="单例模式">单例模式（Singleton Pattern）</a>
 
 ```java
-/*单例模式-懒汉式-多线程不安全
-意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+/*意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
 主要解决：一个全局使用的类频繁地创建与销毁。
 何时使用：当您想控制实例数目，节省系统资源的时候。
 如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。
-关键代码：1、构造函数是私有的。
-*/
+关键代码：构造函数是私有的。注意，单例模式不用构造函数，所以始终为空，不写代码。
+有多种实现方式：懒汉式、饿汉式、双重锁等其他有要求的方式。
+
+懒汉式-多线程不安全，或者增加 synchronized，使其变成线程安全
+饿汉式-多线程都安全，因此使用也较多。在类装载时实例化，其它不变。
+饿汉式：private static Singleton instance = new SingleObject();*/
 class SingleObject{
     //创建 SingleObject 的一个对象
 	private static SingleObject instance = null;
@@ -295,33 +295,13 @@ public class test{
 	single.showMessage();
 	}
 }
-/*单例模式-懒汉式-多线程安全
-在获取 instance 时实例化。但是在多线程下不能正常工作，需要添加Synchronized锁，下面是懒汉式线程安全。
-*/
+
+/*双重锁：安全且在多线程情况下能保持高性能。*/
 class SingleObject{
-    //创建 SingleObject 的一个对象
-	private static SingleObject instance = null;
-    //让构造函数为 private，这样该类就不会被实例化
+	private volatile static SingleObject instance;//创建 SingleObject 的一个对象
 	private SingleObject(){}
     //获取唯一可用的对象
-	public static synchronized SingleObject getInstance(){
-        if(instance == null)
-            instance = new SingleObject();
-		return instance;
-	}
-	public void showMessage(){
-		System.out.println("普通函数");
-	}
-}
-/*单例模式-懒汉式-多线程安全-双重锁
-*/
-class SingleObject{
-    //创建 SingleObject 的一个对象
-	private static SingleObject instance = null;
-    //让构造函数为 private，这样该类就不会被实例化
-	private SingleObject(){}
-    //获取唯一可用的对象
-	public static synchronized SingleObject getInstance(){
+	public static SingleObject getInstance(){
         if(instance == null)
             synchronized(SingleObject.class){
             if(instance == null)
@@ -333,15 +313,17 @@ class SingleObject{
 		System.out.println("普通函数");
 	}
 }
-//饿汉式单、多线程都安全，因此使用也较多。饿汉式：private static Singleton instance = new SingleObject();在类装载时实例化，其它不变。
+
 ```
 
-<a name="建造者模式">建造者模式（Builder Pattern）</a>：使用多个简单的对象一步一步构建成一个复杂的对象。
+<a name="建造者模式">建造者模式（Builder Pattern）</a>
 
 ```java
-//建造者模式
-import java.util.ArrayList;
-import java.util.List;
+/*意图：将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。
+主要解决：主要解决在软件系统中，有时候面临着"一个复杂对象"的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。
+何时使用：一些基本部件不会变，而其组合经常变化的时候。
+如何解决：将变与不变分离开。
+关键代码：建造者：创建和提供实例，导演：管理建造出来的实例的依赖关系。*/
 
 interface Item{ //有了接口关键字，就不需要类了
 	public String name();
@@ -854,8 +836,12 @@ public class CompositePatternDemo {
 4、<a name="装饰器模式">装饰器模式（Decorator Pattern）</a>：动态地将责任附加到对象上, 若要扩展功能, 装饰者提供了比继承更有弹性的替代方案.
 
 ```java
-//刚开始我在想，装饰器其实中间也许不用加这个抽象类的，直接继承接口就好了，
-//但是也许是想将父类的方法和装饰器的方法分开，后面容易扩展考虑吧。
+/*意图：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰器模式相比生成子类更为灵活。
+主要解决：一般的，我们为了扩展一个类经常使用继承方式实现，由于继承为类引入静态特征，并且随着扩展功能的增多，子类会很膨胀。
+何时使用：在不想增加很多子类的情况下扩展类。
+如何解决：将具体功能职责划分，同时继承装饰者模式。
+关键代码： 1、Component 类充当抽象角色，不应该具体实现。 2、修饰类引用和继承 Component 类，具体扩展类重写父类方法。
+刚开始我在想，装饰器其实中间也许不用加这个抽象类的，直接继承接口就好了，但是也许是想将父类的方法和装饰器的方法分开，后面容易扩展考虑吧。*/
 interface Shape{
 	public void draw();
 }
@@ -925,13 +911,90 @@ public class test{
 ```java
 
 ```
-### 三、行为型模式
-这些设计模式特别关注对象之间的通信。
+### 三、行为型模式，这些设计模式特别关注对象之间的通信。
+<a name="观察者模式">观察者模式（Observer Pattern）</a>
 
-1、<a name="责任链模式">责任链模式（Chain of Responsibility Pattern）</a>
-原本一个类对出错等级进行判断，现在细分，不同出错等级由不同的类管理，然而这些类会串联起来，像一个类一样，即实现了原来的功能，又解耦合，易扩展。
 ```java
-abstract class AbstractLogger{ #为不同出错等级的类提供模板
+/*
+意图：定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+主要解决：一个对象状态改变给其他对象通知的问题，而且要考虑到易用和低耦合，保证高度的协作。
+何时使用：一个对象（目标对象）的状态发生改变，所有的依赖对象（观察者对象）都将得到通知，进行广播通知。
+如何解决：使用面向对象技术，可以将这种依赖关系弱化。
+关键代码：在抽象类里有一个 ArrayList 存放观察者们。*/
+
+class Subject{
+	private List<Observer> observers = new ArrayList<Observer>();
+	private int state;
+
+	public int getState(){
+		return state;
+	}
+	public void setState(int state){
+		this.state = state;
+		notifyAllObservers();
+	}
+	public void attach(Observer observer){
+		observers.add(observer);
+	}
+	public void notifyAllObservers(){
+		for(Observer observer : observers){
+			observer.update();
+		}
+	}
+}
+
+abstract class Observer{
+//观察者都会有一个观察的物体，并把自己加入这个物体的观察者队列中
+	protected Subject subject;
+	public abstract void update();
+}
+
+class BinaryObserver extends Observer{
+	public BinaryObserver(Subject subject){
+		this.subject = subject;
+		this.subject.attach(this);
+	}
+	@Override
+	public void update(){
+		System.out.println("BinaryOperator update!" + subject.getState());
+	}
+}
+
+class OctalObserver extends Observer{
+	public OctalObserver(Subject subject){
+		this.subject = subject;
+		this.subject.attach(this);
+	}
+	@Override
+	public void update(){
+		System.out.println("OctalObserver update!" + subject.getState());
+	}
+}
+
+public class test{
+	public static void main(String args[]){
+		Subject subject = new Subject();
+
+		//将物体加入到不同的观察者中
+		new BinaryObserver(subject);
+		new OctalObserver(subject);
+
+		//当物品的状态发生改变时
+		subject.setState(15);
+		subject.setState(10);
+	}
+}
+```
+
+<a name="责任链模式">责任链模式（Chain of Responsibility Pattern）</a>
+
+```java
+/*意图：避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。
+主要解决：职责链上的处理者负责处理请求，客户只需要将请求发送到职责链上即可，无须关心请求的处理细节和请求的传递，所以职责链将请求的发送者和请求的处理者解耦了。
+何时使用：在处理消息的时候以过滤很多道。
+如何解决：拦截的类都实现统一接口。
+关键代码：Handler 里面聚合它自己，在 HandlerRequest 里判断是否合适，如果没达到条件则向下传递，向谁传递之前 set 进去。*/
+abstract class AbstractLogger{ //为不同出错等级的类提供模板
 	public static int INFO = 1;
 	public static int DEBUG = 2;
 	public static int ERROR = 3;
@@ -952,7 +1015,7 @@ abstract class AbstractLogger{ #为不同出错等级的类提供模板
 	protected abstract void write(String message);
 }
 
-class ConsoleLogger extends AbstractLogger{#输入出错
+class ConsoleLogger extends AbstractLogger{//输入出错
 	public ConsoleLogger(int level){
 		this.level = level;
 	}
@@ -962,7 +1025,7 @@ class ConsoleLogger extends AbstractLogger{#输入出错
 	}
 }
 
-class FileLogger extends AbstractLogger{#debug
+class FileLogger extends AbstractLogger{//debug
 	public FileLogger(int level){
 		this.level = level;
 	}
@@ -972,7 +1035,7 @@ class FileLogger extends AbstractLogger{#debug
 	}
 }
 
-class ErrorLogger extends AbstractLogger{#程序错误
+class ErrorLogger extends AbstractLogger{//程序错误
 	public ErrorLogger(int level){
 		this.level = level;
 	}
@@ -982,8 +1045,8 @@ class ErrorLogger extends AbstractLogger{#程序错误
 	}
 }
 
-public class test{
-	public static AbstractLogger abstractLogger(){#构造责任链
+public class Test{
+	public static AbstractLogger abstractLogger(){//构造责任链
 		AbstractLogger consoleLogger = new ConsoleLogger(AbstractLogger.INFO);
 		AbstractLogger fileLogger = new FileLogger(AbstractLogger.DEBUG);
 		AbstractLogger errorLogger = new ErrorLogger(AbstractLogger.ERROR);
@@ -993,11 +1056,69 @@ public class test{
 		return consoleLogger;
 	}
 
-	public static void main(String args[]){#测试
+	public static void main(String args[]){//测试
 		AbstractLogger log = abstractLogger();
 		log.logMessage(1, "this is a message!");
 		log.logMessage(2, "this is a debug message!");
 		log.logMessage(3, "this is a error message!");
+	}
+}
+```
+
+<a name="迭代器模式">迭代器模式（Iterator Pattern）</a>
+
+```java
+/*意图：提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示。
+主要解决：不同的方式来遍历整个整合对象。
+何时使用：遍历一个聚合对象。
+如何解决：把在元素之间游走的责任交给迭代器，而不是聚合对象。
+关键代码：定义接口：hasNext, next。
+应用实例：JAVA 中的 iterator。*/
+interface Iterator{
+	public boolean hasNext();
+	public Object next();
+}
+
+interface Container{
+	public Iterator getIterator();
+}
+
+class NameRepository implements Container{
+	public String name[] = {"Robert" , "John" ,"Julie" , "Lora"};
+
+	@Override
+	public Iterator getIterator(){
+		return new NameIterator();
+	}
+
+	private class NameIterator implements Iterator{
+	//这个类写在上面类的内部
+		int index = 0;
+		@Override
+		public boolean hasNext(){//判断是否是最后一个
+			if(index < name.length){
+				return true;
+			}
+			return false;
+		}
+		@Override
+		public Object next(){//返回下一个值
+			if(this.hasNext()){
+				return name[index++];
+			}
+			return null;
+		}
+	}
+}
+
+public class test{
+	public static void main(String args[]){
+		NameRepository nameRepository = new NameRepository();
+
+		for(Iterator iterator = nameRepository.getIterator(); iterator.hasNext();){
+			String name = (String)iterator.next();
+			System.out.println("name: "+name);
+		}
 	}
 }
 ```
@@ -1153,58 +1274,6 @@ public class test{
 
 ```
 
-4、<a name="#迭代器模式">迭代器模式（Iterator Pattern）</a>：提供一种方法顺序访问一个聚合对象中的各个元素, 而又不暴露其内部的表示.
-
-```java
-interface Iterator{
-	public boolean hasNext();
-	public Object next();
-}
-
-interface Container{
-	public Iterator getIterator();
-}
-
-class NameRepository implements Container{
-	public String name[] = {"Robert" , "John" ,"Julie" , "Lora"};
-
-	@Override
-	public Iterator getIterator(){
-		return new NameIterator();
-	}
-
-	private class NameIterator implements Iterator{
-	//这个类写在上面类的内部
-		int index = 0;
-		@Override
-		public boolean hasNext(){//判断是否是最后一个
-			if(index < name.length){
-				return true;
-			}
-			return false;
-		}
-		@Override
-		public Object next(){//返回下一个值
-			if(this.hasNext()){
-				return name[index++];
-			}
-			return null;
-		}
-	}
-}
-
-public class test{
-	public static void main(String args[]){
-		NameRepository nameRepository = new NameRepository();
-
-		for(Iterator iterator = nameRepository.getIterator(); iterator.hasNext();){
-			String name = (String)iterator.next();
-			System.out.println("name: "+name);
-		}
-	}
-}
-```
-
 5、<a name="#中介者模式">中介者模式（Mediator Pattern）</a>：使用中介者模式来集中相关对象之间复杂的沟通和控制方式.
 
 ```java
@@ -1241,75 +1310,6 @@ public class test{
 ```
 6、<a name="#备忘录模式">备忘录模式（Memento Pattern）</a>：当你需要让对象返回之前的状态时(例如, 你的用户请求”撤销”), 你使用备忘录模式.？？
 
-7、<a name="#观察者模式">观察者模式（Observer Pattern）</a>： 在对象之间定义一对多的依赖, 这样一来, 当一个对象改变状态, 依赖它的对象都会收到通知, 并自动更新.
-
-```python
-import java.util.ArrayList;
-import java.util.List;
-
-class Subject{
-	private List<Observer> observers = new ArrayList<Observer>();
-	private int state;
-
-	public int getState(){
-		return state;
-	}
-	public void setState(int state){
-		this.state = state;
-		notifyAllObservers();
-	}
-	public void attach(Observer observer){
-		observers.add(observer);
-	}
-	public void notifyAllObservers(){
-		for(Observer observer : observers){
-			observer.update();
-		}
-	}
-}
-
-abstract class Observer{
-//观察者都会有一个观察的物体，并把自己加入这个物体的观察者队列中
-	protected Subject subject;
-	public abstract void update();
-}
-
-class BinaryObserver extends Observer{
-	public BinaryObserver(Subject subject){
-		this.subject = subject;
-		this.subject.attach(this);
-	}
-	@Override
-	public void update(){
-		System.out.println("BinaryOperator update!" + subject.getState());
-	}
-}
-
-class OctalObserver extends Observer{
-	public OctalObserver(Subject subject){
-		this.subject = subject;
-		this.subject.attach(this);
-	}
-	@Override
-	public void update(){
-		System.out.println("OctalObserver update!" + subject.getState());
-	}
-}
-
-public class test{
-	public static void main(String args[]){
-		Subject subject = new Subject();
-
-		//将物体加入到不同的观察者中
-		new BinaryObserver(subject);
-		new OctalObserver(subject);
-
-		//当物品的状态发生改变时
-		subject.setState(15);
-		subject.setState(10);
-	}
-}
-```
 8、<a name="#状态模式">状态模式（State Pattern）</a>：允许对象在内部状态改变时改变它的行为, 对象看起来好象改了它的类.
 
 ```java

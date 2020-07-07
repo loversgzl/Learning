@@ -36,8 +36,7 @@
 选择理由：稳定，与原位置偏离不远。
 基本思想：第一个 for 循环定义比较的趟数 n-1 趟，第二个进行比较，定义比较的边界，默认有增加一个状态判断，如果某趟没有进行过交换，则直接结束。
 时间复杂度：最好O(n)，最差O(n2), 平均O(n2)
-空间复杂度：O(1)
-*/
+空间复杂度：O(1)*/
 public static void bobleSort(int[] array){
     int length = array.length;
     boolean state;
@@ -60,13 +59,11 @@ public static void bobleSort(int[] array){
 <a name="简单插入排序"></a>
 
 ```java
-/**
-*简单插入排序
+/*简单插入排序
 选择理由：稳定，基本有序。
 基本思想:从第一个元素开始，不断整理顺序。
 时间复杂度：最好O(n)，最差O(n2),平均O(n2)
-空间复杂度：O(1)
-*/
+空间复杂度：O(1)*/
 public static void insertSort(int[] array){
     int length = array.length;
     for(int i=1; i<length; i++){//定义待排序的数
@@ -84,13 +81,11 @@ public static void insertSort(int[] array){
 <a name="简单选择排序"></a>
 
 ```java
-/**
-*简单选择排序
+/*简单选择排序
 选择理由：不稳定，很无序，与原位置偏离较远。
 基本思想:后面找到最小的值后再来交换，比冒泡排序的优点是不用交换那么多次[可能也是唯一的优点吧]。
 时间复杂度：无论好差平均都是O(n2)
-空间复杂度：O(1)
-*/
+空间复杂度：O(1)*/
 public static void selectSort(int[] array){
     int length = array.length;
     for(int i=0; i<length-1; i++){//定义待交换的数
@@ -113,13 +108,11 @@ public static void selectSort(int[] array){
 <a name="希尔排序"></a>
 
 ```java
-/**
-希尔排序-缩小增量排序
+/*希尔排序-缩小增量排序
 选择理由：不稳定，适合基本无序的序列，内部使用了简单插入排序。
 基本思想:当增量为 1 时，其实就是插入排序。我们比较的元素可以再远一点，即所谓的增量，等距的一些元素先排序，再逐渐过渡到整个数组，最后的增量肯定是 1，检查还有哪些没有排好序。
 时间复杂度：最差O(n2)，最好平均不确定(增量的选择很关键，有很多研究)
-空间复杂度：O(1)
-*/
+空间复杂度：O(1)*/
 public static void shellInsert(int[]array, int d){
     int length = array.length-1;
     for(int i=d; i<=length; i++){

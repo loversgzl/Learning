@@ -59,8 +59,6 @@ ALTER TABLE `student` RENAME TO `students`; #修改表名
 ALTER TABLE `students` add column `age` int not null after `sex`; #为已有表格增加一列
 ALTER TABLE students DROP column nickname; #删除表格格的某一列
 
-
-
 ```
 
 ### 在一个表中查询

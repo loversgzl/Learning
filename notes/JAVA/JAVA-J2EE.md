@@ -5,11 +5,13 @@ JavaEE 号称有十三种核心技术。一般来讲，初学者应该遵循路�
 Java Web包括四大核心知识点：1.Spring的IOC和AOP等知识点、2.Spring MVC框架的基本流程、3.ORM技术（了解 Hibernate与MyBatis的基本开发流程）、4.Spring MVC+MyBatis、
 Java Web可以延后学习的知识点：JSP、Struts MVC、JS、CSS等前端知识
 
-<a href="#JDBC">JDBC：JAVA 操作数据库</a>
-<a href="#Tomcat">Tomcat：常见的免费 web 服务器</a>
-<a href="#Servlet">Servlet：用于处理用户提交的数据</a>
-<a href="#JPS">JSP：可以写 java 代码的 html</a>
-
+<a href="#JDBC">1、JDBC：JAVA 操作数据库</a>
+<a href="#Tomcat">2、Tomcat：常见的免费 web 服务器</a>
+<a href="#Servlet">3、Servlet：用于处理用户提交的数据</a>
+<a href="#JPS">4、JSP：可以写 java 代码的 html</a>
+<a href="#Spring">5、Spring</a>
+<a href="#SpringMVC">6、SpringMVC</a>
+<a href="#MyBatis">7、MyBatis</a>
 
 ### JDBC
 <a name="JDBC"></a>
@@ -154,7 +156,7 @@ JTA事务管理则由 JTA容器实现，JTA容器对当前加入事务的众多C
 -->
 <Context path="/tomcat/" docBase="F:\\JavaWorkSpace\\apache-tomcat-9.0.26\\webapps\\ROOT" debug="0" reloadable="false" />  
 ```
-
+****
 ### Servlet
 <a name="Servlet"></a>
 <img src="../../pics/servlet.png" align="center">
@@ -376,9 +378,6 @@ response.getWriter().println(html);//获取返回html的对象
 response.sendRedirect("fail.html");//客户端跳转网页
 ```
 
-
-
-
 ### Servlet 的 CRUD操作
 ```java
 /*
@@ -389,18 +388,22 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 */
 
 ```
-
-
-
-
-
+****
 
 ### JSP
 <a name="JPS"></a>
-到这里，大家对使用 Servlet 进行CRUD开发就有比较全面感性认识了。 其中一个比较明显的弊端就是在 Servlet 编写 html 代码很痛苦，效率不高，可读性差，难以维护。最好可以在 html 文件里面写html 代码，同时又能在里面调用 java 的变量，那么这样就需要学习 JSP 了。
+B站UP主 程序羊 这样描述这种技术：
+不用学啦，公司里面不用了，很老的技术了。简述互联网前后端开发模式的一些变迁，
+JSP 全称 （Java Server Pages），叫 Java 服务器页面，服务端的网页模板技术。在传统网页 HTML 文件中插入 Java 程序段和 JSP 标记，属于比较传统的模板技术，耦合性很高。服务端网页模板技术，就是网页框架+数据，整合成网页，而这些是在服务端里做的。
+如今互联网前后端开发，一路以来的开发模式的转变：
+老的开发模式：公司内前后端分离开发，开发后进行整合，如果后端程序员来整合，那么他就需要懂前端的东西，否则整不起来，如果交给前端来整合，那么又需要懂后端的东西，比如JSP的标签等等。所以耦合和依赖很强。
+新的开发模式：前后端各自完成各自的任务，前后端通过约定接口、数据的样式、参数格式等。开发分开，部署分开，前端只从后端拿数据，页面渲染工作就不需要后端做了，自己部署，驱动。
+
+但是呢，照例，还是要介绍一下。
+大家对使用 Servlet 进行CRUD开发就有比较全面感性认识了。 其中一个比较明显的弊端就是在 Servlet 编写 html 代码很痛苦，效率不高，可读性差，难以维护。最好可以在 html 文件里面写html 代码，同时又能在里面调用 java 的变量，那么这样就需要学习 JSP 了。
 全称（Java Server Pages）是一种动态网页开发技术。它使用 JSP 标签在 HTML 网页中插入 Java 代码。标签通常以 <%开头以%> 结束。与 JavaScript 相比：虽然 JavaScript 可以在客户端动态生成 HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。 
 
-**如何写.jsp文件**：在JSP页面里，剥离与显示无关的代码，一个好的JSP页面，应该少用甚至不用<%%>包含起来的代码。
+**如何写.jsp文件**：在JSP页面里，剥离与显示无关的代码，一个好的JSP页面，应该少用甚至不用<%%>包含起来的代码。就是为了避免耦合性过高，因此后面前后端分离后，这个就不用了。
 
 **执行过程**：把 hello.jsp 转译为 hello_jsp.java 文件，这个文件继承了 HttpServlet，所以它就是一个Servlet，之后的处理就都是一样的了，编译为 class 文件，处理响应等等。
 
@@ -413,6 +416,26 @@ DAO = DataAccess Object，把数据库相关的操作都封装在这个类里面
 ![JSP语法 ](../../pics/jsp语法.png)
 
 ```jsp
+<%-- 一、JSP 四大作用域： page (作用范围最小)、request、session、application（作用范围最大）。
+1、存储在application对象中的属性可以被同一个WEB应用程序中的所有Servlet和JSP页面访问。（属性作用范围最大）
+2、存储在session对象中的属性可以被属于同一个会话（浏览器打开直到关闭称为一次会话，且在此期间会话不失效）的所有Servlet和JSP页面访问。
+3、存储在request对象中的属性可以被属于同一个请求的所有Servlet和JSP页面访问（在有转发的情况下可以跨页面获取属性值），例如使用PageContext.forward和PageContext.include方法连接起来的多个Servlet和JSP页面。
+4、存储在pageContext对象中的属性仅可以被当前JSP页面的当前响应过程中调用的各个组件访问，例如，正在响应当前请求的JSP页面和它调用的各个自定义标签类。
+
+二、九种隐式对象：不需要显示定义，直接就可以使用的对象
+out：输出 <% out.println("hello jsp");%>
+page：表示当前对象
+request：请求
+response：响应
+session：会话作用域
+
+pageContext：当前页面作用域
+application：全局作用域
+
+config：可以获取一些在 web.xml 中初始化的参数。
+exception：只有当前页面的<%@page 指令设置为isErrorPage="true"的时候才可以使用。
+--%>
+
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*" %>
 
 <%-- 日期，相当于 response.getWriter()，前面带 = 属于需要输出的内容，不用分号结尾
@@ -477,27 +500,6 @@ session.setAttribute("name", "gareen");
 String name = (String)getAttribute("name");
 %>
 
-<%-- 九种隐式对象：不需要显示定义，直接就可以使用的对象
-out：输出 <% out.println("hello jsp");%>
-page：表示当前对象
-request：请求
-response：响应
-session：会话作用域
-
-pageContext：当前页面作用域
-application：全局作用域
-
-config：可以获取一些在 web.xml 中初始化的参数。
-exception：只有当前页面的<%@page 指令设置为isErrorPage="true"的时候才可以使用。
-
-JSP有4个作用域，分别是
-pageContext 当前页面的jsp页面，跳转就访问不到了
-request 一次请求，结束数据即被回收。注意：客户端跳转，浏览器会发生一次新的访问，新的访问会产生一个新的request对象。所以页面间客户端跳转的情况下，是无法通过request传递数据的。（可以使用服务器跳转）
-session 当前会话可以任意访问，但是不能共享不同用户的数据。
-application 全局，所有用户共享
---%>
-
-
 <%-- JSTL JSP Standard Tag Library 标准标签库 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="name" value="${'gareen'}" scope="request" />
@@ -519,22 +521,25 @@ application 全局，所有用户共享
 </c:forEach>
 
 
-
-
 <%-- EL 表达式--%>
 通过标签获取name: <c:out value="${name}" /> <br>
 通过 EL 获取name: ${name}
 英雄名字 ： ${hero.name} <%-- 会自动调用 get,set 方法--%>
 英雄血量 ： ${hero.hp}
 
-
 ```
-
+问：Cookie 和 Session 有什么区别。
 **Cookie**：Cookie 是一种浏览器和服务器交互数据的方式。Cookie 是由服务器端创建，但是不会保存在服务器。创建好之后，发送给浏览器。浏览器保存在用户本地。下一次访问网站的时候，就会把该 Cookie 发送给服务器。
+回话跟踪技术：
+Cookie 是web服务器发送给客户端的一小段信息，客户端请求时，可以读取该信息发送到服务器端；关闭浏览器意味着临时会话ID丢失，但所有与会话关联的会话数据仍然保留在服务器上，直至回话过期。禁用 Cookie 时可以使用URL 重写技术跟踪会话。
 
 **Session**：Session对应的中文翻译是会话。会话指的是从用户打开浏览器访问一个网站开始，无论在这个网站中访问了多少页面，点击了多少链接，都属于同一个会话。 直到该用户关闭浏览器为止，都属于同一个会话。
 
-盒子对应服务器上的 Session，十五分钟或者半小时没有访问过可能会清除，钥匙（SessionID）对应保存在浏览器上的 Cookie。通过钥匙可以找到盒子，会在第一次访问创建一个sessionID，返回给你保存在 Cookie 里，等再次访问时，服务端取出 ID。如果没有 Cookie 那么每次只能重新生成 session。
+盒子对应服务器上的 Session，十五分钟或者半小时没有访问过可能会清除，钥匙（SessionID）保存在浏览器上的 Cookie。通过钥匙可以找到盒子，会在第一次访问创建一个sessionID，返回给你保存在 Cookie 里，等再次访问时，服务端取出 ID。如果没有 Cookie 那么每次只能重新生成 session。
+
+
+
+****
 
 ### MVC
 Servlet 相当于在 Java 代码里面写 html，肯定很繁琐，所有html都是字符串拼接起来的。
@@ -567,11 +572,12 @@ request.getRequestDispatcher("editHero.jsp").forward(request, response);
 ```
 
 ### Spring
+<a name="Spring"></a>
 Spring三大块知识：
 一、常规知识点：IOC/DI
 二、常规知识点：AOP
-二、web应用方面：Spring MVC
-三、框架整个技术
+三、web应用方面：Spring MVC
+四、框架整个技术
 
 
 **一、IOC 是反转控制 (Inversion Of Control) **
@@ -952,8 +958,7 @@ where 标签，可以自动删除多余的 and 和 or。
 首先按照主体部分是springMVC，然后往里面添加了mybatis+spring。
 开始web.xml->pringerMVC->controller。从这里开始，控制器是通过mybatis获取数据库的数据，而不是自己创造或者返回的数据，在使用mybatis获取数据时，又用到了Spring的注解方式的IOC，方便获取数据。然后给Controller，最后控制器添加到页面并显示。
 
-
-**SpringMVC：SSM框架的主体结构**: WEB-INF/web.xml 将浏览器中所有的请求 路径 映射指定的 springerMVC.xml文件中，该文件中使用注解的方式扫描指定的包，调用指定的Controller。到目前为止SSpringMVC框架里的文件是没有动过的。
+**SpringMVC：SSM框架的主体结构**: WEB-INF/web.xml 将浏览器中所有的请求 路径 映射指定的 springerMVC.xml文件中，该文件中使用注解的方式扫描指定的包，调用指定的Controller。到目前为止SpringMVC框架里的文件是没有动过的。
 然后需要看Controller里面，有Springer的注解，需要找Spring的配置文件applicationContext.xml。
 找到对应的Bean后，又发现Bean里面有MyBatis的mapper存在，也是通过文件映射的方式调用的。
 

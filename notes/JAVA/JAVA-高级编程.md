@@ -12,22 +12,54 @@
 
 ### JAVA - 反射
 <a name="javaReflect"></a>
-**有啥用**：使用反射方式，首先准备一个配置文件，就叫做 spring.txt 吧, 放在 src 目录下。 里面存放的是类的名称，和要调用的方法名。在测试类Test中，首先取出类名称和方法名，然后通过反射去调用这个方法。当需要从调用第一个业务方法，切换到调用第二个业务方法的时候，不需要修改一行代码，也不需要重新编译，只需要修改配置文件 spring.txt，再运行即可。
-这也是 Spring 框架的最基本的原理，只是它做的更丰富，安全，健壮。
+**有啥用**：使用反射方式，首先准备一个配置文件，就叫做 spring.txt 吧, 放在 src 目录下。 里面存放的是类的名称，和要调用的方法名。在测试类Test中，首先取出类名称和方法名，然后通过反射去调用这个方法。当需要从调用第一个业务方法，切换到调用第二个业务方法的时候，不需要修改一行代码，也不需要重新编译，只需要修改配置文件 spring.txt，再运行即可。这也是 Spring 框架的最基本的原理，只是它做的更丰富，安全，健壮。
 
-**反射的常见用法**；去有三类，一是 查看，如输入某个类的属性方法等信患；二是 装载 如装载指定的类到内存中；三是 调用，如通过输入参数调用指定的方法。
+**反射的常见用法**；有三类，一是 查看（Hero.class），某个类的属性方法等信息；二是 装载 如装载指定的类到内存中；三是 调用，如通过输入参数调用指定的方法。
 
 **获取类对象的三种方式**
 1. Class.forName（“Hero”） 最常用，通过字符串获取
-2. Hero.class  通过类来获取类，具体用在哪呢？
-3. new Hero().getClass() 通过实例获取该类，也还可以。
+2.  Hero.class 通过类来获取类
+3. new Hero().getClass() 通过实例获取该类
 Hero 是一个类，在一个JVM中，一种类，只会有一个类对象存在。所以以上三种方式取出来的类对象，都是一样的。反射其实就是获取类对象。反射指的是在运行时能够分析类的能力的程序。其中1，3会导致类的静态属性被初始化，而且只会执行一次，后面在调用不会初始化了，2不会。
 ```java
-/*
-知识点：getClass() ？
-SubClass 和 SuperClass 的 getClass() 都没有重写，他们都是调用Object的getClass，而Object的getClass作用是返回的是运行时的类的名字。这个运行时的类就是当前类，所以下面的代码并不是获取父类的名字，而是当前类的名字。
+/*问：你知不知道反射？或者你有没有用过反射？
+答：有，用的最多的应该就是JDBC装载数据库驱动的时候，通过Class.forName("com.mysql.jdbc.Driver");
 
+问：Class类有什么作用？你用过其中的什么方法？
+答：反射的实现基础是Class类，可以查看某个类的属性和方法。当一个类或接口被装入Java虚拟机时，变会产生一个与它相关联的java.lang.Class对象。
+通过Class类的forName方法，我们能得到一个指定类型的Class对象，通过newInstance方法，可以加载指定的类。
+
+问：如果我要看一个class文件中的属性和方法，该怎么看？
+上面一行，加上，可以通过Field类，得到类中的属性。通过Method类，调用类中的方法，通过Constructor类，得到类的构造函数。
 */
+
+
+import java.lang.reflect.Field;
+import java.util.Stack;
+class Student{
+	int age;
+	String name;
+	public Student() {
+		System.out.println("构造函数");
+	}
+}
+
+public class Main {
+    public static void main(String[] args){
+    	try {
+    		Class<?> clazz = Class.forName("Student");	
+    		Field[] fields = clazz.getDeclaredFields();//获取类的字段
+    		for(Field field : fields) 
+    			System.out.println(field.getName());
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
+}
+
+
+/*知识点：getClass() ？
+SubClass 和 SuperClass 的 getClass() 都没有重写，他们都是调用Object的getClass，而Object的getClass作用是返回的是运行时的类的名字。这个运行时的类就是当前类，所以下面的代码并不是获取父类的名字，而是当前类的名字。*/
 super.getClass().getName(); //当前类的名称
 super.getClass().getSuperclass(); //真正获取父类的名称的方法
 
@@ -269,9 +301,8 @@ public class SimpleThread{
     t.start();
 }
 
-/*
-常用方法：
-*/
+/*常用方法：
+通过调用Thread类的start方法来启动一个线程，这是此线程处于就绪状态，并没有运行。当得到cpu时间片后，开始执行run方法。*/
 t1.start(); //启动线程是start()方法，run()并不能启动一个新的线程
 Thread.sleep(1000); //线程阻塞 1 秒
 t1.join();//在主线程中加入该线程，一般是 main 嘛，当 t1 执行完后，才会继续执行主函数
@@ -282,11 +313,22 @@ t1.setDaemon(true); //如果一个进程只剩下守护线程，则该进程会�
 /*问：多线程问题
 多线程问题：sleep、wait、yield、join、volatile、并发、线程池、锁的实现
 
+问：调用后释放锁的只有wait+join。
+答：刚看到一个大佬写的，给大家参考一下，所谓的释放锁资源实际是通知对象内置的monitor对象进行释放，而只有所有对象都有内置的monitor对象才能实现任何对象的锁资源都可以释放。又因为所有类都继承自Object，所以wait(）就成了Object方法，也就是通过wait()来通知对象内置的monitor对象释放，而且事实上因为这涉及对硬件底层的操作，所以wait()方法是native方法，底层是用C写的。     其他都是Thread所有，所以其他3个是没有资格释放资源的    而join()有资格释放资源其实是通过调用wait()来实现的    
+
 Thread.sleep(100);
 作用：让当前正在运行的占用 cpu 的线程，阻塞 100 ms，其余线程自己竞争获取 cpu，如果被停止，会抛出 InterruptedException，需要的注意的是就算线程的睡眠时间到了，他也不是立即会被运行，只是从阻塞状态变为了就绪状态，是不会由阻塞状态直接变为运行状态的。
 
 this.wait()
 自动释放对象锁，挂起，等待this.notify()唤醒，进入就绪状态。注意 wait和notify 两个方法都属于Object类，不是Thread线程上的，生产者-消费者问题。
+
+问：ThreadLocal？
+1、ThreadLocal 存放的值是线程封闭，线程间互斥的，主要用于线程内共享一些数据，避免通过参数来传递。
+2、线程的角度看，每个线程都保持一个对其线程局部变量副本的隐式引用，只要线程是活动的并且ThreadLocal实例是可访问的；在线程消失之后，其线程实例的所有副本都会被垃圾回收。
+3、Thread 类中有一个Map，用于存储每一个线程的变量的副本。
+4、对于多线程资源共享的问题，同步机制采用了“以时间换空间”的方式，而ThreadLocal 采用了以“空间换时间”的方式。
+ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问(通过get或set方法访问)时能保证各个线程里的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程的上下文。  可以总结为一句话：ThreadLocal的作用是提供线程内的局部变量，这种变量在线程的生命周期内起作用，减少同一个线程内多个函数或者组件之间一些公共变量的传递的复杂度。  举个例子，我出门需要先坐公交再做地铁，这里的坐公交和坐地铁就好比是同一个线程内的两个函数，我就是一个线程，我要完成这两个函数都需要同一个东西：公交卡（北京公交和地铁都使用公交卡），那么我为了不向这两个函数都传递公交卡这个变量（相当于不是一直带着公交卡上路），我可以这么做：将公交卡事先交给一个机构，当我需要刷卡的时候再向这个机构要公交卡（当然每次拿的都是同一张公交卡）。这样就能达到只要是我(同一个线程)需要公交卡，何时何地都能向这个机构要的目的。  有人要说了：你可以将公交卡设置为全局变量啊，这样不是也能何时何地都能取公交卡吗？但是如果有很多个人（很多个线程）呢？大家可不能都使用同一张公交卡吧(我们假设公交卡是实名认证的)，这样不就乱套了嘛。现在明白了吧？这就是ThreadLocal设计的初衷：提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。
+
 
 **比较：sleep 方法 和 wait 方法**
 对于sleep()方法，我们首先要知道该方法是属于Thread类中的，而wait()方法，则是属于Object类中的。sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持着，当指定的时间到了又会自动恢复运行状态。
@@ -311,17 +353,28 @@ synchronized关键字不能继承，所以在定义接口方法时不能使用sy
 参考博客1：https://blog.csdn.net/u011277123/article/details/72235927
 参考博客2：https://blog.csdn.net/u012723673/article/details/80682208
 
-问：volatile关键字的作用？
-答：使得一个非原子操作变成原子操作，多线程访问中用 volatile 修饰 long和double 类型的变量。
-解释：一个典型的例子是在类中有一个 long 类型的成员变量。如果你知道该成员变量会被多个线程访问，如计数器、价格等，你最好是将其设置为 volatile。为什么？因为 Java 中读取 long 类型变量不是原子的，需要分成两步，如果一个线程正在修改该 long 变量的值，另一个线程可能只能看到该值的一半（前 32 位）。但是对一个 volatile 型的 long 或 double 变量的读写是原子。
+问：volatile 关键字的作用？
+答：1、使得一个非原子操作变成原子操作，多线程访问中用 volatile 修饰 long和double 类型的变量。
+2、volatile 关键字用在多线程同步中，可保证读取的可见性
+3、JVM 保证从主存加载到线程工作内存的值是最新的
+4、volatile 能禁止进行指令重排序
+
 
 问：volatile原理？
-volatile 是一种简单的同步的处理机制，被 volatile 修饰的变量遵循以下规则：
+出于运行速率的考虑，java编译器会把经常经常访问的变量放到缓存（严格讲应该是工作内存）中，读取变量则从缓存中读。但是在多线程编程中,内存中的值和缓存中的值可能会出现不一致。volatile用于限定变量只能从内存中读取，保证对所有线程而言，值都是一致的。但是volatile不能保证原子性，也就不能保证线程安全。
 变量的值在使用之前总会从主内存中再读取出来。
 对变量值的修改总会在完成之后写回到主内存中。
 
 问：Java 中能创建 volatile 数组吗？修饰一个数组能否保证内存可见性？
 能，Java 中可以创建 volatile 类型数组，不过只是一个指向数组的引用，而不是整个数组。如果改变引用指向的数组，将会受到 volatile 的保护，但是如果多个线程同时改变数组的元素，volatile 标示符就不能起到之前的保护作用了。
+
+问：synchronized关键字和volatile关键字比较？
+   volatile关键字是线程同步的轻量级实现，所以volatile性能肯定比synchronized关键字要好。但是volatile关键字只能用于变量而synchronized关键字可以修饰方法以及代码块。synchronized关键字在JavaSE1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化之后执行效率有了显著提升，实际开发中使用 synchronized 关键字的场景还是更多一些。          
+   多线程访问volatile关键字不会发生阻塞，而synchronized关键字可能会发生阻塞          
+   volatile关键字能保证数据的可见性，但不能保证数据的原子性。synchronized关键字两者都能保证。                  volatile关键字主要用于解决变量在多个线程之间的可见性，而 synchronized关键字解决的是多个线程之间访问资源的同步性。
+
+问：synchronized 关键字和 lock 关键字比较？d
+
 
 问：1、 HashMap和Hashtable的区别   
 2、StringBuffer和StringBuilder的区别   
@@ -330,6 +383,7 @@ volatile 是一种简单的同步的处理机制，被 volatile 修饰的变量�
 答：https://how2j.cn/k/thread/thread-thread-safe/703.html
 
 问：ConcurrentHashMap如何保证线程安全？
+
 
 
 */
@@ -479,6 +533,10 @@ JDK1.5，1.6，1.7，1.8，1.9，1.10，1.11的新特性整理
 <a name="javaGC"></a>
 
 ```java
+/*JDK中提供了三个ClassLoader，根据层级从高到低为：           
+Bootstrap ClassLoader，主要加载JVM自身工作需要的类。          
+Extension ClassLoader，主要加载%JAVA_HOME%\lib\ext目录下的库类。          
+Application ClassLoader，主要加载Classpath指定的库类，一般情况下这是程序中的默认类加载器，也是ClassLoader.getSystemClassLoader() 的返回值。（这里的Classpath默认指的是环境变量中配置的Classpath，但是可以在执行Java命令的时候使用-cp 参数来修改当前程序使用的Classpath）              JVM加载类的实现方式，我们称为 双亲委托模型：          如果一个类加载器收到了类加载的请求，他首先不会自己去尝试加载这个类，而是把这个请求委托给自己的父加载器，每一层的类加载器都是如此，因此所有的类加载请求最终都应该传送到顶层的Bootstrap ClassLoader中，只有当父加载器反馈自己无法完成加载请求时，子加载器才会尝试自己加载。            双亲委托模型的重要用途是为了解决类载入过程中的安全性问题。       假设有一个开发者自己编写了一个名为Java.lang.Object的类，想借此欺骗JVM。现在他要使用自定义ClassLoader来加载自己编写的java.lang.Object类。然而幸运的是，双亲委托模型不会让他成功。因为JVM会优先在Bootstrap ClassLoader的路径下找到java.lang.Object类，并载入它*/
 
 ```
 

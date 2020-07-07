@@ -10,14 +10,42 @@
 
 **二分查找**<a name="二分查找"></a>
 ```java
-/**
-*二分查找
-条件：只能对已经排序好的列表进行查找
+/**条件：只能对已经排序好的列表进行查找
 需求：对搜索时间要求为O(logn)一般都是二分查找。
-模板一：用于查找数组中的某个确定值，经典用法，考察一般。如果这个值不存在，则left会指向第一个比它大的值。
-这样就和下面一样了！
-模板二：有条件查找，如寻找第一个比5大的值，考察较多。
-模板三：有双重条件的查找。
+推荐使用模板一，只要进行简单的修改，即可满足多种情况。
+条件：left <= right
+结束时：left 指向第一个不满足 if 条件中的值，
+如if(array[mid] < target)：就是第一个大于等于target的值
+如if(array[mid] <= target)：就是第一个大于target的值
+
+问：在一个排序数组中寻找某个值，肯定存在这个值，如果不存在，则等同于下面查找第一个大于target的值！
+答：使用 binarySearchOne() 进行二分查找。
+
+问：在一个排序数组中寻找第一个大于 target 的值!
+答：1、存在第一个大于 target 的值，2、target 即为最大值。
+1.1、可以使用 binarySearchOne()，修改条件如下，最终left > right， 且 left 会指向第一个大于target的位置。
+if(array[mid] <= targer) 
+	left = mid + 1;
+else
+	right = mid - 1;
+1.2、使用 binarySearchTwo()，最终 left == right,且指向第一个大于target的位置。
+
+问：寻找第一个 大于等于 target的值！
+答：使用 binarySearchOne()，修改如下，最终 left == right,且 left 指向第一个大于等于target的位置
+if(array[mid] < targer) 
+	left = mid + 1;
+else
+	right = mid - 1;
+	
+答：使用 binarySearchTwo()，修改条件如下，如果有多个target，可以找到左边界。
+if(array[mid] < targer) 
+	left = mid + 1;
+else
+	right = mid;
+*/
+
+/*模板一：用于查找数组中的某个确定值，经典用法，考察一般。
+如果这个值不存在，则left会指向第一个比它大的值。！
 */
 public int binarySearchOne(int[] array, int target) {
 	int left = 0, right = array.length-1;
@@ -25,90 +53,32 @@ public int binarySearchOne(int[] array, int target) {
 		int mid = (left+right)/2;
 		if(array[mid] == target)
 			return mid;
-		if(array[mid] > target)
-			right = mid - 1;
+		if(array[mid] < target)
+            left = mid + 1;
 		else
-			left = mid + 1;
+		   right = mid - 1;
 	}
 	return -1;
 }
     
-//模板一：搜索旋转数组
-//排序好的数组某一部分旋转了，查找某个数。
-def search(nums, target):
-    start,end = 0,len(nums) - 1
-    while start <= end:
-        mid = (start + end) // 2
-        if nums[mid] == target:
-            return mid
-        if nums[mid] < nums[start]: # case [7 8 0 {1} 2 3 4 5]
-            if nums[mid] <= target <= nums[end] :
-                start = mid + 1
-            else:
-                end = mid - 1
-        else:# nums[mid] > nums[start] case [4 5 6 {7} 0 1 2]
-            if nums[start] <= target <= nums[mid]:
-                end = mid - 1
-            else:
-                start = mid + 1
-    return -1    
-    
-/**
-*模板二：查找第一个大于等于 target 值的坐标，或者查找最后一个比 target 小的值的坐标。
-其实上述两个问题的坐标是相邻的，但前者比后者的编码更方便处理一些，可以找前者-1得到后者
-*/
+/**模板二：查找第一个大于 target 值的坐标*/
 public int binarySearchTwo(int[] array, int left, int right,int target){
-//寻找第一个大于等于target的值，找不到返回 -1.
         while(left < right){
             int mid = (left+right)/2;
 //大于等于target要保留，因为可能就是这个坐标，小于则不可能。
-            if(array[mid] >= target)
-                right = mid;
+            if(array[mid] <= target)
+                left = mid + 1;
             else
-                left = mid+1;
+                right = mid;
         }
 //最后结束时有left==right，如果一定存在，则不需要以下语句，直接返回即可。
         if(array[left] >= target)
             return left;
-        return -1;
-
-//如果有多位目标值的情况。
-class Solution {
-    public int search(int[] nums, int target) {
-        return rightBound(nums, target) - leftBound(nums, target) + 1;
-    }
-
-    // 第一次出现的下标或者第一个比target大的下标
-    private int leftBound(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
-        while (left <= right) {
-            int mid = (left + right) >>> 1;
-            if (nums[mid] < target) {
-                left = mid + 1;
-            } else if (nums[mid] >= target) {
-                right = mid - 1;
-            }
-        }
-        return left;
-    }
-
-    // 最后一次出现的下标或者第一个比target小的下标
-    private int rightBound(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
-        while (left <= right) {
-            int mid = (left + right) >>> 1;
-            if (nums[mid] <= target) {
-                left = mid + 1;
-            } else if (nums[mid] > target) {
-                right = mid - 1;
-            }
-        }
-        return right;
-    }
-}
+        return -1;//如果target即是最大值，则返回-1；
 
 
-//查找左右边界，计算目标值的数量，可以为0。
+    
+//例题：查找左右边界，计算目标值的数量，使用了两次查找第一个最大值。
 class Solution {
     public int search(int[] nums, int target) {
         return binarySearch(nums, target + 0.5) - binarySearch(nums, target - 0.5);
@@ -125,50 +95,6 @@ class Solution {
             }
         }
         return left;
-    }
-}
-
-
-
-
-//Tencent2018秋招
-/*
-小Q的父母要出差N天，走之前给小Q留下了M块巧克力。小Q决定每天吃的巧克力数量不少于前一天吃的一半，但是他又不想在父母回来之前的某一天没有巧克力吃，请问他第一天最多能吃多少块巧克力，二分查找的变形。
-*/
-import java.util.Scanner;
-public class Main{
-    /*
-    统计第一天吃了s，后面严格克制自己只刚好满足要求，而不多吃。
-    如：14、7、4、2、1，但是我们可以吃，14、8、4、2、1
-    */
-    public static int mySum(int n, int s){
-        int total = 0;
-        for(int i=0; i<n; i++){
-            total += s;
-            s = (s+1)/2;
-        }
-        return total;
-    }
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int n = scan.nextInt();//父母出差的天数
-        int m = scan.nextInt();//输入巧克力的总数
-        int left=1, right=m;
-//二分查找，寻找第一天吃了 mid 就不够的情况（同第一个大于 5 的数）。
-        while(left < right){
-            int mid = (left+right)/2;//如果第一天吃一半
-//第一天吃了 mid 大于等于给定值（同大于等于 5）
-            if(mySum(n,mid) >= m){
-            	right = mid;
-            }else{
-                left = mid+1;
-            }
-        }
-//最后进行判断，如果是大于，那么肯定是第一次大于，否则就是等于或者小于。
-        if(mySum(n,left) > m)
-            System.out.println(left-1);
-        else
-        	System.out.println(left);
     }
 }
 ```
