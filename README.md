@@ -1,9 +1,6 @@
 | Java | Python3 | Go | C++ | 数据库| 算法 | 计算机网络  | 操作系统 | 前端 |智力题  |
 |:------:|:------:|:------:|:------:|:------:|:---------:|:------:|:------:|:------:|:------:|
-<<<<<<< HEAD
 | <a href="#Java"><img src="pics/java.png"></a> |  <a href="#Python3"><img src="pics/python.png"></a>  | <a href="#Go"><img src="pics/go.png"></a> | <a href="#C++"><img src="pics/C++.png"></a> | <a href="#数据库"><img src="pics/DataBase.png"></a> | <a href="#算法"><img src="pics/Algorithm.png"></a> | <a href="#计算机网络"><img src="pics/Internet.png"></a> | <a href="#操作系统"><img src="pics/System.png" ></a> | <a href="#前端"><img src="pics/Web.jpg"></a> | <a href="#智力题"><img src="pics/IQ.jpg"></a> |
-=======
->>>>>>> 9a3babdefe20429b5c5d7fb80442b039ab09b1d9
 
 ***
 **单击图片跳转到对应主题，Ctrl + Home 回到顶端，Ctrl + End 回到底端**
