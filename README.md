@@ -1,9 +1,11 @@
-| 算法 | 网络 | 操作系统 | 数据库 | Python3 | JAVA | Go | C++ |
-|------|------|-----------|---------|---------|-------|------|------|
-| <a href="#算法"><img src="/pics/Algorithm.png" align="center"></a> | <a href="#网络"><img src="/pics/Internet.png" align="center"></a> | <a href="#操作系统"><img src="/pics/System.png" align="center"></a> | <a href="#数据库"><img src="/pics/DataBase.png" align="center"></a> | <a href="#Python"><img src="/pics/python.png" align="center"></a> | <a href="#JAVA"><img src="/pics/java.png" align="center"></a> | <a href="#Go"><img src="/pics/go.png" align="center"></a> | <a href="#C++"><img src="/pics/C++.png"></a> |
-***
+| Java | Python3 | Go | C++ | 数据库| 算法 | 计算机网络  | 操作系统 | 前端 |智力题  |
+|:------:|:------:|:------:|:------:|:------:|:---------:|:------:|:------:|:------:|:------:|
+| <a href="#Java"><img src="pics/Java.png"></a> |  <a href="#Python3"><img src="pics/Python.png"></a>  | <a href="#Go"><img src="pics/Go.png"></a> | <a href="#C++"><img src="pics/C++.png"></a> | <a href="#数据库"><img src="pics/DataBase.png"></a> | <a href="#算法"><img src="pics/Algorithm.png"></a> | <a href="#计算机网络"><img src="pics/Internet.png"></a> | <a href="#操作系统"><img src="pics/System.png" align="center"></a> | <a href="#前端"><img src="pics/Web.jpg" align="center"></a> | <a href="#智力题"><img src="pics/IQ.jpg" align="center"></a> |
 
-<a name="JAVA"></a>
+***
+**单击图片跳转到对应主题，Ctrl + Home 回到顶端，Ctrl + End 回到底端**
+<a name="Java"></a>
+
 ### Java
 * [基础语法](notes/JAVA/JAVA-基础语法.md)
 * [高级编程](notes/JAVA/JAVA-高级编程.md)
@@ -13,7 +15,7 @@
 * [面试题合集](notes/JAVA/JAVA-面试题合集.md)
 ***
 
-<a name="Python"></a>
+<a name="Python3"></a>
 ### Python3
 * [基础语法](notes/Python/Python-基础语法.md)
 * [常用数据类型 列表、字典、集合](notes/Python/Python-列表-字典-集合.md)
@@ -29,18 +31,11 @@
 ****
 
 <a name="C++"></a>
-
 ### C++
 * [基础语法](notes/CPP/CPP-基础语法.md)
 * [面向对象](notes/CPP/CPP-面向对象.md)
 * [STL](notes/CPP/CPP-STL.md)
 * 设计模式
-****
-
-<a name="网络"></a><a name="操作系统"></a>
-### 计算机网络+操作系统
-* [计算机网络基础练习题](/notes/计算机网络/计算机网络目录.md)
-* [操作系统](notes/操作系统.md)
 ****
 
 <a name="数据库"></a>
@@ -59,9 +54,21 @@
 * Go 版本
 ****
 
-### 其他
-* [智力题](notes/牛客网-智力题.md)
+<a name="计算机网络"></a><a name="操作系统"></a>
+### 计算机网络+操作系统
+* [计算机网络基础练习题](/notes/计算机网络/计算机网络目录.md)
+* [操作系统](notes/操作系统.md)
+****
+
+<a name="前端"></a>
+### 前端
 * [前端三剑客](notes/前端三剑客.md)
+***
+
+<a name="智力题"></a>
+
+### 智力题
+* [智力题](notes/牛客网-智力题.md)
 ***
 
 ### 排版
