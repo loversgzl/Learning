@@ -58,7 +58,7 @@ create table `students`(
 ALTER TABLE `student` RENAME TO `students`; #修改表名
 ALTER TABLE `students` add column `age` int not null after `sex`; #为已有表格增加一列
 ALTER TABLE students DROP column nickname; #删除表格格的某一列
-
+ALTER TABLE students CHANGE type_id type VARCHAR(36); # 修改某一列的名称
 ```
 
 ### 在一个表中查询
@@ -218,7 +218,7 @@ select sex from table2
 ```
 
 * **关键字：join **  [参考博客](https://www.cnblogs.com/fudashi/p/7491039.html)
-即表格的交并补操作，有左连接，右连接，内部连接，外部连接，注意：解析连接的表是从右往左进行
+即表格的交并补操作，有左连接，右连接，内部连接，外部连接，注意：**解析连接的表是从右往左进行**
 左连接（left join）：求两个表的交集外加左表剩下的数据；
 右连接（right join）：求两个表的交集外加右表剩下的数据；
 内部连接（inner join）：求两个表的交集；

@@ -21,7 +21,6 @@
 * [常用数据类型 列表、字典、集合](notes/Python/Python-列表-字典-集合.md)
 * [常用函数](notes/Python/Python-常用函数.md)
 * [面试基础知识](notes/Python/Python-面试问题.md)
-* 设计模式
 ***
 
 <a name="Go"></a>
@@ -35,7 +34,6 @@
 * [基础语法](notes/CPP/CPP-基础语法.md)
 * [面向对象](notes/CPP/CPP-面向对象.md)
 * [STL](notes/CPP/CPP-STL.md)
-* 设计模式
 ****
 
 <a name="数据库"></a>
