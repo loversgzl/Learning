@@ -69,7 +69,7 @@ watch：当一条数据影响多条数据的时候就需要用 watch，栗子：
 * **答**：因为 JavaScript 的特性所导致，在 component 中，data 必须以函数的形式存在，不可以是对象。组建中的 data 写成一个函数，数据以函数返回值的形式定义，这样每次复用组件的时候，都会返回一份新的 data，相当于每个组件实例都有自己私有的数据空间，它们只负责各自维护的数据，不会造成混乱。而单纯的写成对象形式，就是所有的组件实例共用了一个 data，这样改一个全都改了。
 ****
 * **问：Vue常用的修饰符？**  
-* **答**：.stop：等同于JavaScript中的event.stopPropagation()，防止事件冒泡；  
+* **答**：.stop：等同于 JavaScript 中的 event.stopPropagation()，防止事件冒泡；  
 .prevent：等同于JavaScript中的event.preventDefault()，防止执行预设的行为（如果事件可取消，则取消该事件，而不停止事件的进一步传播）；  
 .capture：与事件冒泡的方向相反，事件捕获由外到内；  
 .self：只会触发自己范围内的事件，不包含子元素；  
@@ -97,15 +97,15 @@ watch：当一条数据影响多条数据的时候就需要用 watch，栗子：
 
 ### v-事件
 * **问：v-on 可以监听多个方法吗？**  
-* **答**：可以，栗子：<input type="text" v-on="{ input:onInput,focus:onFocus,blur:onBlur, }">。
+* **答**：可以，栗子：`<input type="text" v-on="{ input:onInput,focus:onFocus,blur:onBlur, }">`。
 ****
 * **问：v-if 和 v-for 的优先级？**  
-* **答**：当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级，这意味着 v-if 将分别重复运行于每个 v-for 循环中。所以，不推荐 v-if 和 v-for 同时使用。  
+* **答**：当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级，这意味着 v-if 将分别重复运行于每个 v-for 循环中。所以，不推荐 v-if 和 v-for 同时使用；  
 如果 v-if 和 v-for 一起用的话，Vue 中的的会自动提示 v-if 应该放到外层去。
 ****
 * **问：v-show 和 v-if 指令的共同点和不同点？**  
-* **答**：v-show：切换元素的显示与隐藏，为true为显示，可以绑定表达式 v-show="age > 18"；原理是修改元素的 display。  
-v-if：切换元素的显示与隐藏，操作整个元素，而不只是里面的属性。  
+* **答**：v-show：切换元素的显示与隐藏，为true为显示，可以绑定表达式 v-show="age > 18"；原理是修改元素的 display；  
+v-if：切换元素的显示与隐藏，操作整个元素，而不只是里面的属性；  
 （区别：v-if 直接操作 dom 树，删除元素，如果是频繁显示与隐藏，建议使用 v-show）
 
 <a name="Vue-cli"></a>
@@ -115,12 +115,12 @@ v-if：切换元素的显示与隐藏，操作整个元素，而不只是里面�
 * **答**：assets 文件夹是放静态资源；components 是放组件；router 是定义路由相关的配置；app.Vue 是一个应用主组件；main.js 是入口文件。
 ****
 * **问：assets 和 static 的区别？**  
-* **答**：相同点：assets 和 static 两个都是存放静态资源文件。项目中所需要的资源文件图片，字体图标，样式文件等都可以放在这两个文件下。  
-不相同点：assets 中存放的静态资源文件在项目打包时，也就是运行 npm run build 时会将 assets中放置的静态资源文件进行打包上传，所谓打包简单点可以理解为压缩体积，代码格式化。而压缩后的静态资源文件最终也都会放置在 static 文件中跟着 index.html 一同上传至服务器。static 中放置的静态资源文件就不会要走打包压缩格式化等流程，而是直接进入打包好的目录，直接上传至服务器。因为避免了压缩直接进行上传，在打包时会提高一定的效率，但是 static 中的资源文件由于没有进行压缩等操作，所以文件的体积也就相对于 assets 中打包后的文件提交较大点。在服务器中就会占据更大的空间。  
+* **答**：相同点：assets 和 static 两个都是存放静态资源文件。项目中所需要的资源文件图片，字体图标，样式文件等都可以放在这两个文件下；  
+不相同点：assets 中存放的静态资源文件在项目打包时，也就是运行 npm run build 时会将 assets中放置的静态资源文件进行打包上传，所谓打包简单点可以理解为压缩体积，代码格式化。而压缩后的静态资源文件最终也都会放置在 static 文件中跟着 index.html 一同上传至服务器。static 中放置的静态资源文件就不会要走打包压缩格式化等流程，而是直接进入打包好的目录，直接上传至服务器。因为避免了压缩直接进行上传，在打包时会提高一定的效率，但是 static 中的资源文件由于没有进行压缩等操作，所以文件的体积也就相对于 assets 中打包后的文件提交较大点。在服务器中就会占据更大的空间；  
 建议：将项目中 template 需要的样式文件 js 文件等都可以放置在 assets 中，走打包这一流程。减少体积。而项目中引入的第三方的资源文件如 iconfoont.css 等文件可以放置在 static 中，因为这些引入的第三方文件已经经过处理，我们不再需要处理，直接上传。
 ****
 * **问：Vue-loader 是什么？使用它的用途有哪些？**  
-* **答**：Vue 文件的一个加载器，将 template/js/style 转换成 js 模块。
+* **答**：Vue 文件的一个加载器，将 template/js/style 转换成 js 模块；  
 用途：js 可以写 es6、style 样式可以 scss 或 less、template 可以加 jade 等
 ****
 * **问：你们Vue项目是打包了一个js文件，一个css文件，还是有多个文件？**  
@@ -145,28 +145,28 @@ axios 中的发送字段的参数是 data 跟 params 两个，两者的区别在
 * **答**：每个 Vue 实例在被创建时都要经过一系列的初始化过程——例如，需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等。同时在这个过程中也会运行一些叫做 生命周期钩子 的函数，这给了用户在不同阶段添加自己代码的机会。（ps：生命周期钩子就是生命周期函数）例如，如果要通过某些插件操作 DOM 节点，如想在页面渲染完后弹出广告窗， 那我们最早可在 mounted 中进行。
 ****
 * **问：第一次页面加载会触发哪几个钩子？**  
-* **答**：beforeCreated， created， beforeMount， mounted
+* **答**：beforeCreated， created， beforeMount， mounted。
 ****
 * **问：简述每个周期具体适合哪些场景？**  
-* **答**：**beforeCreate**：在 new 一个 Vue 实例后，只有一些默认的生命周期钩子和默认事件，其他的东西都还没创建。在 beforeCreate 生命周期执行的时候，data 和 methods 中的数据都还没有初始化。不能在这个阶段使用 data 中的数据和 methods 中的方法。  
-**created**：data 和 methods 都已经被初始化好了，如果要调用 methods 中的方法，或者操作 data 中的数据，最早可以在这个阶段中操作。  
-**beforeMount**：执行到这个钩子的时候，在内存中已经编译好了模板了，但是还没有挂载到页面中，此时，页面还是旧的。    
-**mounted**：执行到这个钩子的时候，就表示 Vue 实例已经初始化完成了。此时组件脱离了创建阶段，进入到了运行阶段。 如果我们想要通过插件操作页面上的 DOM 节点，最早可以在和这个阶段中进行。  
-**beforeUpdate**： 当执行这个钩子时，页面中显示的数据还是旧的，data 中的数据是更新后的， 页面还没有和最新的数据保持同步。  
-**updated**：页面显示的数据和 data 中的数据已经保持同步了，都是最新的。  
-**beforeDestory**：Vue 实例从运行阶段进入到了销毁阶段，这个时候上所有的 data 和 methods ， 指令， 过滤器 ……都是处于可用状态。还没有真正被销毁。  
-**destroyed**： 这个时候上所有的 data 和 methods ， 指令， 过滤器 ……都是处于不可用状态。组件已经被销毁了。
+* **答**：**beforeCreate**：在 new 一个 Vue 实例后，只有一些默认的生命周期钩子和默认事件，其他的东西都还没创建。在 beforeCreate 生命周期执行的时候，data 和 methods 中的数据都还没有初始化。不能在这个阶段使用 data 中的数据和 methods 中的方法；  
+**created**：data 和 methods 都已经被初始化好了，如果要调用 methods 中的方法，或者操作 data 中的数据，最早可以在这个阶段中操作；  
+**beforeMount**：执行到这个钩子的时候，在内存中已经编译好了模板了，但是还没有挂载到页面中，此时，页面还是旧的；    
+**mounted**：执行到这个钩子的时候，就表示 Vue 实例已经初始化完成了。此时组件脱离了创建阶段，进入到了运行阶段。 如果我们想要通过插件操作页面上的 DOM 节点，最早可以在和这个阶段中进行；  
+**beforeUpdate**： 当执行这个钩子时，页面中显示的数据还是旧的，data 中的数据是更新后的， 页面还没有和最新的数据保持同步；  
+**updated**：页面显示的数据和 data 中的数据已经保持同步了，都是最新的；  
+**beforeDestory**：Vue 实例从运行阶段进入到了销毁阶段，这个时候上所有的 data 和 methods ， 指令， 过滤器 都是处于可用状态。还没有真正被销毁；  
+**destroyed**： 这个时候上所有的 data 和 methods ， 指令， 过滤器 都是处于不可用状态。组件已经被销毁了。
 ****
 * **问：created 和 mounted 的区别？**  
-* **答**：created：在模板渲染成 html 前调用，即通常初始化某些属性值，然后再渲染成视图。
+* **答**：created：在模板渲染成 html 前调用，即通常初始化某些属性值，然后再渲染成视图；
 mounted：在模板渲染成 html 后调用，通常是初始化页面完成后，再对 html 的 DOM 节点进行一些需要的操作。
 ****
 * **问：Vue 获取数据在哪个周期函数？**  
-* **答**：一般 created/beforeMount/mounted 皆可.比如如果你要操作 DOM , 那肯定 mounted 时候才能操作.
+* **答**：一般 created/beforeMount/mounted 皆可.比如如果你要操作 DOM , 那肯定 mounted 时候才能操作。
 ****
 * **问：请详细说下你对 Vue 生命周期的理解？**  
-* **答**：总共分为 8 个阶段创建前/后，载入前/后，更新前/后，销毁前/后。
-**创建前/后**： 在 beforeCreate 阶段，Vue 实例的挂载元素 $el 和 **数据对象** data 都为 undefined，还未初始化。在 created 阶段，Vue 实例的数据对象 data 有了，$el 还没有。  
-**载入前/后**：在 beforeMount 阶段，Vue 实例的 $el 和 data 都初始化了，但还是挂载之前为虚拟的DOM 节点，data.message 还未替换。在mounted阶段，Vue 实例挂载完成，data.message 成功渲染。  
-**更新前/后**：当 data 变化时，会触发 beforeUpdate 和 updated 方法。  
+* **答**：总共分为 8 个阶段创建前/后，载入前/后，更新前/后，销毁前/后：
+**创建前/后**： 在 beforeCreate 阶段，Vue 实例的挂载元素 $el 和 **数据对象** data 都为 undefined，还未初始化。在 created 阶段，Vue 实例的数据对象 data 有了，$el 还没有；  
+**载入前/后**：在 beforeMount 阶段，Vue 实例的 $el 和 data 都初始化了，但还是挂载之前为虚拟的DOM 节点，data.message 还未替换。在mounted阶段，Vue 实例挂载完成，data.message 成功渲染；  
+**更新前/后**：当 data 变化时，会触发 beforeUpdate 和 updated 方法；  
 **销毁前/后**：在执行 destroy 方法后，对 data 的改变不会再触发周期函数，说明此时 Vue 实例已经解除了事件监听以及和 DOM 的绑定，但是 DOM 结构依然存在。
