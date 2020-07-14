@@ -102,8 +102,12 @@ v-if 和 v-for 的优先级
 如果 v-if 和 v-for 一起用的话，Vue 中的的会自动提示 v-if 应该放到外层去。
 
 **v-show 和 v-if 指令的共同点和不同点？**
+v-show：切换元素的显示与隐藏，为true为显示，可以绑定表达式 v-show="age > 18"；原理是修改元素的 display。
+v-if：切换元素的显示与隐藏，操作整个元素，而不只是里面的属性。
+（区别：v-if 直接操作 dom 树，删除元素，如果是频繁显示与隐藏，建议使用 v-show）
 
 <a name="Vue-cli"></a>
+
 # Vue-cli
 请说出 Vue-cli 项目中 src 目录每个文件夹和文件的用法？
 答：assets 文件夹是放静态资源；components 是放组件；router 是定义路由相关的配置；app.Vue 是一个应用主组件；main.js 是入口文件。

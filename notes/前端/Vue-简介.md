@@ -4,7 +4,6 @@
 3、Vue 的目标是通过尽可能简单的 API 实现响应的数据绑定和组合的视图组件。  
 4、Vue 学习起来非常简单，本教程基于 Vue 2.1.8 版本测试。
 
-****
 
 # 学习资料
 [菜鸟教程](https://www.runoob.com/vue2/vue-tutorial.html)  
