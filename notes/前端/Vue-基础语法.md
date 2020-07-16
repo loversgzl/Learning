@@ -93,7 +93,7 @@ created 实例出现在内存中， mounted 实例出现在页面中， updated 
 * **问：如何传递 整数或者 boolean？**
 * **答**：初学者常犯的一个错误是使用字面量语法传递数值，`<comp some-prop="1"></comp>`，因为它是一个字面 prop ，它的值以字符串 "1" 而不是以实际的数字传下去。如果想传递一个实际的 JavaScript 数字，需要使用 v-bind ，从而让它的值被当作 JavaScript 表达式计算：`<comp v-bind:some-prop="1"></comp>`
 ****
-* **问：（let，var，const） me =  this 对作用域的影响 ？ **  
+* **问：（let，var，const） me =  this 对作用域的影响 ？**  
 不同作用域， this 所指代的对象不同。this 对象是在运行时基于函数的执行环境绑定的。  
 在全局函数中（匿名函数具有全局性）：this 等于 window  
 当函数被作为某个对象调用时：this 等于那个对象  
