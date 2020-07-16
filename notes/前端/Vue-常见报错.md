@@ -4,7 +4,7 @@
 
 ****
 **'报错：webpack-dev-server' 不是内部或外部命令，也不是可运行的程序 或批处理文件。**  
-试错一：先不删除 node_modules，直接 cnpm install，这样更快，看看是否可行，不行再试试下一条。
+试错一：先不删除 node_modules，直接 cnpm install，这样更快，看看是否可行，不行再试试下一条。  
 试错二：1、删除根目录下的 node_modules  
 2、cnpm install 重新安装  
 3、直接运行，简单粗暴  
@@ -29,3 +29,9 @@
 **报错：Vue 中清空 Form 表单的 resetFields 方法不起作用？**  
 答：如果要使用此方法，那么表单中的所有 item 都要加 prop 属性，该方法会根据 prop 属性中的值找到对应的 formdata，然后清除。（注意：如果使用了 vuex，则必须先清空 vuex，此方法无效）
 
+****
+**报错：Error in beforeDestroy hook: “Error: [ElementForm]unpected width “found in**
+[博客](https://www.cnblogs.com/chendada/p/12570825.html)
+原因：当组件中存在 v-show 时，并且 el-form 中 label-Width 设为 auto 时，就会获取不到 label 的宽度。正常单页面操作可能不会出现这个问题，由于我是运用在 tabs 页中页面刷新时出现了这个问题（即通过 tabs 页达到多页面应用）两个解决方案。
+一、上层框架组件 调用我的模块时 使用了 v-show，可以改为 v-if。
+二、label-Width 设为固定
