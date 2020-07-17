@@ -278,21 +278,26 @@ window.eventBus = new Vue();
 //disRescueTeam Controller下的总目录，后端根路径
 @RequestMapping("/disRescueTeam")
 
-//前端：无参数调用方法
+//前端：查找
+me.$ajax.get("disRescueTeam/listTeamType").then(res => {});
 //后端：@GetMapping(value={"/listTeamType"})
-let url = 'disRescueTeam/listTeamType';
-me.$ajax.get(url).then(res => {});
 
-//前端：新增某个用户，有参数列表
-//后端：@PostMapping("/save")
+
+//前端：新增
 me.$ajax.post("userManage/save", me.formData).then(res => {});
-
+//后端：@PostMapping("/save")
 
 //前端：删除某个用户，有参数
+ me.$ajax.delete('disRescueTeam/' + data.id).then(res => {});
 //后端：@DeleteMapping("/{id}")
-  me.$ajax.delete('disRescueTeam/' + data.id).then(res => {});
+
+//前端：修改某个用户
+me.$ajax.put("disMaterialCategorys/updateCategory", me.formData).then(res => {});
+//后端：@PutMapping(value = {"/updateCategory"})
 
 ```
+* **问： put 和 Post 有什么区别？**
+* **答**：
 
 <a name="指令"></a>
 
