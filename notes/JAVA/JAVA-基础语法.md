@@ -12,26 +12,16 @@
 ****
 ## 简介
 <a name="简介" />
-由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。  
-
-它既有能开发桌面应用的 Java SE（Java Platform，Standard Edition）  
-
-也有开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
-
-还有 Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）  
-
-[JAVA SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
-
-[JAVA 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
-
-**知名应用**：我的世界、淘宝网、Android 操作系统。  
-
+**公司**：由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。  
+**应用**：开发桌面应用的 Java SE（Java Platform，Standard Edition）  
+开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
+Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）  
+[Java SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
+**知名作品**：我的世界、淘宝网、Android 操作系统。  
 **Java 容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如Tomcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到整个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。  
-
 **JDK**：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  
-
+[Java 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
 **JAR**： Java 类库的 class 文件。  
-
 [JDK 和 JRE 的区别](https://blog.csdn.net/shaochenshuo/article/details/78507132)
 
 ****
