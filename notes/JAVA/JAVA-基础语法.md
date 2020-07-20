@@ -10,32 +10,31 @@
 * <a href="#异常">异常和调试</a>
 
 ****
-### 简介
+## 简介
 <a name="简介" />
-由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。
-它既有能开发桌面应用的 Java SE（Java Platform，Standard Edition）
-也有开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）
-还有 Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）
-[JAVA SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)
-[JAVA 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)
+由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。  
+它既有能开发桌面应用的 Java SE（Java Platform，Standard Edition）  
+也有开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
+还有 Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）  
+[JAVA SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
+[JAVA 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
 
-**知名应用**：我的世界、淘宝网、Android 操作系统。
-**Java容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如omcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到整个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。
-**JDK**：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。
-**JAR**： java 类库的 class 文件。
+**知名应用**：我的世界、淘宝网、Android 操作系统。  
+**Java 容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如Tomcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到整个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。  
+**JDK**：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  
+**JAR**： Java 类库的 class 文件。  
 [JDK 和 JRE 的区别](https://blog.csdn.net/shaochenshuo/article/details/78507132)
 
 ****
 
-### 基础知识
+## 基础知识
 <a name="基础知识"/>
-**第一个 Java 程序**
+### 第一个 Java 程序
 
 ```java
 package test; 
 /*如果有包需要在第一行注明，注意：导包只可以导当前层，如果里面有包，则包中的类不会导入。
-如：import java.*; 和 import java.util.*; 第一个不可能把所有的包中类全导入。
-*/
+  如：import java.*; 和 import java.util.*; 第一个不可能把所有的包中类全导入。*/
 import java.util.Scanner; //引入 JAVA 输入包
 public class test {
     public static void main(String args[]) {//所有的 Java 程序主方法入口
@@ -44,40 +43,41 @@ public class test {
     }
 }
 /*1.创建源文件 .java
-2.javac 将 .java 源代码转换为 JVM 能够识别的字节码 .class
-3.通过 JVM 执行 .class 文件
-编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc */
-
-/*F3 :可以查看某个函数的源码
-放在某个函数上，F2 可以查看具体的使用方法*/
+  2.javac 将 .java 源代码转换为 JVM 能够识别的字节码 .class
+  3.通过 JVM 执行 .class 文件
+  编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc 
+  F3 :可以查看某个函数的源码
+  放在某个函数上，F2 可以查看具体的使用方法*/
 
 ```
 
-**命名**
-**类名**：驼峰命名法，所有单词首字母大写
-**方法名**：第一个单词小写，其余单词首字母大写
-**源文件名**：源文件名必须和类名相同，文件名的后缀为.java。（如果文件名和类名不相同则会导致编译错误）。
-**关键字与保留字**：Java 保留字是指现在Java版本尚未使用，但以后版本可能会作为关键字使用。所以注意false、true、null等都是保留字。
-**Java标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。
-
-**问：switch(x)语句中，x可以是哪些类型？**
-答：包括：byte/short/int/char、enum枚举、java7后开始支持String、
-注意事项：1、case 语句中的值的数据类型必须与变量的数据类型相同.
-2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了break或者整体结束为止。
-3、多个case后面的数值不可以重复。
-4、注意：这里的匹配相当于映射，而不是遍历的查找，因此，case 和 deault 语句顺序无所谓，当匹配后，无break语句，则会从当前位置往后执行。
+### 命名
+**类名**：UpperCamelCase  
+**方法名**：lowerCamelCase  
+**源文件名**：源文件名必须和类名相同，文件名的后缀为 .java。（如果文件名和类名不相同则会导致编译错误）。  
+**关键字与保留字**：Java 保留字是指现在 Java 版本尚未使用，但以后版本可能会作为关键字使用。所以注意 false、true、null 等都是保留字。  
+**Java标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。  
+****
+**问：switch(x) 语句中，x 可以是哪些类型？**  
+**答**：包括：byte/short/int/char、enum枚举、Java7 后开始支持 String；  
+**注意事项**  
+1、case 语句中的值的数据类型必须与变量的数据类型相同；  
+2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了 break 或者整体结束为止；  
+3、多个 case 后面的数值不可以重复；  
+4、这里的匹配相当于映射，而不是遍历的查找，因此，case 和 deault 语句顺序无所谓，当匹配后，无 break 语句，则会从当前位置往后执行；  
 
 ```java
-//return 比 break 效果更强，直接退出。
+// return 比 break 效果更强，直接退出。
 switch(1) {
     case 1: System.out.println(1);return;
     case 2: System.out.println(2);return;
     case 3: System.out.println(3);return;
     case 4: System.out.println(4);return;
-    default:System.out.println("default");return; //这一句放在第一行也是可以的。
+    // default 语句放在第一行也是可以的。
+    default:System.out.println("default");return; 
 }
 
-//逻辑运算符
+// 逻辑运算符
 &：不管&的左边是true还是false，右边都会进行运算 
 &&： 只要左边是false，右边就不会进行运算 
 一半情况下都会选择&&，因为这样可以提高效率，也可以进行异常处理，当右边产生异常的时候，同样可以跳过。

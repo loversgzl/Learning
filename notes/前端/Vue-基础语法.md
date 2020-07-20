@@ -282,7 +282,6 @@ window.eventBus = new Vue();
 me.$ajax.get("disRescueTeam/listTeamType").then(res => {});
 //后端：@GetMapping(value={"/listTeamType"})
 
-
 //前端：新增
 me.$ajax.post("userManage/save", me.formData).then(res => {});
 //后端：@PostMapping("/save")
