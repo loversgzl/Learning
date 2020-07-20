@@ -11,7 +11,7 @@
 
 ****
 ## 简介
-<a name="简介" />
+<a name="简介"></a>
 **公司**：由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。  
 **应用**：开发桌面应用的 Java SE（Java Platform，Standard Edition）  
 开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
@@ -27,7 +27,8 @@ Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edi
 ****
 
 ## 基础知识
-<a name="基础知识"/>
+<a name="基础知识"></a>
+
 ### 第一个 Java 程序
 
 ```java
@@ -112,7 +113,7 @@ System.out.printf(); //C 格式输出
 ****
 
 ### 集合框架
-<a name="集合框架"/>
+<a name="集合框架"></a>
 ![集合框架](../../pics/集合框架.jpg)
 
 由图可见，集合框架主要包括两种类型的容器，以Collection为基类的线性表、以Map为基类的键值对类，前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。List 具体实现类有 Vector、ArrayList、LinkedList；Set具体实现的类有SortedSet、TreeSet、HashSet、LinkedHashSet；Map的具体实现类有：HashMap、HashTable、LinkedHashMap。
@@ -377,7 +378,7 @@ PriorityQueue是一个无界队列，不允许null值，入队和出队的时间
 ****
 
 ### 字符串
-<a name="字符串"/>
+<a name="字符串"></a>
 问：字符串拼接，StringBuffer，StringBuilder，concat 和 + 的区别。
 答：[参考博客](https://www.cnblogs.com/lojun/articles/9664794.html)
 
@@ -514,7 +515,7 @@ public static void main(String[] args) {
 ****
 
 ### Java常用内置类
-<a name="Java常用内置类"/>
+<a name="Java常用内置类"></a>
 **Math、Number、Character、Random、StringBuilder、StringBuffer**
 
 **Number类**
@@ -748,7 +749,7 @@ public class Main {
 
 
 ### Java常用包
-<a name="Java常用包"/>
+<a name="Java常用包"></a>
 
 ```java
 /*
