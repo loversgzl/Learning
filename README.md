@@ -1,6 +1,6 @@
-| Java | Python3 | Go | C++ | 数据库| 算法 | 计算机网络  | 操作系统 | 前端 |智力题  |
-|:------:|:------:|:------:|:------:|:------:|:---------:|:------:|:------:|:------:|:------:|
-| <a href="#Java"><img src="pics/java.png"></a> |  <a href="#Python3"><img src="pics/python.png"></a>  | <a href="#Go"><img src="pics/go.png"></a> | <a href="#C++"><img src="pics/C++.png"></a> | <a href="#数据库"><img src="pics/DataBase.png"></a> | <a href="#算法"><img src="pics/Algorithm.png"></a> | <a href="#计算机网络"><img src="pics/Internet.png"></a> | <a href="#操作系统"><img src="pics/System.png" ></a> | <a href="#前端"><img src="pics/Web.jpg"></a> | <a href="#智力题"><img src="pics/IQ.jpg"></a> |
+| Java | Python3 | Go | C++ | 数据库 | 计算机网络  | 操作系统 |智力题  |
+|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+| <a href="#Java"><img src="pics/java.png"></a> |  <a href="#Python3"><img src="pics/python.png"></a>  | <a href="#Go"><img src="pics/go.png"></a> | <a href="#C++"><img src="pics/C++.png"></a> | <a href="#数据库"><img src="pics/DataBase.png"></a> | <a href="#计算机网络"><img src="pics/Internet.png"></a> | <a href="#操作系统"><img src="pics/System.png" ></a> | <a href="#智力题"><img src="pics/IQ.jpg"></a> |
 
 ***
 **单击图片跳转到对应主题，Ctrl + Home 回到顶端，Ctrl + End 回到底端**
@@ -42,28 +42,11 @@
 * [MySQL-练习题](notes/数据库/数据库-MySQL-练习题.md)
 ****
 
-<a name="算法"></a>
-### 算法
-参考Leetcode、剑指offer，本节不单独将数据结构作为一章，会显得内容枯燥，不易理解，可直接参照各个栈、队列、堆、树等章节的算法，结合例题和概念，更易理解和掌握。
-
-* [Python3 版本](notes/Python/Python-算法目录.md)
-* JAVA 版本
-* CPP 版本
-* Go 版本
-****
-
 <a name="计算机网络"></a><a name="操作系统"></a>
+
 ### 计算机网络+操作系统
 * [计算机网络基础练习题](/notes/计算机网络/计算机网络目录.md)
 * [操作系统](notes/操作系统.md)
-****
-
-<a name="前端"></a>
-
-### 前端
-* [前端发展的三个阶段](notes/前端/前端发展的三个阶段.md)
-* [前端主流技术](notes/前端/前端主流技术.md)
-* [Vue-框架](notes/前端/Vue-目录.md)
 ****
 
 <a name="智力题"></a>
