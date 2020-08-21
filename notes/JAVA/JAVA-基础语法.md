@@ -35,9 +35,10 @@ Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edi
 package test; 
 /*如果有包需要在第一行注明，注意：导包只可以导当前层，如果里面有包，则包中的类不会导入。
   如：import java.*; 和 import java.util.*; 第一个不可能把所有的包中类全导入。*/
-import java.util.Scanner; //引入 JAVA 输入包
+import java.util.Scanner; //引入 Java Scanner包
 public class test {
-    public static void main(String args[]) {//所有的 Java 程序主方法入口
+    // Java 程序启动函数
+    public static void main(String args[]) {
     	String name = "tom";
     	System.out.println(name);
     }
@@ -46,17 +47,18 @@ public class test {
   2.javac 将 .java 源代码转换为 JVM 能够识别的字节码 .class
   3.通过 JVM 执行 .class 文件
   编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc 
-  F3 :可以查看某个函数的源码
-  放在某个函数上，F2 可以查看具体的使用方法*/
+  F3 ：可以查看某个函数的源码
+  F2 ：可以查看具体的使用方法*/
 
 ```
 
 ### 命名
-**类名**：UpperCamelCase  
-**方法名**：lowerCamelCase  
+**类名**：UpperCamelCase，首字母全部大写  
+**方法名**：lowerCamelCase，第一个首字母小写  
 **源文件名**：源文件名必须和类名相同，文件名的后缀为 .java。（如果文件名和类名不相同则会导致编译错误）。  
 **关键字与保留字**：Java 保留字是指现在 Java 版本尚未使用，但以后版本可能会作为关键字使用。所以注意 false、true、null 等都是保留字。  
 **Java标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。  
+
 ****
 **问：switch(x) 语句中，x 可以是哪些类型？**  
 **答**：包括：byte/short/int/char、enum枚举、Java7 后开始支持 String；  
@@ -78,9 +80,9 @@ switch(1) {
 }
 
 // 逻辑运算符
-&：不管&的左边是true还是false，右边都会进行运算 
-&&： 只要左边是false，右边就不会进行运算 
-一半情况下都会选择&&，因为这样可以提高效率，也可以进行异常处理，当右边产生异常的时候，同样可以跳过。
+&：不管&的左边是 true 还是 false ，右边都会进行运算 
+&&： 只要左边是 false ，右边就不会进行运算 
+一般情况下都会选择 &&，因为这样可以提高效率，也可以进行异常处理，当右边产生异常的时候，同样可以跳过。
 
 ```
 ****
@@ -90,25 +92,26 @@ switch(1) {
 //输入
 import java.util.Scanner;
 Scanner scan = new Scanner(System.in);
-int one = scan.nextInt(); //一个一个读，中间的空格和回车视为一次输入的结束，所以纯数字输入优先。
-String str = scan.nextLine(); //一行一行读
+int one = scan.nextInt();            //一个一个读，中间的空格和回车视为一次输入的结束，所以纯数字输入优先。
+String str = scan.nextLine();        //一行一行读
 char ch = (char)System.in.read();
-ch = (char)(ch+32); //大写转小写
+ch = (char)(ch+32);                  //大写转小写
 
-if(scan.hasNext()){//只读取一次，遇到空格或者回车结束
-	String str1 = scan.next();//读取字符串
+//只读取一次，遇到空格或者回车结束
+if(scan.hasNext()){ 
+	String str1 = scan.next();      //读取字符串
 }
 
-//输出
-System.out.println(); 
+// 输出
 //输出带换行，且输出的是字符串，如果不是，默认调用toString()方法。如果是基本数据类型，则会先进行装箱，再调用。
-System.out.format("%d %d",1,2); //某些需要有格式的输出，优先使用C++的方式。
-//%d 十进制，%s 字符串，%.2f 浮点数控制精度
+System.out.println(); 
 
-System.out.print("front" + variable + "end"); //输出不带换行
-System.out.format("x:%d,y:%d,radius:%d",x,y,radius); //%d 十进制，%s 字符串
-System.out.format("%.2f", pi);//浮点数控制精度的方法，最后一位会自动四舍五入。
-System.out.printf(); //C 格式输出
+// 某些需要有格式的输出，优先使用 C++ 的方式。%d 十进制，%s 字符串，%.2f 浮点数控制精度
+System.out.format("%d %d",1,2); 
+System.out.print("front" + variable + "end");              // 输出不带换行
+System.out.format("x:%d,y:%d,radius:%d",x,y,radius);       // %d 十进制，%s 字符串
+System.out.format("%.2f", pi);           // 浮点数控制精度的方法，最后一位会自动四舍五入。
+System.out.printf();                                       // C 格式输出
 ```
 ****
 
@@ -116,110 +119,118 @@ System.out.printf(); //C 格式输出
 <a name="集合框架"></a>
 ![集合框架](../../pics/集合框架.jpg)
 
-由图可见，集合框架主要包括两种类型的容器，以Collection为基类的线性表、以Map为基类的键值对类，前者存储一个元素的集合，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。List 具体实现类有 Vector、ArrayList、LinkedList；Set具体实现的类有SortedSet、TreeSet、HashSet、LinkedHashSet；Map的具体实现类有：HashMap、HashTable、LinkedHashMap。
-图解：虚线框表示接口、实线框表示类、直线+空心三角形=实现接口/继承，虚线+空心三角形=扩展接口，虚线+箭头=依赖，
-[详细参考此链接](https://www.jianshu.com/p/57620b762160)
-接口：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象。
-还有一些在集合框架出现以前的数据结构：stack
-
-数组缺点：固定长度，数据多了不够，少了浪费空间。
-容器类：为了解决数组的缺点，如  ArrayList、LinkedList、
+由图可见，集合框架主要包括两种类型的容器，以 Collection 为基类的线性表、以 Map 为基类的键值对类，前者存储一类元素，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。  
+* List 具体实现类有：ArrayList、LinkedList、Vector；
+* Set 具体实现的类有：SortedSet、TreeSet、HashSet、LinkedHashSet；
+* Map 的具体实现类有：HashMap、HashTable、LinkedHashMap；  
+**图解**：虚线框表示接口、实线框表示类、直线+空心三角形=实现接口/继承，虚线+空心三角形=扩展接口，虚线+箭头=依赖，[详细参考此链接](https://www.jianshu.com/p/57620b762160)  
+**接口**：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象，还有一些在集合框架出现以前的数据结构：stack；  
+**数组缺点**：固定长度，数据多了不够，少了浪费空间；  
+**容器类**：为了解决数组的缺点，如  ArrayList、LinkedList；  
 
 **Collections、Arrays常用方法**
+
 ```java
-/*Collections 容器的工具类，只能是容器，无返回值，改变原List
-Collection是  List Set Queue 的接口，不要混淆
+/*
+Collections：容器的工具类，只能是容器，无返回值，改变原List
+Collection：（无 S）是  List Set Queue 的接口，不要混淆
 */
 import java.util.Collections;
 List<Integer> numbers = new ArrayList<>();
-Collections.max(numbers);//最大值
-Collections.min(numbers);//最小值
-Collections.indexOf(100);//定位
-Collections.sort(numbers);//正序排序
-Collections.reverse(numbers); //倒转数组,
-Collections.shuffle(numbers);//混淆
-Collections.swap(numbers,0,1);
-Collections.rotate(numbers,2);//所有元素向右循环移动 2 位
-Collections.synchronizedList(numbers);//将线程不安全的改为安全的，还有Set,Map等，但是没有String
+Collections.max(numbers);			// 最大值
+Collections.min(numbers);			// 最小值
+Collections.indexOf(100);			// 定位
+Collections.sort(numbers);			// 正序排序
+Collections.reverse(numbers); 		// 倒转数组,
+Collections.shuffle(numbers);		// 混淆
+Collections.swap(numbers,0,1);		// 将 0，1 坐标的值互换
+Collections.rotate(numbers,2);        // 所有元素向右循环移动 2 位
+Collections.synchronizedList(numbers); // 将线程不安全的改为安全的，还有 Set,Map 等，但是没有 String
 
 /*Arrays 是数组的工具类*/
 Arrays.sort(arr); //给数组排序
 ```
 
 ```java
-/*
-易混淆点
-数组的长度：.lenght; List的长度：.size(); 字符串的长度：.length();
+/*易混淆点
+数组的长度：.lenght; List 的长度：.size(); 字符串的长度：.length();
 字符串添加元素：append(x);
-List添加元素：add(x); 
-List获取用 get！不要总是用 [] 数组的东西。
-StringBuilder用charAt
+List 添加元素：add(x); 
+List 获取用 get！不要总是用 [] 数组的东西。
+StringBuilder 用 charAt
 */
 
 /*
 线程安全的集合对象，分别对应线性表，键值对，字符串。
-Vector 线程安全：
+Vector 线程安全：底层实现基于数组
 HashTable 线程安全：
 StringBuffer 线程安全：
 其他都是非线程安全的集合框架
+问：Vector、HashTable、StringBuffer 底层如何实现线程安全的？
 */
-
-/*普通数组
-1、值相同的数组，引用也不相同。
-2、排序函数
-3、数组赋值*/
-import java.util.Arrays;
-Arrays.sort(nums);//排序函数
-
-String[] names = {"James", "Larry", "Tom", "Lacy"}; //字符串数组
-return new int[]{1,2,3}; //直接返回一个匿名数组
-int[] numbers = new int[10]; //默认值为 0
-int[][] array = new int[10][10]; //二维数组
-for(int i=0; i<names.length; i++)//长度为 length，注意和动态 size 的区分。
-    System.out.println(names[i]);
-for(String name : names) //迭代
-    System.out.println(name);
-System.arraycopy(origin,0,copy,0,9); //拷贝数组(原始数组,index,新数组,index,数量)。
 
 /*
-判断空的情况
+普通数组
+1、值相同的数组，引用也不相同。
+2、排序函数
+3、数组赋值
 */
-if(names == null || names != null && names.length == 0){}
+import java.util.Arrays;
+Arrays.sort(nums);                                   //排序函数
 
-//复制ArrayList,而不传引用
-res.add(new ArrayList(oldList));
+String[] names = {"James", "Larry", "Tom", "Lacy"};  // 字符串数组
+return new int[]{1,2,3};                             // 直接返回一个匿名数组
+int[] numbers = new int[10];                         // 默认值为 0
+int[][] array = new int[10][10];                     // 二维数组
+for(int i=0; i<names.length; i++)                    // 长度为 length，注意和动态 size 的区分
+    System.out.println(names[i]);
+for(String name : names) 
+    System.out.println(name);
+System.arraycopy(origin,0,copy,0,9);                  // 拷贝数组(原始数组,index,新数组,index,数量)
 
-//将List转换为String[] 数组。
+if(names == null || names != null && names.length == 0){} // 判断空的情况
+
+res.add(new ArrayList(oldList));					//复制ArrayList,而不传引用
+
+//将 List 转换为 String[] 数组，只能是String 数组，int 不行。
 List<String> res = new LinkedList<>();
 res.toArray(new String[res.size()]);
-List<String> list = Arrays.asList(array);  //数组转ArrayList
+
+//数组转ArrayList
+List<String> list = Arrays.asList(array);  
+Collections.addAll(list, array);
 
 //自定义比较函数，比较两个字符串连接顺序后的大小。
 Arrays.sort(strs, (x, y) -> (x + y).compareTo(y + x));
 
 /*List
 问：ArrayList 与 LinkedList 的区别？
-相同：都是List接口的实现类
-不同：ArrayList存储结构是线性表，LinkedList存储结构是链表。因此插入，删除，访问速度遵循存储结构的特性。
-LinkedList是一个双向链表, 当数据量很大或者操作很频繁的情况下，添加和删除元素时具有比ArrayList更好的性能。但在元素的查询和修改方面要弱于ArrayList。
+相同：都是 List 接口的实现类
+不同：ArrayList 存储结构是线性表，LinkedList 存储结构是链表。因此插入，删除，访问速度遵循存储结构的特性。
+LinkedList 是一个双向链表, 当数据量很大或者操作很频繁的情况下，添加和删除元素时具有比 ArrayList 更好的性能。但在元素的查询和修改方面要弱于 ArrayList。
 */
 
-/* 
-ArrayList动态数组
+/* ArrayList 动态数组
 List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
-问：为什么ArrayList常用，Vector不常用？
-Vector是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector需要一定开销来维护线程安全，而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下ArrayList 的性能要优于 Vector。
-Vector和ArrayList一样都是基于数组的。
+问：为什么 ArrayList 常用，Vector 不常用？
+Vector 是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector 需要一定开销来维护线程安全，而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下 ArrayList 的性能要优于 Vector。
+Vector 和 ArrayList 一样都是基于数组的。
+
+源码解析：如何初始化时收到设置参数为 0，那么 ArrayList 将不会初始化大小，如果不加参数，默认会初始化 10，源码中是通过 EMPTY_ELEMENTDATA 与 DEFAULTCAPACITY_EMPTY_ELEMENTDATA 两个空值来区分是哪种空！（扩容是扩容，元素是元素，在编码阶段，扩容与否不影响编码，不是数组申请空间还有默认值的那种）
+
 */
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
-/*这种方式存储的是Object对象，很难维护，知道即可。*/
-ArrayList list = new ArrayList(); 
+ArrayList list = new ArrayList(); // 这种方式存储的是 Object 对象，很难维护，知道即可
 
-/*通过泛型，约定存放同类数据,李氏替换原则，这里需要注意：list可以使用List接口定义的方法，但子类ArrayList的某些方法，如list.removeLast() 就不能用了。*/
+/*通过泛型，约定存放同类数据,李氏替换原则，这里需要注意：list 可以使用 List 接口定义的方法，
+但子类 ArrayList的某些方法，如 removeLast() 就不能用了。如果想使用，则以 ArrayList 声明*/
 List<String> list = new ArrayList<>();
+
+/*查：获取某个位置的对象、某个对象的位置、返回元素个数、返回是否包含元素x、输出字符串形式的数组*/
+get(index);  indexOf(obj);  size();  contains(x); toString();
 
 /*增：末尾添加、指定位置添加、添加另一个列表*/
 add(object);  add(index,object);  addAll(list);
@@ -234,10 +245,11 @@ String[] array = (String[])list.toArray(new String[size]);
 /*改：数组转ArrayList*/
 List<String> list=Arrays.asList(array); 
 
-/*查：获取某个位置的对象、某个对象的位置、返回元素个数、返回是否包含元素x、输出字符串形式的数组*/
-get(index);  indexOf(obj);  size();  contains(x); toString();
 
-/*LinkedList之双向链表数组，拥有和 ArrayList 一样的方法再加上下面这些*/
+/*LinkedList
+基于双向链表，拥有和 ArrayList 一样的方法再加上下面这些。
+这里没有用泛型声明
+*/
 import java.util.LinkedList; 
 LinkedList<String> sts =new LinkedList<>();
 sts.addLast("last1"); //增，在末尾插入，
@@ -264,6 +276,10 @@ while(it.hasNext())
 /*动态二维数组*/
 List<List<Integer>> triangle = new ArrayList<List<Integer>>(); 
 
+/*查：获取第一个数组的第一个值、动态数组的大小，注意和静态数组长度的区分*/
+triangle.get(0).get(0); 
+triangle.size(); 
+
 /*增：添加一个数组元素、给第一个数组添加一个元素、*/
 triangle.add(new ArrayList<>()); 
 triangle.get(0).add(1); 
@@ -271,28 +287,29 @@ triangle.get(0).add(1);
 /*改：修改第一个数组的第一个值为 99*/
 triangle.get(0).set(0,99);
 
-/*查：获取第一个数组的第一个值、动态数组的大小，注意和静态数组长度的区分*/
-triangle.get(0).get(0); 
-triangle.size(); 
 
 
+/* 集合：Set
+TreeSet：是 SortedSet 的唯一实现类，红黑树实现，树形结构，它的本质可以理解为是有序，无重复的元素的集合；
+因为都是有序的，所以相应的就有 get，remove 和 add 方法；
+HashSet：看他的源码可以知道，他的底层是 hashmap；
+LinkedHashSet：安插入顺序进行存储；
 
-
-
-/* 集合 Set
-问：如何去除数组中重复的元素？
-方法一：只需要创建一个集合，然后遍历数组逐一放入集合，只要在放入之前用 contains()方法判断一下集合中是否已经存在这个元素就行了，然后用 toArray 转成数组一切搞定。 
-方法二：最简单的方法就是利用Set集合无序不可重复的特性进行元素过滤。
-SortedSet接口继承自Set，他根据对象的比较顺序（可以是自然顺序，也可以是自定义的顺序），而不是插入顺序进行排序；
-TreeSet是SortedSet的唯一实现类，红黑树实现，树形结构，它的本质可以理解为是有序，无重复的元素的集合。
-因为都是有序的，所以相应的就有get，remove和add方法。HashSet看他的源码可以知道，他的底层，是hashmap。
-LinkedHashSet，维护的是插入时的顺序；
-
-注意：在使用Set时，如果存放的不是基本数据类型，而是自定义的类，那么一定要继承Comparable接口，重写compareTo方法，否则Set无法去重，TreeSet也会根据该方法区分大小，进行排序，还要重写equals方法，一般包装类都重写了此方法，否则会调用父类Obeject中的equals方法，比较地址而不是值了。
+注意：在使用 Set 时，如果存放的不是基本数据类型，而是自定义的类，那么一定要继承 Comparable 接口，
+重写 compareTo 方法，否则 Set 无法去重，TreeSet 也会根据该方法区分大小，进行排序，还要重写 equals 方法，
+一般包装类都重写了此方法，否则会调用父类 Obeject 中的 equals 方法，比较地址而不是值了。
 
 问：TreeSet 和 HashSet 有什么区别？
-答：HashSet 是基于哈希表实现的，允许存在一个null值，插入一个值时会调用HashCode()方法，生成HashCode值，来进行相同元素的区分，但它却不能保证插入次序与遍历次序的一致性，因此才有了LinkedHashSet，也是采用HashCode值方式存储，但多用了链表的方式来保证插入与遍历次序的一致性。
-TreeSet 是 SortedSet 接口的唯一实现类，它是用二叉树存储数据的方式来保证存储的元素处于有序状态。但是TreeSet不允许插入null值。
+答：HashSet 是基于哈希表实现的，允许存在一个 null 值，插入一个值时会调用 HashCode() 方法，生成 HashCode 值，
+来进行相同元素的区分，但它却不能保证插入次序与遍历次序的一致性，因此才有了 LinkedHashSet，
+也是采用 HashCode 值方式存储，但多用了链表的方式来保证插入与遍历次序的一致性。
+TreeSet 是 SortedSet 接口的唯一实现类，它是用二叉树存储数据的方式来保证存储的元素处于有序状态。
+但是TreeSet不允许插入null值。
+
+问：如何去除数组中重复的元素？
+方法一：只需要创建一个集合，然后遍历数组逐一放入集合，只要在放入之前用 contains()方法，
+判断一下集合中是否已经存在这个元素就行了，然后用 toArray 转成数组一切搞定。 
+方法二：最简单的方法就是利用 Set 集合无序不可重复的特性进行元素过滤。
 */
 import java.util.HashSet;
 Set<Integer> set = new HashSet();  //实例化一个set集合  
@@ -307,22 +324,37 @@ TreeSet<Integer> set = new TreeSet<>();//排序的集合
 set.subSet(from,true,to,true);//截取某段值，[from,to],两端值看bool函数的取值。
 
 
-/*
+/* 图：Map 
 图接口 import java.util.MAP;
 四个实现类 import java.util.HashMap、HashTable、HashSet
+
 问：你有没有重写过 HashCode 方法和 equals 方法？
-有，有一次在使用HashMap时，key是自定义的类，需要根据ID判断是否是同一个对象而不是根据地址，
-如果我们在HashMap的键部分存放自定义的对象，一定要在这个对象中用自己的equals方法和hashCode方法覆盖掉Object中的同名方法。
+有，有一次在使用 HashMap 时，key 是自定义的类，需要根据 ID 判断是否是同一个对象而不是根据地址，
+如果我们在 HashMap 的键部分存放自定义的对象，一定要在这个对象中用自己的 equals 方法和 hashCode 方法
+覆盖掉 Object 中的同名方法。
+
+问：HashMap实现原理
+参考： https://blog.csdn.net/qq_41345773/article/details/92066554
+参考： https://www.cnblogs.com/dijia478/p/8006713.html
+1、基本：HashMap 是基于 Map 接口实现的，允许存入空键和值放在 0 位置，并且是线程不安全的。
+2、底层：
+底层是用数组和链表（HashCode 冲突，采用链地址法）实现的，JDK1.8 采用了数组+红黑树的方式实现。
+有两个原因：1、当扩容时，1.7 采用头插法，所以扩容后的链表与原来相反，多线程的情况下可能产生条件竞争，导致死循环。1.8采用了尾插法。
+引入红黑树优化了HashMap的性能。当节点数大于 8 时，自动扩展为红黑树。
+HashMap 扩容时是当前容量翻倍即:capacity x 2。
+HashMap 对 key 进行了二次 hash，以获得更好的散列值，然后对 table 数组长度取摸。
 */
 class key{
     private Integer id;
     public Integer getId(){return id;}
     public key(Integer id){this.id = id;}
-    public boolean equals(Object ob){//重写了equals方法
+    //重写了equals方法
+    public boolean equals(Object ob){
         if(ob==null || !(ob instanceof key)) return false;
         return this.getId().equals(((key)ob).getId);
     }
-    public int hashCode(){ return id.hashCode();}//重写了hashCode方法
+    //重写了hashCode方法
+    public int hashCode(){ return id.hashCode();}
 }
 
 
@@ -355,6 +387,7 @@ while(it.hasNext){
 /*在集合框架之前应用的一些类，现在一般用集合框架代替。
 Dictionary、Vector、Stack、Properties、*/
 /*栈 Stack*/
+// 源码只有五个基本方法+一个构造函数
 Stack stack = new Stack(); //初始化，对象默认是 Obejct
 Stack<Integer> stack1 = new Stack<Integer>();  //指定类型的初始化
 stack.empty(); //判断是否为空，返回true/false
@@ -384,7 +417,7 @@ PriorityQueue是一个无界队列，不允许null值，入队和出队的时间
 
 ```java
 /*
-String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它是 java 中唯一不需要 new 就可以产生对象的途径。以String s="abce";形式赋值在 java 中叫直接量,它是在常量池中而不是象 new 一样放在压缩堆中。这种形式的字符串，在JVM内部发生字符串拘留，即当声明这样的一个字符串后，JVM会在常量池中先查找有有没有一个值为"abcd"的对象,如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,如果没有,则在常量池中新创建一个"abcd",下一次如果有String s1 = "abc";又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象
+String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它是 java 中唯一不需要 new 就可以产生对象的途径。以String s="abce";形式赋值在 java 中叫直接量,它是在常量池中而不是象 new 一样放在压缩堆中。这种形式的字符串，在JVM 内部发生字符串拘留，即当声明这样的一个字符串后，JVM 会在常量池中先查找有没有一个值为"abcd"的对象,如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,如果没有,则在常量池中新创建一个"abcd",下一次如果有String s1 = "abc";又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象
 */
 
 /*问：java字符串如何比较是否相等？
@@ -393,7 +426,7 @@ String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它�
 
 /*是否是同一变量的分析：
 和Integer不同，String只要是对象，== 就一定返回false。
-注意 + 号，有对象，也会转为对象关系。
+注意 + 号，有对象，就会转为对象关系。
 String str = "1" + new String("00"); 会产生一个对象。
 str = str + 100; 也是成立的。
 */
@@ -624,15 +657,17 @@ long start = System.currentTimeMillis();
 
 **Math类**
 ```java
-Math.max(a,b); //选取最大值，参数为 2.
+
 //利用三目运算符，三数取最大值。
 Math.max(maxValue*x, (x > minValue*x) ? x : minValue*x); 
-int n = Math.pow(a,b); //a 的 b 次方。
+Math.pow(a,b); 	 		//a 的 b 次方。
+Math.sqrt(x); 			//求平方根
+Math.abs(a); 			// 取正
+
 //向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
-Math.ceil(11.6); //12.0
-Math.floor(11.6); //11.0
-Math.round(-11.6); //-12 整数
-Math.sqrt(x); //求平方根
+Math.ceil(11.6); 		//12.0
+Math.floor(11.6); 		//11.0
+Math.round(-11.6); 		//-12 整数
 
 ```
 
@@ -746,8 +781,6 @@ public class Main {
 5.表示退出当前方法，返回到调用层，快捷键为 F7。
 6.表示当前线程的堆栈，从中可以看出在运行哪些代码，并且整个调用过程，以及代码行号。
 
-
-
 ### Java常用包
 <a name="Java常用包"></a>
 
@@ -790,3 +823,6 @@ java.lang 包，每个程序自动载入的
 */
 import java.lang.Math;
 ```
+
+### 泛型
+<a name="泛型"></a>

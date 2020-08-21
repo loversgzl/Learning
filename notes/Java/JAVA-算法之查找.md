@@ -45,7 +45,7 @@ else
 */
 
 /*模板一：用于查找数组中的某个确定值，经典用法，考察一般。
-如果这个值不存在，则left会指向第一个比它大的值。！
+如果这个值不存在，则 left 会指向第一个比它大的值。！
 */
 public int binarySearchOne(int[] array, int target) {
 	int left = 0, right = array.length-1;
@@ -65,7 +65,7 @@ public int binarySearchOne(int[] array, int target) {
 public int binarySearchTwo(int[] array, int left, int right,int target){
         while(left < right){
             int mid = (left+right)/2;
-//大于等于target要保留，因为可能就是这个坐标，小于则不可能。
+//大于target要保留，因为可能就是这个坐标，小于则不可能。
             if(array[mid] <= target)
                 left = mid + 1;
             else

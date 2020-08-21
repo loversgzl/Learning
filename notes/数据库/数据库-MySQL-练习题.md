@@ -55,6 +55,7 @@ create table `students`(
 ) default charset 'UTF8';
 
 #修改表格
+USE school;
 ALTER TABLE `student` RENAME TO `students`; #修改表名
 ALTER TABLE `students` add column `age` int not null after `sex`; #为已有表格增加一列
 ALTER TABLE students DROP column nickname; #删除表格格的某一列
@@ -80,6 +81,9 @@ when matched then
 	update set a.name = b.name
 when not matched then 
 	insert into a(ISBN,name) values(b.ISBN,b.name)
+	
+# 有时存在有则更新，无则插入的情况，可以使用 replace into
+
 ```
 
 ### 基本查询语句
@@ -267,5 +271,8 @@ GROUP BY d.dept_no*
 * 3-如果不要 MAX 函数，只加上 Group by，那么只会显示分组的种类数，每个部门选第一条数据展示。
 * 4-如果都要，可以这样理解，先用 Group by 进行分组，没有结束前是分组状态，不会只抽取第一条记录，当使用  MAX 函数过滤出每组的最大值后，每个分组只剩一条记录。
 
+* **问：查找两个表的交集？**
+两个要求交集的表（列）的结构要一致,对应的字段数，字段类型都应该相同；将两个数据的数据列用 UNION ALL 关键字合并；将上面的所有需要比较的列 GROUP BY ；最后 HAVING COUNT(任意一列，不能多列)>1,那么就是交集。
+```mysql
 
-
+```
