@@ -32,9 +32,13 @@ Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edi
 ### 第一个 Java 程序
 
 ```java
-package test; 
+// 单行注释
+/* 块注释*/
+/** 文档注释:注释若干行，并写入javadoc文档*/
+
 /*如果有包需要在第一行注明，注意：导包只可以导当前层，如果里面有包，则包中的类不会导入。
   如：import java.*; 和 import java.util.*; 第一个不可能把所有的包中类全导入。*/
+package test; 
 import java.util.Scanner; //引入 Java Scanner包
 public class test {
     // Java 程序启动函数
@@ -46,13 +50,12 @@ public class test {
 /*1.创建源文件 .java
   2.javac 将 .java 源代码转换为 JVM 能够识别的字节码 .class
   3.通过 JVM 执行 .class 文件
-  编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc 
-  F3 ：可以查看某个函数的源码
-  F2 ：可以查看具体的使用方法*/
+  编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc */
+
 
 ```
 
-### 命名
+### 命名与基本方法
 **类名**：UpperCamelCase，首字母全部大写  
 **方法名**：lowerCamelCase，第一个首字母小写  
 **源文件名**：源文件名必须和类名相同，文件名的后缀为 .java。（如果文件名和类名不相同则会导致编译错误）。  
@@ -66,7 +69,7 @@ public class test {
 1、case 语句中的值的数据类型必须与变量的数据类型相同；  
 2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了 break 或者整体结束为止；  
 3、多个 case 后面的数值不可以重复；  
-4、这里的匹配相当于映射，而不是遍历的查找，因此，case 和 deault 语句顺序无所谓，当匹配后，无 break 语句，则会从当前位置往后执行；  
+4、注意：查找相当于映射，而不是遍历的查找，因此，case 和 deault 语句顺序无所谓；但是当匹配后，无 break 语句，则会从当前位置往后执行，从这里开始遍历了；  
 
 ```java
 // return 比 break 效果更强，直接退出。
@@ -327,6 +330,7 @@ set.subSet(from,true,to,true);//截取某段值，[from,to],两端值看bool函�
 /* 图：Map 
 图接口 import java.util.MAP;
 四个实现类 import java.util.HashMap、HashTable、HashSet
+三类Map：HashMap、LinkedHashMap、TreeMap
 
 问：你有没有重写过 HashCode 方法和 equals 方法？
 有，有一次在使用 HashMap 时，key 是自定义的类，需要根据 ID 判断是否是同一个对象而不是根据地址，
@@ -364,8 +368,8 @@ Map<String,Integer> map = new HashMap<>();
 Map<int[],Integer> map = new HashMap<>();
 
 put("Tom",12); putAll(anotherMap); //增，改,如果已经存在，则覆盖
-clear();remove(x);//清空、删除某个键、
-containsKey("Tom"); //返回Boolean
+clear();remove(x);				  //清空、删除某个键、
+containsKey("Tom"); 			  //返回Boolean
 get("Tom"); getOrDefault(key, 0);
 
 //三种遍历方式
@@ -378,7 +382,7 @@ for(Map.Entry<String, Integer> entry : map.entrySet())
     System.out.println(entry.getKey()+entry.getValue());
 
 Iterator<Map.Entry<String, Integer>> it = map.entrySet().iterator();
-while(it.hasNext){
+while(it.hasNext()){
     Map.Entry<String, Integer> entry = it.next();
     System.out.println(entry.getKey()+entry.getValue());
 }
@@ -559,25 +563,42 @@ Java不是纯的面向对象的语言，不纯的地方就是这些基本数据�
 
 ```java
 /*
-问：Boolean属于关键字么？
+问：Boolean 属于关键字么？
 答：不属于，只是java中的包装类，关键字应该更广泛一些，属于某种类型，这个应该和标识符类似，只是系统已经构造好的类的名称。
 
 问：int i = null?
 错误，null 表示没有地址，可以赋值给引用变量，不能赋值给基本类型。
 
-问：java中的变量不一定要初始化？
-答：错误，一定会初始化，全局变量是系统自动做的，对应基本类型顺序，0，0，0，0L，0.0f，0，'u0000',false
-所有引用类型都是null。局部变量要手动，否则直接报错。
+问：Java 中的变量不一定要初始化？
+答：错误，一定会初始化，全局变量(对象中的变量，或者是静态变量)是系统自动做的，对应基本类型顺序，0，0，0，0L，0.0f，0，'u0000',false，所有引用类型都是null。局部变量（就是某个函数中的变量）要手动，否则直接报错。
 
 问：基本数据类型在堆栈上分配？
-答：是，八个基本数据类型不能看作对象（这点很特殊）。栈内操作速度快，创建销毁很容易。八个基本数据类型都有对应的包装类，包装类就是对象了。比如Integer j = new Integer（10）。j属于对象的引用，引用放在栈中，而实际的数据10 则放在堆中。 （堆区适合存放大的数据对象，但是操作速度远远不及栈中）（提示：对象的销毁---对象的引用放在栈中，所以使用完引用就被从栈中销毁了，但是实际的对象仍然存放在堆中，只有在没有任何的引用使用它的时候才被垃圾回收器销毁掉）
+答：是，八个基本数据类型不能看作对象（这点很特殊）。栈内操作速度快，创建销毁很容易。八个基本数据类型都有对应的包装类，包装类就是对象了。比如Integer j = new Integer（10）。j 属于对象的引用，引用放在栈中，而实际的数据10 则放在堆中。 （堆区适合存放大的数据对象，但是操作速度远远不及栈中）（提示：对象的销毁---对象的引用放在栈中，所以使用完引用就被从栈中销毁了，但是实际的对象仍然存放在堆中，只有在没有任何的引用使用它的时候才被垃圾回收器销毁掉）
 注意：局部变量是在栈上分配的，且没有默认值，必须初始化才可以使用！
 
-问：count = 0; count = count++ 时，count是多少？
-答：0，赋值操作是最后执行的，那么赋值之前的一步是将0给count，count++是在将0给count之后再加，所以编译器不再执行++。
+问：count = 0; count = count++ 时，count 是多少？
+答：0，赋值操作是最后执行的，那么赋值之前的一步是将 0 给 count，count++ 是在将 0 给 count 之后再加，所以编译器不再执行++。
 
-问：byte b1=1,b2=2,b3; b3 = b1 + b2; 报错？
+问：byte b1=1, b2=2, b3; b3 = b1 + b2; 报错？
 答：java中byte,short,char进行计算都会自动提升为int，所以需要强制类型转换，不能赋给b3。
+
+问：float 与 double 的精度问题？
+【"单精度用float表示，在计算机中使用4位字节（32位bit）来表示，具有7位有效数字"】
+float a=3.14159;a 在内存中实际上表示为0.314159乘以10的1次方（0是符号位），而分配给a的存储单元就分为两部分，一部分存0.314159，一部分存指数1，而且也都是转化为2进制来存。
+float ，1位符号位， 8位指数位，23位尾数位 
+double，1位符号位，11位指数位，52位尾数位 
+float尾数位23位，2^23=8.3E6，7位，所以float的精度是7位，是小数点前后都算上。
+最大值：3.4028235E38
+最小值：1.4E-45
+（以 E 前面的数字为准，按e右边的数字移动小数点位数。e右边的数字如果是负数，则向左移动小数点。）
+double尾数52位，2^52=4.5E15，15位，所以double的有效位数是15位 
+
+问：float 保留精度？
+float price=89.89;
+int itemNum=3;
+float totalPrice=price*itemNum;
+float num=(float)(Math.round(totalPrice*100)/100);//如果要求精确4位就*10000然后/10000</span>
+
 */
 
 /*基本数据类型 和 包装类*/
@@ -664,9 +685,9 @@ Math.pow(a,b); 	 		//a 的 b 次方。
 Math.sqrt(x); 			//求平方根
 Math.abs(a); 			// 取正
 
-//向下取整，向上取整，四舍五入（内置为+0.5，向下取整），
-Math.ceil(11.6); 		//12.0
-Math.floor(11.6); 		//11.0
+//向上取整，向下取整，四舍五入（内置为+0.5，向下取整），
+Math.ceil(11.6); 		//天花板 12.0
+Math.floor(11.6); 		//地板 11.0
 Math.round(-11.6); 		//-12 整数
 
 ```
