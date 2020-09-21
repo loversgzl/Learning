@@ -1,6 +1,6 @@
-| Java | Python3 | Go | C++ | 数据库 | 计算机网络  | 操作系统 |智力题  |
-|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
-| <a href="#Java"><img src="pics/java.png"></a> |  <a href="#Python3"><img src="pics/python.png"></a>  | <a href="#Go"><img src="pics/go.png"></a> | <a href="#C++"><img src="pics/C++.png"></a> | <a href="#数据库"><img src="pics/DataBase.png"></a> | <a href="#计算机网络"><img src="pics/Internet.png"></a> | <a href="#操作系统"><img src="pics/System.png" ></a> | <a href="#智力题"><img src="pics/IQ.jpg"></a> |
+| Java | Python3 | Go | C++ | 数据库 | 计算机网络  | 操作系统 |
+|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+| <a href="#Java"><img src="pics/java.png"></a> |  <a href="#Python3"><img src="pics/python.png"></a>  | <a href="#Go"><img src="pics/go.png"></a> | <a href="#C++"><img src="pics/C++.png"></a> | <a href="#数据库"><img src="pics/DataBase.png"></a> | <a href="#计算机网络"><img src="pics/Internet.png"></a> | <a href="#操作系统"><img src="pics/System.png" ></a> |
 
 ***
 **单击图片跳转到对应主题，Ctrl + Home 回到顶端，Ctrl + End 回到底端**

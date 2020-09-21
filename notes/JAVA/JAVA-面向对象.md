@@ -1,26 +1,24 @@
 # JAVA-面向对象
 
-@[TOC](目录)
-
-**下面先介绍一下基本概念，然后再从我们熟知的封装、继承、多态三大部分进行讲解，不要死记概念，去刷相关的笔试题，然后再找找相关概念，下面直接阅读会让人产生眩晕感，之后会慢慢加点问题改进的**
 1、<a href="#基本概念">基本概念</a>
 2、<a href="#封装">封装</a>
 3、<a href="#继承">继承</a>
 4、<a href="#多态">多态</a>
 5、<a href="#内部类">内部类</a>
+**下面先介绍一下基本概念，然后再从我们熟知的封装、继承、多态三大部分进行讲解，不要死记概念，去刷相关的笔试题，然后再找找相关概念，下面直接阅读会让人产生眩晕感，之后会慢慢加点问题改进的**
 
 # 1、基本概念
 <a name="基本概念"></a>
 **类声明**：一个源文件中只能有一个 public 类且源文件的名称应该和此类名相同，可以有多个非 public 类。此源文件属于哪个包，就在首行标明 package 包名；
-类包括 外部类 和 内部类，内部类 还包括 成员内部类（单独定义） 和 局部内部类（某个方法里定义）。
-**外部类**：的上一级是包，所以他只有两个作用域，同一个包内和任意位置。因此只能有两个修饰符，默认 和 public。
+类包括 外部类 和 内部类，内部类 还包括 成员内部类（单独定义） 和 局部内部类（某个方法里定义，就像是方法中的一个局部变量，不能有修饰符，或者只能是 abstract 或者 final）。
+**外部类**：的上一级是包，所以他只有两个作用域，同一个包内和任意位置。因此只能有两个访问控制修饰符，默认 和 public，非访问控制修饰符有多个可选 abstract, final。
 **内部类**：的上一级是外部类，有四个作用域，当做普通的成员对待，三个修饰符都可以（默认不用修饰符）。但如果是在方法体内（局部内部类），那么是不可以使用访问控制修饰符的。
 
 **JAVA 包（package）**：包主要用来对 类和接口 进行分类。当开发 Java 程序时，可能编写成百上千的类，因此很有必要对类和接口进行分类。有关联关系的类放在一个源文件中，该文件属于哪个包，那么就在该源文件的首行写 package 语句，而不是你想象的那样将许多源文件打包。
-1、为了更好地组织类，Java提供了包机制。包是类的容器，用于分隔类名空间。如果没有指定包名，所有的示例都属于一个默认的无名包。Java中的包一般均包含相关的类，Java 是跨平台的，所以 Java 中的包和操作系统没有任何关系，Java 的包是用来组织文件的一种虚拟文件系统。
+1、为了更好地组织类，Java 提供了包机制。包是类的容器，用于分隔类名空间。如果没有指定包名，所有的示例都属于一个默认的无名包。Java 中的包一般均包含相关的类，Java 是跨平台的，所以 Java 中的包和操作系统没有任何关系，Java 的包是用来组织文件的一种虚拟文件系统。
 2、import 语句并没有将对应的 Java 源文件拷贝到此处，仅仅是引入，告诉编译器有使用外部文件，编译的时候要去读取这个外部文件。
 3、Java 提供的包机制与 IDE 也没有关系。
-4、定义在同一个包（package）内的类可以不经过 import 而直接相互使用。
+4、定义在同一个包（package）内的类可以不经过 import 而直接相互使用，因为只有两种关系，要么 public 全局，要么就是默认的包内。
 
 **import**：在 Java 中，如果给出一个完整的限定名，包括包名、类名，那么 Java 编译器就可以很容易地定位到源代码或者类。Import 语句就是用来提供一个合理的路径，使得编译器可以找到某个类。如果源文件包含 import 语句，那么应该放在 package 语句和类定义之间。
 
@@ -33,32 +31,37 @@
 访问范围：【public】> 【protected】> 【default 】> 【private】
 ![访问修饰符](../../pics/java访问修饰符.png) ![访问修饰符](../../pics/UML用例图.png) 
 
-## 2.2、非访问修饰符：static、final、interface、abstract
-为了实现一些其他的功能，Java也提供了许多非访问修饰符。
+## 2.2、非访问控制修饰符：static、final、interface、abstract
+为了实现一些其他的功能，Java 也提供了许多非访问修饰符（所有成员都肯定有访问控制修饰符，而非访问控制修饰符是可选的，可有可无）。
 **static 修饰符**：用来创建类方法和类变量，这里叫**类方法**，就是静态方法。类的静态成员与类直接相关，与对象无关，在一个类的所有实例之间共享同一个静态成员
 1、静态变量必须初始化（不赋值，系统会自动初始化），可以修改（例如我们常利用静态成员变量统计某个函数的调用次数）
-2、静态变量只能在类主体中定义，不能在方法中定义（不能修饰局部变量），静态的都属于类，不属于实例方法。
-3、静态成员函数中不能调用非静态成员（实例变量 和 实例方法）
+2、静态变量只能在类主体中定义，不能在方法中定义（不能修饰局部变量：局部变量，由于在方法中，方法中的变量都在栈中，随着方法的进栈出栈产生和销毁。所以不可以被static修饰。一旦被static修饰变量就属于类了），静态的都属于类，不属于实例方法。
+3、静态成员函数中不能调用非静态成员（实例变量 和 实例方法）：因为也许这个实例还没有产生。
 4、在类方法中不能使用super、this关键字。
 5、类方法不能被覆盖。 
 6、非静态成员函数中可以调用静态成员
 
 **final  修饰符**：用来修饰类、方法和变量。
-1、final修饰的类不能够被继承，如String类是不可变类
+1、final 修饰的类不能够被继承，如 String 类是不可变类
 2、修饰的方法不能被重写
 3、修饰的变量为常量，是不可修改的。赋值 final 修饰的变量有三种方式。（1、在声明时直接赋值，2、在构造函数中赋值，3、在初始代码块中进行赋值。）
 
 ```java
 /*问：static class 对么？
-static 不能用来修饰类，除非类是内部类，此时该类作为外部类的成员变量，可以用 static 修饰，否则一般类（class）只有两种访问控制修饰符 + abstract，final。*/
-
-public static final int BOXWIDTH = 10; 
-//声明一个常量，不可变，默认关键字是 default
+static 不能用来修饰类，除非类是内部类，此时该类作为外部类的成员变量，可以用 static 修饰，否则一般类（class）只有两种访问控制修饰符（+ abstract，final 这两种是非访问控制修饰符，可有可无）*/
 
 private static int numInstances = 0 ; //构造一个私有的静态变量
 private static void addInstance(){ //构造一个私有的静态函数
 	numInstances++;
 }
+
+/*当用final修饰一个类时，表明这个类不能被继承。也就是说，如果一个类你永远不会让他被继承，就可以用final进行修饰。final 类中的成员变量可以根据需要设为 final，但是要注意 final 类中的所有成员方法都会被隐式地指定为 final方法。
+如果一个类不允许其子类覆盖某个方法，则可以把这个方法声明为 final 方法。使用final方法的原因有二：
+1、把方法锁定，防止任何继承类修改它的意义和实现。 
+2、高效，编译器在遇到调用 final 方法时候会转入内嵌机制，大大提高执行效率。 
+*/
+public final Class String{} // String 是不可变类
+public static final int BOXWIDTH = 10; // 声明一个常量
 ```
 
 **接口（interface）**
@@ -70,15 +73,17 @@ private static void addInstance(){ //构造一个私有的静态函数
 6、一个类可以同时实现多个接口，关键字是（implements）
 
 1、JDK1.8之前：
-接口中只能有抽象方法：[public （abstract可以省略） method();
+接口中只能有抽象方法：[（public  abstract可以省略）void  method();
 全局静态常量：public static final 常量；
 2、JDK1.8之后：
-抽象，默认，静态方法：1、public method(); 2、default void method(){有代码} 3、public static void method(){有代码} 注：接口中的静态方法可以直接使用，interface.method();
+抽象，默认，静态方法：1、public abstract void method(); 2、public default void method(){有代码} 3、public static void method(){有代码} 注：接口中的静态方法可以直接使用，interface.method();
 
-结论：接口默认方法的”类优先”原则 ，若一个接口中定义了一个默认方法，而另外一个父类或接口中 又定义了一个同名的方法时，先调用类中的同名方法。
-
-结论：如果一个类实现多个接口。并且这些接 口提供了一个具有相同名称和参数列表的方法（不管方法 是否是默认方法），那么必须覆盖该方法来解决冲突。子类必须指定覆盖哪个父类接口中的方法。
-
+**新增静态方法和默认方法**：
+1、因为静态方法不可以实例化，在接口中也是一样的 所以在接口中定义静态方法的作用就是静态方法的作用：不需要实例化，直接使用，节省内存空间。
+2、默认方法是可以在接口中写执行体的。主要作用：
+2.1、接口升级，可以避免改变其他实现类；函数拼接。
+2.2、接口默认方法的”类优先”原则 ，若一个接口中定义了一个默认方法，而另外一个父类或接口中 又定义了一个同名的方法时，先调用类中的同名方法。
+2.3、如果一个类实现多个接口。并且这些接口提供了一个具有相同名称和参数列表的方法（不管方法 是否是默认方法），那么必须覆盖该方法来解决冲突。子类必须指定覆盖哪个父类接口中的方法。
 
 **abstract 修饰符**：修饰抽象类和抽象方法，声明抽象类的唯一目的是为了将来对该类进行扩充。
 1、抽象类不能用来实例化对象，但是可以有构造方法
@@ -90,35 +95,46 @@ private static void addInstance(){ //构造一个私有的静态函数
 
 ```java
 /*问：不能用来修饰 接口 里 方法的有哪些关键字？
-答：不能用 private、protected，常用关键字public、abstract，当然 java8 新增 default 与 static 方法。
-(1)增加default方法。对已有的接口，如果想对接口增加一个新方法，那么需要对实现该接口的所有类进行修改，如果接口实的现类很多，就会带来很大的工作量，而且还很容易破坏以前的代码，带来一些问题。如果把新的方法定义为default方法，就可以避免对其他实现类的修改。
-但是，这样也会有一个问题：如果接口A和接口B里有一个名字相同并且参数列表也相同的方法都被定义为了default方法，那么当类C实现接口A和接口B的时候就会在编译时报错。由于是编译时报错，这个完全可以接受，当类C成功实现了
-接口A和接口B以后（没有冲突），类C的实例就可以调用接口A和接口B里的default方法了。
+答：不能用 private、protected，常用 public static final 修饰属性，public abstract 修饰方法，当然 java8 新增 default、static 修饰方法。
+(1)增加 default 方法。对已有的接口，如果想对接口增加一个新方法，那么需要对实现该接口的所有类进行修改，如果接口的实现类很多，就会带来很大的工作量，而且还很容易破坏以前的代码，带来一些问题。如果把新的方法定义为 default 方法，就可以避免对其他实现类的修改。Default方法是非常有用的，通过在接口定义的方法的访问修饰符前加上关键字default，那么实现类就无需提供该方法的实现了。
+但是，这样也会有一个问题：如果接口 A 和接口 B 里有一个名字相同并且参数列表也相同的方法都被定义为了default方法，那么当类 C 实现接口 A 和接口 B 的时候就会在编译时报错。由于是编译时报错，这个完全可以接受，当类 C 成功实现了接口 A 和接口 B 以后（没有冲突），类 C 的实例就可以调用接口 A 和接口 B 里的 default 方法了。
 
-(2)新增了static函数。static修饰的方法也是非抽象方法，有自己的方法体，在接口中定义一个静态方法，该方法可以直接用 接口名.方法名() 的形式来调用。相当于调用类的静态方法一样，给方法的调用带来了方便。
-
+(2)新增了 static 函数。static 修饰的方法也是非抽象方法，有自己的方法体，在接口中定义一个静态方法，该方法可以直接用 接口名.方法名() 的形式来调用。相当于调用类的静态方法一样，给方法的调用带来了方便。
 
 问：为什么是 public static final？
-为什么是public：因为接口必然是要被实现的，如果不是 public，这个属性就没有意义了；
-为什么是static：因为如果不是static，那么由于每个类可以继承多个接口，那就会出现重名的情况；
-为什么是final：这是为了体现java的开闭原则，因为接口是一种模板，既然是模板，那就对修改关闭，对扩展开放。
+为什么是 public：因为接口必然是要被实现的，如果不是 public，这个属性就没有意义了；
+为什么是 static：因为如果不是 static，那么由于每个类可以继承多个接口，那就会出现重名的情况；
+为什么是 final：这是为了体现 Java 的开闭原则，因为接口是一种模板，既然是模板，那就对修改关闭，对扩展开放。
 
 问：接口和抽象类有什么区别？
-答：抽象类是对概念的归纳，接口是对功能的归纳。继承抽象类可以先完成一个总体需求，再增加一个额外的功能，而接口则是强调对需求用户提供服务。需求不同，选择也会不一样。抽象方法和接口都不能定义方法体。*/
+答：抽象类是对概念的归纳，接口是对功能的归纳。继承抽象类可以先完成一个总体需求，再增加一个额外的功能，而接口则是强调对需求用户提供服务。需求不同，选择也会不一样。抽象方法不能定义方法体。*/
 
-/*接口之间应该也是继承，而不是实现implements，且可以是多继承*/
+/*接口之间应该也是继承，而不是实现 implements 且可以是多继承*/
 public interface interfaceOne extends interfaceTwo,interfaceThree,interfaceFour{}
 
 /*接口中可以定义的变量和方法*/
 interface Father{
-    public static final int a = 1;
-    static final int b = 1;
-    public static void test(){System.out.println("static method");}
-    public void testb(int a); //省略了abstract
-    void method();
+    /*成员变量*/
+    public static final int a = 1; // 不写修饰符也可以，默认是 public static final 修饰
+    int b = 1; // 一般这么写，上面会提示冗余的修饰符
+
+    /*成员函数*/
+    public abstract void method(int a); //不写修饰符也可以，默认是 public abstract
+    void method(); // 一般这么写，上面会提示冗余的修饰符
+    
+    /*静态方法，可以直接定义*/
+    public static void testOne(){
+        System.out.println("static method");
+    } 
+    
+    /*默认方法，可以直接定义，且继承此接口的类无需重新实现此方法，可直接调用，对于后期修改非常友好*/
+    public default void testTwo() {
+        System.out.println("你好，中国！");
+    }
 }
 
-abstract class Caravan{ //抽象类
+/*抽象类：含有抽象方法的就是抽象类，其余和普通类相同*/
+abstract class Caravan{ 
 	private double price;
 	public abstract void addPrice(); //抽象方法
     public abstract void method(){}; //错误，抽象方法不能有方法体，不是可选的。
@@ -130,29 +146,43 @@ abstract class Caravan{ //抽象类
 1、类继承是用 extends，而接口是用 implements
 2、类是单继承，接口可以多继承，接口可以继承多个接口
 3、子类不可以继承父类的构造方法，只可以调用。（方法没有继承一说，要么重载，要么重写，或者调用父类的方法）
-4、子类中所有的构造函数都会默认访问父类中的无参构造函数，因为默认第一行都会有super(); 
-当父类中存在有参构造器时，当子类调用父类的无参构造函数时，必须提供无参构造器（因为这个时候，系统不会自动生成了）
+4、子类中所有的构造函数都会默认访问父类中的无参构造函数，因为默认第一行都会有super(); 当父类中存在有参构造器时，子类调用父类的无参构造函数时，必须提供无参构造器（因为这个时候，系统不会自动生成了）
 
-**子类继承父类的执行顺序**：在继承中代码的执行顺序为：
+```java
+/*继承：从项目的角度来看：一般把通用的代码放入父类和接口中，这样可以避免大面积的重复代码*/
+
+/*对于本题来说：在只想new Sub(5)的时候，父类先初始化了 int flag = 1，然后执行父类的构造函数Super（），父类构造函数中执行的test（）方法，因子类是重写了test（）方法的，因此父类构造函数中的test（）方法实际执行的是子类的test（）方法，所以输出为Sub.test() flag=1，接着执行子类构造函数Sub(5) 将flag赋值为5，因此输出结果Sub.Sub() flag=5。输出：Sub.test() flag=1，Sub.Sub() flag=5
+这题有没有让你对继承有了新的认识：不要把子类和父类分开，而是将父类放入到继承的子类中，当做一个大类来对待，这样很多问题都能容易理解。
+*/
+
+class Super{  
+    int flag = 1;
+    Super(){ 
+        test();
+    }  
+    void test(){
+        System.out.println("Super.test() flag="+flag); 
+    }
+} 
+class Sub extends Super{
+    Sub(int i){  
+        flag = i;  
+        System.out.println("Sub.Sub() flag=" + flag); 
+    }  
+    void test(){  
+        System.out.println("Sub.test()flag=" + flag); 
+    }
+    public static void main(String[] args) {  
+        new Sub(5);
+    }
+}
+
+
+/*子类继承父类的执行顺序**：在继承中代码的执行顺序为：
 1.父类静态对象，父类静态变量，父类静态代码块
 2.子类静态对象，子类静态变量，子类静态代码块
 3.父类初始化代码块，父类构造函数
-4.子类初始化代码块，子类构造函数
-
-```java
-/*对于本题来说：在只想new Sub(5)的时候，父类先初始化了 int flag = 1，然后执行父类的构造函数Super（），父类构造函数中执行的test（）方法，因子类是重写了test（）方法的，因此父类构造函数中的test（）方法实际执行的是子类的test（）方法，所以输出为Sub.test() flag=1，接着执行子类构造函数Sub(5) 将flag赋值为5，因此输出结果Sub.Sub() flag=5。输出：Sub.test() flag=1，Sub.Sub() flag=5*/
-
-class Super{  
-    int flag=1;
-    Super(){ test();}  
-    void test(){System.out.println("Super.test() flag="+flag); }
-    } 
-class Sub extends Super{
-    Sub(int i){  flag=i;  System.out.println("Sub.Sub()flag="+flag); }  
-    void test(){  System.out.println("Sub.test()flag="+flag); }
-    public static void main(String[] args) {  new Sub(5);}
-}
-
+4.子类初始化代码块，子类构造函数*/
 class A{
     public static int a = testA();
     static {
@@ -199,7 +229,7 @@ public class B extends A{
 两同：方法名、形参都要相同
 两大：访问权限>=重写前(并解释)，返回值类型>=重写前
 一小：抛出异常<=重写前
-2、声明为final的方法不能被重写
+2、声明为 final 的方法不能被重写，final 修饰的类不能被继承；
 3、声明 static 的方法不能被重写（实际是重写不了），父类调用的永远是父类的静态方法
 4、 @Override ：不写也可以，但是写了有如下好处，1-可以当注释用，方便阅读；2-编译器可以给你验证 @Override下面的方法名是否是你 **父类** 中所有的，如果没有则报错。例如，你如果没写 @Override，而你下面的方法名又写错了，这时你的编译器是可以编译通过的，因为编译器以为这个方法是你的子类中自己增加的方法。
 
@@ -211,25 +241,31 @@ public class B extends A{
 正确，在一个子类被创建的时候，首先会在内存中创建一个父类对象，然后在父类对象外部放上子类独有的属性，两者合起来形成一个子类的对象。所以所谓的继承使子类拥有父类所有的属性和方法其实可以这样理解，子类对象确实拥有父类对象中所有的属性和方法，但是父类对象中的私有属性和方法，子类是无法访问到的，只是拥有，但不能使用。就像有些东西你可能拥有，但是你并不能使用。所以子类对象是绝对大于父类对象的，所谓的子类对象只能继承父类非私有的属性及方法的说法是错误的。可以继承，只是无法访问到而已。
 
 问：子类可以继承和覆盖父类的类方法？
-答：static修饰的成员属于类成员，父类字段或方法只能被子类同名字段或方法遮蔽，不能被继承覆盖。
+答：static 修饰的成员属于类成员，父类字段或方法只能被子类同名字段或方法遮蔽，不能被继承覆盖。
 
 instanceof 判断是否是继承关系
 
-Obeject类是所有类的终极父类，任何类都是它的子类*/
+Obeject 类是所有类的终极父类，任何类都是它的子类*/
 
 System.out.println(dog instanceof Animal); //左边是子类 右边是父类
 
-Animal a = new Cat();
-a.staticMethod(); //调用的是父类的静态方法，参考3.
-
+Animal cat = new Cat(){
+    public String toString(){return "we change the toString methods";}
+};
+cat.staticMethod(); // 调用的是父类的静态方法，参考3.
+System.out.println(cat); // 会自动调用 toString 方法
 ```
 
 # 4、多态
+```java
+/*从项目的角度看：多态要解决的问题是，把抽象的业务逻辑和具体的实施细节分离，把做什么和怎么做分离。多态有修改点隔离 和 无障碍扩展 两大好处。
+在实际的的开发过程中，这种继承加覆盖的方式可以做到以上两点好处：
+1、修改代码时，只需要修改相应子类的代码即可，无需动其它类，即修改点隔离；
+2、如果增加新的业务，只需要增加子类即可，即无障碍扩展；
 
 向上转型：Animal animal = new Dog(); 会自动丢弃子类的方法，调用自己的方法时，如果子类有覆盖方法，则调用子类的，如果调用的方法是父类没有的，则编译会出错（所以如果使用父类进行调用一定是重写的方法！），具体参考下面的代码。
-向下转型：Dog  dog = (Dog) animal; 要强转，调用子类重写的方法时会调用父类的方法。
+向下转型：Dog  dog = (Dog) animal; 要强转，调用子类重写的方法时会调用父类的方法。*/
 
-```java
 class Animal {//注意默认是 default，public类 只能有一个，且必须与文件名相同
 	private int i; //私有成员不能被继承
 	public void move(){
@@ -267,7 +303,9 @@ public class test{
 是可以的！即使 Test test = null;也会加载静态方法，所以test包含Test类中的初始化数据，静态的，构造的，成员属性。额外，就算不是静态方法，编译也是可以通过的，只有在运行的时候才会报错。
 如果一个成员被声明为static，它就能够在它的类的任何对象创建之前被访问，而不必引用任何对象（跟类是否有static修饰无关）。*/
 class Test{
-	public static void hello(){System.out.println("hello");}
+	public static void hello(){
+        System.out.println("hello");
+    }
 }
 public class MyApp{
 	public static void main(String[] args){
@@ -284,7 +322,9 @@ public void Parent(){} 也是可以的普通方法。*/
 回答：会的，由于子类的构造函数什么都没写，所以系统会默认的添加super()；来调用Parent类中无参的构造函数，而父类中没有，则报错。*/
 class Parent{
 	private int value;
-	public Parent(int val){this.value = val;}
+	public Parent(int val){
+        this.value = val;
+    }
 }
 class SubClass extends Parent{
 	public SubClass(int i){
@@ -297,3 +337,26 @@ class SubClass extends Parent{
 ![内部类定义](../../pics/内部类.png)
 
 特点：静态内部类才可以声明静态方法，静态方法不可以使用非静态变量。
+```java
+/*成员内部类：*/
+
+
+/*局部内部类：在某个函数中*/
+public void fun(){
+    abstract class innerClassOne{}
+    final class innerClassTwo{}
+    class innerClassThree{}
+}
+    
+/*匿名内部类：创建了一个匿名内部类，并将所创建的匿名对象赋给 Object (多态：子类对象赋给超类引用)。同时，该匿名内部类重写了 Object 类的 equals 方法。*/
+public class TestObj{ 
+    public static void main(String[] args){
+        Object o = new Object(){
+            public boolean equals(Object obj){
+                return true;
+            }
+        }; 
+        System.out.println(o.equals(“Fred”));
+    }
+} 
+```

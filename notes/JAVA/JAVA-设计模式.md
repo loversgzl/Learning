@@ -1,5 +1,3 @@
-@[TOC](目录)
-
 # JAVA-设计模式
 
 ### 简介
@@ -8,7 +6,7 @@
 
 ### 设计模式常见问题
 **问：需要重点了解的设计模式**
-答：创建型：单例模式、工厂模式、 抽象工厂、
+答：创建型：单例模式、工厂模式、 抽象工厂、建造者模式、原型模式、
 结构型：装饰器模式、适配器模式、代理模式、
 行为型：观察者模式、责任链模式、迭代器模式、
 
@@ -26,6 +24,7 @@
 2.模版模式，这个也很明显，在各种BeanFactory以及ApplicationContext实现中也都用到了；
 3.代理模式，在Aop实现中用到了JDK的动态代理；
 4.单例模式，这个比如在创建bean的时候。
+
 ****
 
 ### 设计模式的七大原则
@@ -77,13 +76,13 @@
 3、<a href="#代理模式">代理模式（Proxy Pattern）</a>：为另一个对象提供一个替身或占位符以控制对这个对象的访问.
 
 ****
-5、<a href="#桥接模式">桥接模式（Bridge Pattern）</a>： 使用桥接模式通过将实现和抽象放在两个不同的类层次中而使它们可以独立改变.
+4、<a href="#桥接模式">桥接模式（Bridge Pattern）</a>： 使用桥接模式通过将实现和抽象放在两个不同的类层次中而使它们可以独立改变.
 
 5、<a href="#组合模式">组合模式（Composite Pattern）</a>：允许你将对象组合成树形结构来表现”整体/部分”层次结构. 组合能让客户以一致的方式处理个别对象以及对象组合.
 
-5、<a href="#外观模式">外观模式（Facade Pattern）</a>：提供了一个统一的接口, 用来访问子系统中的一群接口. 外观定义了一个高层接口, 让子系统更容易使用.
+6、<a href="#外观模式">外观模式（Facade Pattern）</a>：提供了一个统一的接口, 用来访问子系统中的一群接口. 外观定义了一个高层接口, 让子系统更容易使用.
 
-5、<a href="#享元模式">享元模式（Flyweight Pattern）</a>：如想让某个类的一个实例能用来提供许多”虚拟实例”, 就使用蝇量模式.
+7、<a href="#享元模式">享元模式（Flyweight Pattern）</a>：如想让某个类的一个实例能用来提供许多”虚拟实例”, 就使用蝇量模式.
 
 
 
@@ -110,6 +109,62 @@
 * 学习的过程中可能会遇到 UML 类图，所以还是有点必要学习一下的。[参考 W3C UML 类图](https://www.w3cschool.cn/uml_tutorial/uml_tutorial-5y1i28pl.html)
 
 ****
+
+<a name="单例模式">单例模式（Singleton Pattern）</a>
+
+```java
+/*意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+主要解决：一个全局使用的类频繁地创建与销毁。
+何时使用：当您想控制实例数目，节省系统资源的时候。
+如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。
+关键代码：构造函数是私有的。注意，单例模式不用构造函数，所以始终为空，不写代码。
+有多种实现方式：懒汉式、饿汉式、双重锁等其他有要求的方式。
+
+懒汉式-线程不安全，或者增加 synchronized，使其变成线程安全
+饿汉式-线程安全，因此使用也较多。在类装载时实例化，其它不变。
+饿汉式：private static Singleton instance = new SingleObject();*/
+class SingleObject{
+    //创建 SingleObject 的一个对象
+	private static SingleObject instance = null;
+    //让构造函数为 private，这样该类就不会被实例化
+	private SingleObject(){}
+    //获取唯一可用的对象
+	public static SingleObject getInstance(){
+        if(instance == null)
+            instance = new SingleObject();
+		return instance;
+	}
+	public void showMessage(){
+		System.out.println("普通函数");
+	}
+}
+
+public class test{
+	public static void main(String args[]){
+	SingleObject single = SingleObject.getInstance();
+	single.showMessage();
+	}
+}
+
+/*双重锁：安全且在多线程情况下能保持高性能。*/
+class SingleObject{
+	private volatile static SingleObject instance;//创建 SingleObject 的一个对象
+	private SingleObject(){}
+    //获取唯一可用的对象
+	public static SingleObject getInstance(){
+        if(instance == null)
+            synchronized(SingleObject.class){
+            if(instance == null)
+                instance = new SingleObject();
+        	}
+		return instance;
+	}
+	public void showMessage(){
+		System.out.println("普通函数");
+	}
+}
+
+```
 
 <a name="工厂模式">工厂模式（Factory Pattern）</a>
 
@@ -258,62 +313,6 @@ public class test{
 		color1.fill();
 	}
 }
-```
-
-<a name="单例模式">单例模式（Singleton Pattern）</a>
-
-```java
-/*意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
-主要解决：一个全局使用的类频繁地创建与销毁。
-何时使用：当您想控制实例数目，节省系统资源的时候。
-如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。
-关键代码：构造函数是私有的。注意，单例模式不用构造函数，所以始终为空，不写代码。
-有多种实现方式：懒汉式、饿汉式、双重锁等其他有要求的方式。
-
-懒汉式-多线程不安全，或者增加 synchronized，使其变成线程安全
-饿汉式-多线程都安全，因此使用也较多。在类装载时实例化，其它不变。
-饿汉式：private static Singleton instance = new SingleObject();*/
-class SingleObject{
-    //创建 SingleObject 的一个对象
-	private static SingleObject instance = null;
-    //让构造函数为 private，这样该类就不会被实例化
-	private SingleObject(){}
-    //获取唯一可用的对象
-	public static SingleObject getInstance(){
-        if(instance == null)
-            instance = new SingleObject();
-		return instance;
-	}
-	public void showMessage(){
-		System.out.println("普通函数");
-	}
-}
-
-public class test{
-	public static void main(String args[]){
-	SingleObject single = SingleObject.getInstance();
-	single.showMessage();
-	}
-}
-
-/*双重锁：安全且在多线程情况下能保持高性能。*/
-class SingleObject{
-	private volatile static SingleObject instance;//创建 SingleObject 的一个对象
-	private SingleObject(){}
-    //获取唯一可用的对象
-	public static SingleObject getInstance(){
-        if(instance == null)
-            synchronized(SingleObject.class){
-            if(instance == null)
-                instance = new SingleObject();
-        	}
-		return instance;
-	}
-	public void showMessage(){
-		System.out.println("普通函数");
-	}
-}
-
 ```
 
 <a name="建造者模式">建造者模式（Builder Pattern）</a>
@@ -504,7 +503,68 @@ public class test{
 ```
 
 ### 二、结构型模式
-1、<a name="适配器模式">适配器模式（Adapter Pattern）</a>：将一个类的接口，转换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。 对象适配器使用组合，类适配器使用多重继承。
+1、<a name="装饰器模式">装饰器模式（Decorator Pattern）</a>：动态地将责任附加到对象上, 若要扩展功能, 装饰者提供了比继承更有弹性的替代方案.
+
+```java
+/*意图：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰器模式相比生成子类更为灵活。
+主要解决：一般的，我们为了扩展一个类经常使用继承方式实现，由于继承为类引入静态特征，并且随着扩展功能的增多，子类会很膨胀。
+何时使用：在不想增加很多子类的情况下扩展类。
+如何解决：将具体功能职责划分，同时继承装饰者模式。
+关键代码： 1、Component 类充当抽象角色，不应该具体实现。 2、修饰类引用和继承 Component 类，具体扩展类重写父类方法。
+刚开始我在想，装饰器其实中间也许不用加这个抽象类的，直接继承接口就好了，但是也许是想将父类的方法和装饰器的方法分开，后面容易扩展考虑吧。*/
+interface Shape{
+	public void draw();
+}
+class Circle implements Shape{
+	@Override
+	public void draw(){
+		System.out.println("this is a circle.");
+	}
+}
+class Rectangle implements Shape{
+	@Override
+	public void draw(){
+		System.out.println("this is a Rectangle.");
+	}
+}
+
+abstract class ShapeDecorator implements Shape{
+	protected Shape shape;
+	public ShapeDecorator(Shape shape){
+		this.shape = shape;
+	}
+	@Override
+	public void draw(){
+		shape.draw();
+	}
+}
+
+class RedShapeDecorator extends ShapeDecorator{
+	public RedShapeDecorator(Shape shape){
+		super(shape);
+	}
+
+	@Override
+	public void draw(){
+		shape.draw();
+		setRedBorder(shape);
+	}
+	private void setRedBorder(Shape shape){
+		System.out.println("this border color is red.");
+	}
+}
+
+public class test{
+	public static void main(String args[]){
+		Shape redCircle = new RedShapeDecorator(new Circle());
+		Shape redRectangle = new RedShapeDecorator(new Rectangle());
+		redCircle.draw();
+		redRectangle.draw();
+	}
+}
+```
+
+2、<a name="适配器模式">适配器模式（Adapter Pattern）</a>：将一个类的接口，转换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。 对象适配器使用组合，类适配器使用多重继承。
 
 ```java
 interface MediaPlayer{
@@ -833,66 +893,6 @@ public class CompositePatternDemo {
 }
 ```
 
-4、<a name="装饰器模式">装饰器模式（Decorator Pattern）</a>：动态地将责任附加到对象上, 若要扩展功能, 装饰者提供了比继承更有弹性的替代方案.
-
-```java
-/*意图：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰器模式相比生成子类更为灵活。
-主要解决：一般的，我们为了扩展一个类经常使用继承方式实现，由于继承为类引入静态特征，并且随着扩展功能的增多，子类会很膨胀。
-何时使用：在不想增加很多子类的情况下扩展类。
-如何解决：将具体功能职责划分，同时继承装饰者模式。
-关键代码： 1、Component 类充当抽象角色，不应该具体实现。 2、修饰类引用和继承 Component 类，具体扩展类重写父类方法。
-刚开始我在想，装饰器其实中间也许不用加这个抽象类的，直接继承接口就好了，但是也许是想将父类的方法和装饰器的方法分开，后面容易扩展考虑吧。*/
-interface Shape{
-	public void draw();
-}
-class Circle implements Shape{
-	@Override
-	public void draw(){
-		System.out.println("this is a circle.");
-	}
-}
-class Rectangle implements Shape{
-	@Override
-	public void draw(){
-		System.out.println("this is a Rectangle.");
-	}
-}
-
-abstract class ShapeDecorator implements Shape{
-	protected Shape shape;
-	public ShapeDecorator(Shape shape){
-		this.shape = shape;
-	}
-	@Override
-	public void draw(){
-		shape.draw();
-	}
-}
-
-class RedShapeDecorator extends ShapeDecorator{
-	public RedShapeDecorator(Shape shape){
-		super(shape);
-	}
-
-	@Override
-	public void draw(){
-		shape.draw();
-		setRedBorder(shape);
-	}
-	private void setRedBorder(Shape shape){
-		System.out.println("this border color is red.");
-	}
-}
-
-public class test{
-	public static void main(String args[]){
-		Shape redCircle = new RedShapeDecorator(new Circle());
-		Shape redRectangle = new RedShapeDecorator(new Rectangle());
-		redCircle.draw();
-		redRectangle.draw();
-	}
-}
-```
 
 5、<a name="外观模式">外观模式（Facade Pattern）</a>：提供了一个统一的接口, 用来访问子系统中的一群接口. 外观定义了一个高层接口, 让子系统更容易使用.
 

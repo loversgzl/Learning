@@ -64,7 +64,7 @@ public class test {
 
 ****
 **问：switch(x) 语句中，x 可以是哪些类型？**  
-**答**：包括：byte/short/int/char、enum枚举、Java7 后开始支持 String；  
+**答**：包括：byte/short/int/char（包括它们的封装类）、enum枚举、Java7 后开始支持 String；  
 **注意事项**  
 1、case 语句中的值的数据类型必须与变量的数据类型相同；  
 2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了 break 或者整体结束为止；  
@@ -416,23 +416,24 @@ PriorityQueue是一个无界队列，不允许null值，入队和出队的时间
 
 ### 字符串
 <a name="字符串"></a>
-问：字符串拼接，StringBuffer，StringBuilder，concat 和 + 的区别。
-答：[参考博客](https://www.cnblogs.com/lojun/articles/9664794.html)
-
 ```java
-/*
-String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它是 java 中唯一不需要 new 就可以产生对象的途径。以String s="abce";形式赋值在 java 中叫直接量,它是在常量池中而不是象 new 一样放在压缩堆中。这种形式的字符串，在JVM 内部发生字符串拘留，即当声明这样的一个字符串后，JVM 会在常量池中先查找有没有一个值为"abcd"的对象,如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,如果没有,则在常量池中新创建一个"abcd",下一次如果有String s1 = "abc";又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象
-*/
+/*问：String 字符串的创建？
+String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它是 Java 中唯一不需要 new 就可以产生对象的途径。以String s="abce";形式赋值在 Java 中叫直接量,它是在常量池中而不是像 new 一样放在压缩堆中。这种形式的字符串，在 JVM 内部发生字符串拘留，即当声明这样的一个字符串后，JVM 会在常量池中先查找有没有一个值为"abcd"的对象,如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,如果没有,则在常量池中新创建一个"abcd",下一次如果有 String s1 = "abc";又会将 s1 指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象
 
-/*问：java字符串如何比较是否相等？
-答：java中字符串的比较：== 是比较地址，equals比较值。
-*/
-
-/*是否是同一变量的分析：
-和Integer不同，String只要是对象，== 就一定返回false。
-注意 + 号，有对象，就会转为对象关系。
+问：Java 字符串如何比较是否相等？
+1、== 是比较地址，equals 比较值。
+2、和 Integer 不同，String 只要是对象，== 就一定返回 false。
+3、注意 + 号拼接的字符串，两边有对象，就会转为对象关系，如下：
 String str = "1" + new String("00"); 会产生一个对象。
-str = str + 100; 也是成立的。
+
+问：字符串可以和整数相加么？
+String str = "123";
+str = str + 45; 输出 12345；
+
+问：StringBuffer，StringBuilder，concat 和 + 的区别？
+性能比较：https://www.cnblogs.com/lojun/articles/9664794.html
+1、String变量的累加操作：底层使用了StringBuilder的功能。
+2、注：执行一次字符串“+”,相当于 str = new StringBuilder(str).append("a").toString()。
 */
 String s1 = "abc"; //定义的是一个常量，在常量池中。
 String s3 = new String("abc"); //定义的是一个变量，在堆中，值是常量不可变。
@@ -441,32 +442,34 @@ false:s1 == s3;
 true:s3.equals(s1);
 false:s3 == s4;
 
-String c = "a";
-String d = c + "bc";//会产生新对象
+String c = "a", a = "abc";
+String d = c + "bc";//其中一个是地址，会产生新对象
 String e = "a" + "bc"; //两个常量的连接操作，还是常量
-false: a==d
-true: a==e
+false: a == d
+true: a == e
 
-/*
+/*常见基本操作
 String str = "";
 */
 /*增：*/
-String s = strs[0]+11+"22"; 
+String s = strs[0] + 11 + "22"; 
 String s = s2.concat(String.valueOf(11));
 
 /*删：消除两端的空格*/
 str.strip(); 
 
-/*改（无论什么操作，请用变量接收，字符串是常量，不会改变）：返回长度、返回某个字符、返回拼接num次的字符串、*/
+/*改（下面的操作不会改变原始字符串的值，请接收返回值，字符串是常量，不会改变）：
+返回长度、返回某个字符、返回拼接num次的字符串、*/
 str.length(); str.charAt(int index);
 String newStr = str.repeat(num);
 String subStr = str.subString();
-String[] strs = preStr.split("\\.");
+String[] strs = "".split("\\."); // 如果没有切分，则返回包含原始字符串的数组
 String.join("",strs);
-/*改：将List转换为String[] 数组、数组转ArrayList*/
+
+/*改：将 List 转换为数组、将数组转为 List*/
 List<String> res = new LinkedList<>();
-res.toArray(new String[res.size()]);
-List<String> list = Arrays.asList(array); 
+String[] array = res.toArray(new String[res.size()]);
+List<String> list = Arrays.asList(array); //底层代码调用 ArrayList 的构造函数
 
 /*查：*/
 char ch = str.charAt(index);
@@ -599,6 +602,9 @@ int itemNum=3;
 float totalPrice=price*itemNum;
 float num=(float)(Math.round(totalPrice*100)/100);//如果要求精确4位就*10000然后/10000</span>
 
+问：查看某个变量的类型？
+判断某个类型：boolean type = str instanceof String;
+获取类型：obj.getClass.toString();
 */
 
 /*基本数据类型 和 包装类*/
@@ -639,9 +645,14 @@ java核心卷I中43页有如下表述：两个数值进行二元操作时，会�
   否则，如果其中一个操作数是float类型，另一个将会转换为float类型。 
   否则，如果其中一个操作数是long类型，另一个会转换为long类型。 
   否则，两个操作数都转换为int类型。 
-  故，x==f1[0]中，x将会转换为float类型。*/
+  故，x==f1[0]中，x将会转换为float类型。
+  问：String x = "1";        int y = 1;        System.out.println(x+y);  输出 11 么？
+  是的，会自动转型为String
+  */
 
-/*强制类型转换*/
+
+
+/*强制类型转换：常用封装类来进行数据类型的转换*/
 long a = 100; 
 int b = (int)a;//强制类型转换通常的方法一，大 转 小。
 char ch = 'G';
@@ -733,29 +744,47 @@ int num = (int)(Math.random()*100);//取[0,100)的随机数，一般这种写法
 
 ### 异常和调试
 <a name="异常"></a>
-异常可以分为三类：检查性异常(Exception)、错误(Error)、运行时异常(RuntimeException)、Error 和 Exception它们都继承 Throwable； RuntimeException 继承 Exception，其还有子类SQLException,IOException。
-
-**问：请问error和exception有什么区别?**
-**error**： 不可能指望程序能处理这样的情况，比如说内存溢出等，遇到错误建议中止程序。
-**exception**： 与错误相比，程序一般可以捕获和处理异常，可以对异常进行简单的处理，如无法连接网络，可以十秒后再次尝试，而不是简单的终止程序。
-
-**处理异常的常用方法**：try、catch、finally，无论是否发生异常，即使catch块中有return，finally也还是会被执行。
-
-**运行时常见异常（RuntimeException）**
-此类异常不必须包含在try内，因为可能出现在任何地方，下面这些都是。
-
-**异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem？**
-解决：反复看都没有找到错误，是因为缺少了包名，如果有包一定要在首行添加，package test; 这个一定要放在第一句的！
-**异常：xxx cannot be resolved to a type**
-解决：缺少包，xxx不是一个类或接口。
-**异常：java.lang.Error**：语法错误，如少了一个分号
-**异常：java.lang.ArithmeticException**：算术异常，例如除零异常
-**异常：java.lang.ArrayIndexOutOfBoundsException**：数组越界异常
-**异常：java.lang.NullPointerException**：空指针异常
-
-**问：throw,throws,Throwable的区别**
 ```java
-//Throwable 是 Error和Exception的父类。
+/*
+异常可以分为三类：检查性异常(Exception)、错误(Error)、运行时异常(RuntimeException)
+Throwable 的子类：Error 和 Exception； 
+Exception 的子类：RuntimeException、SQLException、IOException 等
+Error 的子类：后缀是 Error 的异常
+
+问：请问 Error 和 Exception 有什么区别?
+Error：不可能指望程序能处理这样的情况，比如说内存溢出等，遇到错误建议中止程序。
+Exception：与错误相比，程序一般可以捕获和处理异常，可以对异常进行简单的处理，如无法连接网络，可以十秒后再次尝试，而不是简单的终止程序。
+
+问：处理异常的常用方法？
+try、catch、finally，无论是否发生异常，即使 catch 块中有 return，finally 也还是会被执行。
+除非出现 System.exit(0)。
+
+问：throw,throws,Throwable 的区别？
+Throwable 是异常的父类，throws 出现在声明方法的位置，throw 出现在函数体中。
+
+问：运行期常见异常（RuntimeException）
+此类异常不必须包含在 try 内，因为可能出现在任何地方，如下面这些：
+* 异常：Exception in thread "main" java.lang.Error: Unresolved compilation problem？
+解决：反复看都没有找到错误，是因为缺少了包名，如果有包一定要在首行添加，package test; 这个一定要放在第一句的！
+
+* 异常：xxx cannot be resolved to a type
+解决：缺少包，xxx不是一个类或接口。
+
+* 异常：java.lang.Error：语法错误，如少了一个分号
+* 异常：java.lang.ArithmeticException：算术异常，例如除零异常
+* 异常：java.lang.ArrayIndexOutOfBoundsException：数组越界异常
+* 异常：java.lang.NullPointerException：空指针异常
+
+问：当某个线程抛出 OutOfMemoryError 时，其他线程有可能不受影响？
+答：是的，在程序内存溢出之后，溢出内存的线程所占的内存会被快速释放。
+
+问：下面哪个行为被打断不会导致 InterruptedException？
+答：API 里面写的：当线程在活动之前或活动期间处于正在等待、休眠或占用状态且该线程被中断时，抛出该异常。Thread.suspend 不会。
+
+*/
+
+
+//Throwable 是 Error 和 Exception 的父类。
 public class Main {
     public static void checkData(int data) throws Exception {
     	if(data < 0) 
@@ -772,26 +801,43 @@ public class Main {
     	}
     }
 }
-/*finally块内应放一些回收内存的代码
+
+/*finally 块内应放一些回收内存的代码
 1-如果连接数据库，需要关闭连接。
-2-如果用到了IO对象，则需要关闭。
+2-如果用到了 IO 对象，则需要关闭。
 3-如果用到了ArrayList,LinkedList,HashMap，则需要clear.
 4-如果有一个对象obj指向一个大的内存，则可以写obj=null。
-*/
+
+问：try catch finally 中包含 return 的几种情况，及返回结果？
+return 出现的不同情况：https://www.cnblogs.com/sunshineweb/p/7656463.html
+第一种 catch 块中有return语句：try 发生异常时，立即跳转到catch，执行完后，仍会执行 finally；
+（注意：如果finally中对返回值进行了修改，返回值不变，即无法修改）
+第二种 catch 和 finally 块中都有 return 语句：最终返回 finally 块中的语句*/
+//输出：3423
+public static String output = ””;
+public static void foo(inti){
+    try{
+        if (i == 1) throw new Exception();
+    }
+    catch (Exception e){
+        output += “2”;
+        return ;
+    } finally{
+        output += “3”;
+    }
+    output += “4”;
+}
+public static void main(String[] args){
+    foo(0);
+    foo(1);
+    System.out.println(output);
+}
 
 
-/*try catch finally 中包含return的几种情况，及返回结果*/
-参考链接：https://www.cnblogs.com/sunshineweb/p/7656463.html
-第一种：try发生异常时，立即跳转到catch，执行里面的return操作。
-第二种：上面情况下，finally里有对上述返回值的操作，但返回值不变（基本数据类型，如果是引用则另说）。
-第三种：finally里面也有return语句，则会捷足先登先返回。try-catch中的语句也会执行，只是存起来，未返回
+
 
 ```
-* **问：当某个线程抛出OutOfMemoryError时，其他线程有可能不受影响？**
-答：是的，在程序内存溢出之后，溢出内存的线程所占的内存会被快速释放。
 
-* **问：下面哪个行为被打断不会导致InterruptedException？**
-答：API里面写的：当线程在活动之前或活动期间处于正在等待、休眠或占用状态且该线程被中断时，抛出该异常。Thread.suspend不会。
 
 **Eclipse调试**
 [参考博客](https://www.cnblogs.com/sjxbg/p/9768597.html)
@@ -806,6 +852,12 @@ public class Main {
 <a name="Java常用包"></a>
 
 ```java
+/*
+java.lang 包，系统自动载入，无需声明引入，里面有许多基本类
+*/
+import java.lang.Math;
+import java.lang.Integer;
+
 /*
 java.util 包
 */
@@ -839,10 +891,7 @@ java.net 网络编程常用包
 */
 import java.net.Socket;
 
-/*
-java.lang 包，每个程序自动载入的
-*/
-import java.lang.Math;
+
 ```
 
 ### 泛型
