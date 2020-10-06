@@ -121,13 +121,12 @@ System.out.printf();                                       // C 格式输出
 ### 集合框架
 <a name="集合框架"></a>
 ![集合框架](../../pics/集合框架.jpg)
-
 由图可见，集合框架主要包括两种类型的容器，以 Collection 为基类的线性表、以 Map 为基类的键值对类，前者存储一类元素，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。  
-* List 具体实现类有：ArrayList、LinkedList、Vector；
-* Set 具体实现的类有：SortedSet、TreeSet、HashSet、LinkedHashSet；
-* Map 的具体实现类有：HashMap、HashTable、LinkedHashMap；  
+* List 具体实现类有：ArrayList、LinkedList、Vector、Stack；
+* Set 具体实现的类有：HashSet、LinkedHashSet、TreeSet；
+* Map 的具体实现类有：HashMap、LinkedHashMap、Hashtable、TreeMap；  
 **图解**：虚线框表示接口、实线框表示类、直线+空心三角形=实现接口/继承，虚线+空心三角形=扩展接口，虚线+箭头=依赖，[详细参考此链接](https://www.jianshu.com/p/57620b762160)  
-**接口**：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象，还有一些在集合框架出现以前的数据结构：stack；  
+**接口**：Collection、List、Set、Map，之所以定义多个接口是为了以不同的方式操作集合对象
 **数组缺点**：固定长度，数据多了不够，少了浪费空间；  
 **容器类**：为了解决数组的缺点，如  ArrayList、LinkedList；  
 
@@ -151,36 +150,37 @@ Collections.rotate(numbers,2);        // 所有元素向右循环移动 2 位
 Collections.synchronizedList(numbers); // 将线程不安全的改为安全的，还有 Set,Map 等，但是没有 String
 
 /*Arrays 是数组的工具类*/
-Arrays.sort(arr); //给数组排序
+import java.util.Arrays;
+Arrays.sort(arr); 						//给数组排序
+System.arraycopy(origin,0,copy,0,9);     // 拷贝数组(原始数组,index,新数组,index,数量)
+res.add(new ArrayList(oldList));					//复制ArrayList,而不传引用
+//自定义比较函数，比较两个字符串连接顺序后的大小。
+Arrays.sort(strs, (x, y) -> (x + y).compareTo(y + x));
 ```
 
+## 数组
 ```java
-/*易混淆点
-数组的长度：.lenght; List 的长度：.size(); 字符串的长度：.length();
+/*
+易混淆点列举：
+数组的长度：.lenght; 
+List 的长度：.size(); 
+字符串的长度：.length();
 字符串添加元素：append(x);
 List 添加元素：add(x); 
 List 获取用 get！不要总是用 [] 数组的东西。
 StringBuilder 用 charAt
-*/
 
-/*
-线程安全的集合对象，分别对应线性表，键值对，字符串。
+线程安全的集合对象，分别对应线性表，键值对，字符串：
 Vector 线程安全：底层实现基于数组
 HashTable 线程安全：
 StringBuffer 线程安全：
 其他都是非线程安全的集合框架
+
 问：Vector、HashTable、StringBuffer 底层如何实现线程安全的？
+在方法前加上 synchronized。
 */
 
-/*
-普通数组
-1、值相同的数组，引用也不相同。
-2、排序函数
-3、数组赋值
-*/
-import java.util.Arrays;
-Arrays.sort(nums);                                   //排序函数
-
+/*数组*/
 String[] names = {"James", "Larry", "Tom", "Lacy"};  // 字符串数组
 return new int[]{1,2,3};                             // 直接返回一个匿名数组
 int[] numbers = new int[10];                         // 默认值为 0
@@ -189,11 +189,7 @@ for(int i=0; i<names.length; i++)                    // 长度为 length，注�
     System.out.println(names[i]);
 for(String name : names) 
     System.out.println(name);
-System.arraycopy(origin,0,copy,0,9);                  // 拷贝数组(原始数组,index,新数组,index,数量)
-
 if(names == null || names != null && names.length == 0){} // 判断空的情况
-
-res.add(new ArrayList(oldList));					//复制ArrayList,而不传引用
 
 //将 List 转换为 String[] 数组，只能是String 数组，int 不行。
 List<String> res = new LinkedList<>();
@@ -202,25 +198,24 @@ res.toArray(new String[res.size()]);
 //数组转ArrayList
 List<String> list = Arrays.asList(array);  
 Collections.addAll(list, array);
+```
 
-//自定义比较函数，比较两个字符串连接顺序后的大小。
-Arrays.sort(strs, (x, y) -> (x + y).compareTo(y + x));
+## List
+```java
+/*集合列表 List：ArrayList、LinkedList、Vector、Stack
+问：ArrayList 与 LinkedList 有什么区别，分别有什么适用场景（高频考点）
+答：类似于动态数组和链表，前者定位，修改快，后者插入，删除快。相同：都是继承自 List 接口。
+（LinkedList 是一个双向链表）
 
-/*List
-问：ArrayList 与 LinkedList 的区别？
-相同：都是 List 接口的实现类
-不同：ArrayList 存储结构是线性表，LinkedList 存储结构是链表。因此插入，删除，访问速度遵循存储结构的特性。
-LinkedList 是一个双向链表, 当数据量很大或者操作很频繁的情况下，添加和删除元素时具有比 ArrayList 更好的性能。但在元素的查询和修改方面要弱于 ArrayList。
-*/
-
-/* ArrayList 动态数组
-List 是一个接口，而 ArrayList 是 List 接口的一个实现类。 ArrayList 类继承并实现了 List 接口。 因此，List 接口不能被构造，也就是我们说的不能创建实例对象，但是我们可以像下面那样为 List 接口创建一个指向自己的对象引用，而 ArrayList 实现类的实例对象就在这充当了这个指向List接口的对象引用。 
 问：为什么 ArrayList 常用，Vector 不常用？
-Vector 是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector 需要一定开销来维护线程安全，而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下 ArrayList 的性能要优于 Vector。
-Vector 和 ArrayList 一样都是基于数组的。
+答：Vector 是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector 需要一定开销来维护线程安全，而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下 ArrayList 的性能要优于 Vector。
 
 源码解析：如何初始化时收到设置参数为 0，那么 ArrayList 将不会初始化大小，如果不加参数，默认会初始化 10，源码中是通过 EMPTY_ELEMENTDATA 与 DEFAULTCAPACITY_EMPTY_ELEMENTDATA 两个空值来区分是哪种空！（扩容是扩容，元素是元素，在编码阶段，扩容与否不影响编码，不是数组申请空间还有默认值的那种）
+Vector 线程安全是的方式就是在方法前加上 synchronized，因此效率低，很少使用。
+Vector 和 ArrayList 一样都是基于数组的。
 
+问：为什么 ArrayList 继承了 abstractList 还要继承 List 接口（接口已经被抽象类继承了）
+可能为了实现代理功能而设计的：https://www.cnblogs.com/bluejavababy/p/4320545.html
 */
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -251,7 +246,6 @@ List<String> list=Arrays.asList(array);
 
 /*LinkedList
 基于双向链表，拥有和 ArrayList 一样的方法再加上下面这些。
-这里没有用泛型声明
 */
 import java.util.LinkedList; 
 LinkedList<String> sts =new LinkedList<>();
@@ -276,7 +270,7 @@ while(it.hasNext())
     System.out.println(it.next());
 
 
-/*动态二维数组*/
+/*动态二维列表*/
 List<List<Integer>> triangle = new ArrayList<List<Integer>>(); 
 
 /*查：获取第一个数组的第一个值、动态数组的大小，注意和静态数组长度的区分*/
@@ -289,22 +283,25 @@ triangle.get(0).add(1);
 
 /*改：修改第一个数组的第一个值为 99*/
 triangle.get(0).set(0,99);
+```
 
+## Set
+```java
+/* 集合Set：HashSet、LinkedHashSet、TreeSet
+TreeSet：是 SortedSet 的唯一实现类，（底层是TreeMap，所以也是红黑树实现），它的本质可以理解为是有序，无重复的元素的集合；因为都是有序的，所以相应的就有 get，remove 和 add 方法；
+HashSet：看他的源码可以知道，他的底层是 HashMap；
+LinkedHashSet：按照插入顺序进行存储；
 
+问：使用 TreeSet 是否一定要实现 Comparable 接口？
+答：在使用 Set 时，如果存放的不是基本数据类型，而是自定义的类，那么一定要有比较功能，下面是两种情况：
+情况一：比较的类继承 Comparable 接口，重写 compareTo 方法，但是，如果这个类是别人写好的，那这就不行了；
+情况二：后期代码修改常用，自己构造一个比较器（写一个类继承Comparator，重写compare方法），然后将类加入到集合中，该集合即具备该功能。
 
-/* 集合：Set
-TreeSet：是 SortedSet 的唯一实现类，红黑树实现，树形结构，它的本质可以理解为是有序，无重复的元素的集合；
-因为都是有序的，所以相应的就有 get，remove 和 add 方法；
-HashSet：看他的源码可以知道，他的底层是 hashmap；
-LinkedHashSet：安插入顺序进行存储；
-
-注意：在使用 Set 时，如果存放的不是基本数据类型，而是自定义的类，那么一定要继承 Comparable 接口，
-重写 compareTo 方法，否则 Set 无法去重，TreeSet 也会根据该方法区分大小，进行排序，还要重写 equals 方法，
+否则 Set 无法去重，TreeSet 也会根据该方法区分大小，进行排序，还要重写 equals 方法，
 一般包装类都重写了此方法，否则会调用父类 Obeject 中的 equals 方法，比较地址而不是值了。
 
 问：TreeSet 和 HashSet 有什么区别？
-答：HashSet 是基于哈希表实现的，允许存在一个 null 值，插入一个值时会调用 HashCode() 方法，生成 HashCode 值，
-来进行相同元素的区分，但它却不能保证插入次序与遍历次序的一致性，因此才有了 LinkedHashSet，
+答：HashSet 是基于哈希表实现的，允许存在一个 null 值，插入一个值时会调用 HashCode() 方法，生成 HashCode 值，来进行相同元素的区分，但它却不能保证插入次序与遍历次序的一致性，因此才有了 LinkedHashSet，
 也是采用 HashCode 值方式存储，但多用了链表的方式来保证插入与遍历次序的一致性。
 TreeSet 是 SortedSet 接口的唯一实现类，它是用二叉树存储数据的方式来保证存储的元素处于有序状态。
 但是TreeSet不允许插入null值。
@@ -325,19 +322,18 @@ set.contains(x);//查：返回是否包含x、
 import java.util.TreeSet;
 TreeSet<Integer> set = new TreeSet<>();//排序的集合
 set.subSet(from,true,to,true);//截取某段值，[from,to],两端值看bool函数的取值。
+```
 
-
-/* 图：Map 
-图接口 import java.util.MAP;
-四个实现类 import java.util.HashMap、HashTable、HashSet
-三类Map：HashMap、LinkedHashMap、TreeMap
+## Map
+```java
+/* 集合 Map：HashMap、LinkedHashMap、Hashtable、TreeMap
 
 问：你有没有重写过 HashCode 方法和 equals 方法？
-有，有一次在使用 HashMap 时，key 是自定义的类，需要根据 ID 判断是否是同一个对象而不是根据地址，
+答：有，有一次在使用 HashMap 时，key 是自定义的类，需要根据 ID 判断是否是同一个对象而不是根据地址，
 如果我们在 HashMap 的键部分存放自定义的对象，一定要在这个对象中用自己的 equals 方法和 hashCode 方法
 覆盖掉 Object 中的同名方法。
 
-问：HashMap实现原理
+问：HashMap实现原理？
 参考： https://blog.csdn.net/qq_41345773/article/details/92066554
 参考： https://www.cnblogs.com/dijia478/p/8006713.html
 1、基本：HashMap 是基于 Map 接口实现的，允许存入空键和值放在 0 位置，并且是线程不安全的。
@@ -345,9 +341,25 @@ set.subSet(from,true,to,true);//截取某段值，[from,to],两端值看bool函�
 底层是用数组和链表（HashCode 冲突，采用链地址法）实现的，JDK1.8 采用了数组+红黑树的方式实现。
 有两个原因：1、当扩容时，1.7 采用头插法，所以扩容后的链表与原来相反，多线程的情况下可能产生条件竞争，导致死循环。1.8采用了尾插法。
 引入红黑树优化了HashMap的性能。当节点数大于 8 时，自动扩展为红黑树。
-HashMap 扩容时是当前容量翻倍即:capacity x 2。
-HashMap 对 key 进行了二次 hash，以获得更好的散列值，然后对 table 数组长度取摸。
+
+问：HashMap 和 Hashtable 的区别？
+五点区别：https://blog.csdn.net/qq_41345773/article/details/92066554
+相同：HashMap 和 Hashtable 都实现了Map接口，都是键值对保存数据的方式；
+区别1线程安全、区别2null、区别3扩容、区别4哈希、区别5继承；
+
+问：HashMap 与 HashSet 有什么区别，两者在查询某个值的效率上是否有区别？
+答：类似字典和集合，HashSet 自身并没有独立的实现，而是在里面封装了一个 Map，向 HashSet 中增加元素，其实就是把该元素作为 key，增加到 Map 中，其他也是类似的 map 操作。
+
+
+
+问：ConcurrentHashMap 与 Hashtable 有什么区别？
+
+问：HashMap 和 LinkedHashMap 的区别？
+LinkedHashMap; 数据会有序的存入字典中和 HashMap 不同，后者是无序的。
+TreeMap 能够把它保存的记录根据键排序,默认是按键值的升序排序。
+
 */
+import java.util.MAP;
 class key{
     private Integer id;
     public Integer getId(){return id;}
@@ -426,6 +438,9 @@ String s="abce"是一种非常特殊的形式,和 new 有本质的区别。它�
 3、注意 + 号拼接的字符串，两边有对象，就会转为对象关系，如下：
 String str = "1" + new String("00"); 会产生一个对象。
 
+问：如果地址不同，但值相同的字符串存入hashmap中，会取出两个不同的值么？
+不会，就算地址不同，但hashmap是根据值来进行哈希存储的。
+
 问：字符串可以和整数相加么？
 String str = "123";
 str = str + 45; 输出 12345；
@@ -434,6 +449,12 @@ str = str + 45; 输出 12345；
 性能比较：https://www.cnblogs.com/lojun/articles/9664794.html
 1、String变量的累加操作：底层使用了StringBuilder的功能。
 2、注：执行一次字符串“+”,相当于 str = new StringBuilder(str).append("a").toString()。
+
+问：字符串常用操作？
+length()：取长度
+.charAt()：取某个位置的字符
+.split()：切分字符串
+.substring()：取子字符串
 */
 String s1 = "abc"; //定义的是一个常量，在常量池中。
 String s3 = new String("abc"); //定义的是一个变量，在堆中，值是常量不可变。
@@ -448,9 +469,6 @@ String e = "a" + "bc"; //两个常量的连接操作，还是常量
 false: a == d
 true: a == e
 
-/*常见基本操作
-String str = "";
-*/
 /*增：*/
 String s = strs[0] + 11 + "22"; 
 String s = s2.concat(String.valueOf(11));
@@ -462,7 +480,7 @@ str.strip();
 返回长度、返回某个字符、返回拼接num次的字符串、*/
 str.length(); str.charAt(int index);
 String newStr = str.repeat(num);
-String subStr = str.subString();
+String subStr = str.substring();
 String[] strs = "".split("\\."); // 如果没有切分，则返回包含原始字符串的数组
 String.join("",strs);
 

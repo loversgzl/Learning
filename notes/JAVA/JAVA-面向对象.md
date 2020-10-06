@@ -35,7 +35,7 @@
 为了实现一些其他的功能，Java 也提供了许多非访问修饰符（所有成员都肯定有访问控制修饰符，而非访问控制修饰符是可选的，可有可无）。
 **static 修饰符**：用来创建类方法和类变量，这里叫**类方法**，就是静态方法。类的静态成员与类直接相关，与对象无关，在一个类的所有实例之间共享同一个静态成员
 1、静态变量必须初始化（不赋值，系统会自动初始化），可以修改（例如我们常利用静态成员变量统计某个函数的调用次数）
-2、静态变量只能在类主体中定义，不能在方法中定义（不能修饰局部变量：局部变量，由于在方法中，方法中的变量都在栈中，随着方法的进栈出栈产生和销毁。所以不可以被static修饰。一旦被static修饰变量就属于类了），静态的都属于类，不属于实例方法。
+2、静态变量只能在类主体中定义，不能在方法中定义，静态方法也不行（不能修饰局部变量：局部变量，由于在方法中，方法中的变量都在栈中，随着方法的进栈出栈产生和销毁。所以不可以被static修饰。一旦被static修饰变量就属于类了），静态的都属于类，不属于实例方法。
 3、静态成员函数中不能调用非静态成员（实例变量 和 实例方法）：因为也许这个实例还没有产生。
 4、在类方法中不能使用super、this关键字。
 5、类方法不能被覆盖。 
@@ -86,17 +86,18 @@ public static final int BOXWIDTH = 10; // 声明一个常量
 2.3、如果一个类实现多个接口。并且这些接口提供了一个具有相同名称和参数列表的方法（不管方法 是否是默认方法），那么必须覆盖该方法来解决冲突。子类必须指定覆盖哪个父类接口中的方法。
 
 **abstract 修饰符**：修饰抽象类和抽象方法，声明抽象类的唯一目的是为了将来对该类进行扩充。
-1、抽象类不能用来实例化对象，但是可以有构造方法
-2、如果一个类包含抽象方法，那么该类一定要声明为抽象类，但是一个抽象类不一定有抽象方法。
-3、抽象方法是一种没有任何实现的方法（不能有大括号），该方法的的具体实现由子类提供。
-4、任何继承抽象类的子类必须实现父类的所有抽象方法，除非该子类也是抽象类。
-5、抽象类中也可以包含已经实现的方法，这是和接口的一个重要区别。
-6、抽象类中的抽象方法要加 abstract 关键字声明，但是接口中可以省略。
+1、抽象类不能用来实例化对象，但是可以有构造方法（？？）
+2、接口是公开的，里面不能有私有的方法或变量，是用于让别人使用的，而抽象类是可以有私有方法或私有变量的。
+3、抽象类中也可以包含已经实现的方法，这是和接口的一个重要区别（现在可能不是了）。
+4、抽象类中的抽象方法要加 abstract 关键字声明，但是接口中可以省略。
+5、如果一个类包含抽象方法，那么该类一定要声明为抽象类，但是一个抽象类不一定有抽象方法。
+6、抽象方法是一种没有任何实现的方法（不能有大括号），该方法的的具体实现由子类提供。
+7、任何继承抽象类的子类必须实现父类的所有抽象方法，除非该子类也是抽象类。
 
 ```java
 /*问：不能用来修饰 接口 里 方法的有哪些关键字？
 答：不能用 private、protected，常用 public static final 修饰属性，public abstract 修饰方法，当然 java8 新增 default、static 修饰方法。
-(1)增加 default 方法。对已有的接口，如果想对接口增加一个新方法，那么需要对实现该接口的所有类进行修改，如果接口的实现类很多，就会带来很大的工作量，而且还很容易破坏以前的代码，带来一些问题。如果把新的方法定义为 default 方法，就可以避免对其他实现类的修改。Default方法是非常有用的，通过在接口定义的方法的访问修饰符前加上关键字default，那么实现类就无需提供该方法的实现了。
+(1)增加 default 方法。对已有的接口，如果想对接口增加一个新方法，那么需要对实现该接口的所有类进行修改，如果接口的实现类很多，就会带来很大的工作量，而且还很容易破坏以前的代码，带来一些问题。如果把新的方法定义为 default 方法，就可以避免对其他实现类的修改。Default 方法是非常有用的，通过在接口定义的方法的访问修饰符前加上关键字default，那么实现类就无需提供该方法的实现了。
 但是，这样也会有一个问题：如果接口 A 和接口 B 里有一个名字相同并且参数列表也相同的方法都被定义为了default方法，那么当类 C 实现接口 A 和接口 B 的时候就会在编译时报错。由于是编译时报错，这个完全可以接受，当类 C 成功实现了接口 A 和接口 B 以后（没有冲突），类 C 的实例就可以调用接口 A 和接口 B 里的 default 方法了。
 
 (2)新增了 static 函数。static 修饰的方法也是非抽象方法，有自己的方法体，在接口中定义一个静态方法，该方法可以直接用 接口名.方法名() 的形式来调用。相当于调用类的静态方法一样，给方法的调用带来了方便。
@@ -185,34 +186,34 @@ class Sub extends Super{
 4.子类初始化代码块，子类构造函数*/
 class A{
     public static int a = testA();
-    static {
-        System.out.println("父类静态代码块");
-    }
     public static int testA(){ //如果没有变量的调用，是不会初始化的。
         System.out.println("父类静态变量");
         return 1;
     }
-    public A(){
-        System.out.println("父类构造方法");
+    static {
+        System.out.println("父类静态代码块");
     }
     {//这里也叫父类对象成员构造函数，就一大括号
         System.out.println("父类初始化块");
     }
+    public A(){
+        System.out.println("父类构造方法");
+    }
 }
 public class B extends A{
     public static int b = testB();
-    static{
-        System.out.println("子类静态代码块");
-    }
     public static int testB(){
         System.out.println("子类静态变量");
         return 1;
     }
-    public B(){
-        System.out.println("子类构造方法");
+    static{
+        System.out.println("子类静态代码块");
     }
     {//这里也叫子类对象成员构造函数，就一大括号
         System.out.println("子类初始化块");
+    }
+    public B(){
+        System.out.println("子类构造方法");
     }
     public static void main(String[] args){
         new B();
@@ -329,6 +330,41 @@ class Parent{
 class SubClass extends Parent{
 	public SubClass(int i){
         //可以在这里添加 super(i); 否则系统会默认添加super();找不到父类的无参构造方法报错。
+    }
+}
+
+/*问：输出的值为多少？
+答：22 34 17*/
+class Test {
+    public static void main(String[] args) {
+        System.out.println(new B().getValue());
+    }
+    static class A {
+        protected int value;
+        public A (int v) {
+            setValue(v);
+        }
+        public void setValue(int value) {
+            this.value= value;
+        }
+        public int getValue() {
+            try {
+                value ++;
+                return value;
+            } finally {
+                this.setValue(value);
+                System.out.println(value);
+            }
+        }
+    }
+    static class B extends A {
+        public B () {
+            super(5);
+            setValue(getValue()- 3);
+        }
+        public void setValue(int value) {
+            super.setValue(2 * value);
+        }
     }
 }
 ```

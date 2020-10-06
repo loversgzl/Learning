@@ -63,37 +63,7 @@ AQS（AbstractQueuedSynchronizer），即队列同步器。它是构建锁或者
 读写锁、偏向锁、乐观锁、悲观锁
 
 ### 集合框架的问题
-**问：ArrayList 与 LinkedList 有什么区别，分别有什么适用场景（高频考点）**
-答：类似于动态数组和链表，前者定位，修改快，后者插入，删除快。相同：都是继承自 List 接口。
-
-**Map 接口类**
-Java 为数据结构中的映射定义了一个接口 java.util.Map; 它有四个实现类，分别是HashMap、Hashtable、LinkedHashMap 和 TreeMap。
-**问：HashMap 实现原理（get、put、resize）？？？**
-[参考博客](https://www.imooc.com/article/24118)
-需要阅读源码深入理解。
-
-**问：HashMap 与 HashSet 有什么区别，两者在查询某个值的效率上是否有区别？**
-答：类似字典和集合，HashSet 自身并没有独立的实现，而是在里面封装了一个 Map，向 HashSet 中增加元素，其实就是把该元素作为 key，增加到 Map 中，其他也是类似的 map 操作。
-
-**问：HashMap 和 Hashtable 的区别？**
-答：相同：HashMap 和 Hashtable都实现了Map接口，都是键值对保存数据的方式；
-区别1：HashMap 可以存放 null、Hashtable 不能存放 null
-区别2：HashMap 不是线程安全的类、Hashtable 是线程安全的类
-HashMap 不支持线程的同步，即任一时刻可以有多个线程同时写 HashMap;可能会导致数据的不一致。如果需要同步，可以用 Collections 的 synchronizedMap 方法使 HashMap具有同步的能力，或者使用ConcurrentHashMap。
-
-**问：HashMap 和 Linked HashMap 的区别？**
-LinkedHashMap; 数据会有序的存入字典中和 HashMap 不同，后者是无序的。TreeMap 能够把它保存的记录根据键排序,默认是按键值的升序排序。
-
-```java
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Iterator;
-Map<Integer, String> map = new LinkedHashMap<>();
-map.put(1,"one");
-//用 Iterator 遍历时会按照插入顺序输出
-for(Iterator x = map.keySet().iterator(); x.hasNext();)
-	Object key = x.next();
-```
+见java-基础语法
 
 ### 字符串问题
 **问：字符串拼接 StringBuffer，StringBuilder，concat 和 + 的区别？**

@@ -529,14 +529,40 @@ JDK1.5，1.6，1.7，1.8，1.9，1.10，1.11的新特性整理
 
 
 
-### JAVA - 垃圾回收机制
+### JAVA - 垃圾回收机制与内存调优
 <a name="javaGC"></a>
 
 ```java
-/*JDK中提供了三个ClassLoader，根据层级从高到低为：           
+/*JDK 中提供了三个 ClassLoader，根据层级从高到低为：           
 Bootstrap ClassLoader，主要加载JVM自身工作需要的类。          
 Extension ClassLoader，主要加载%JAVA_HOME%\lib\ext目录下的库类。          
-Application ClassLoader，主要加载Classpath指定的库类，一般情况下这是程序中的默认类加载器，也是ClassLoader.getSystemClassLoader() 的返回值。（这里的Classpath默认指的是环境变量中配置的Classpath，但是可以在执行Java命令的时候使用-cp 参数来修改当前程序使用的Classpath）              JVM加载类的实现方式，我们称为 双亲委托模型：          如果一个类加载器收到了类加载的请求，他首先不会自己去尝试加载这个类，而是把这个请求委托给自己的父加载器，每一层的类加载器都是如此，因此所有的类加载请求最终都应该传送到顶层的Bootstrap ClassLoader中，只有当父加载器反馈自己无法完成加载请求时，子加载器才会尝试自己加载。            双亲委托模型的重要用途是为了解决类载入过程中的安全性问题。       假设有一个开发者自己编写了一个名为Java.lang.Object的类，想借此欺骗JVM。现在他要使用自定义ClassLoader来加载自己编写的java.lang.Object类。然而幸运的是，双亲委托模型不会让他成功。因为JVM会优先在Bootstrap ClassLoader的路径下找到java.lang.Object类，并载入它*/
+Application ClassLoader，主要加载Classpath指定的库类，一般情况下这是程序中的默认类加载器，也是ClassLoader.getSystemClassLoader() 的返回值。（这里的Classpath默认指的是环境变量中配置的Classpath，但是可以在执行Java命令的时候使用-cp 参数来修改当前程序使用的Classpath）              JVM加载类的实现方式，我们称为 双亲委托模型：          如果一个类加载器收到了类加载的请求，他首先不会自己去尝试加载这个类，而是把这个请求委托给自己的父加载器，每一层的类加载器都是如此，因此所有的类加载请求最终都应该传送到顶层的Bootstrap ClassLoader中，只有当父加载器反馈自己无法完成加载请求时，子加载器才会尝试自己加载。            双亲委托模型的重要用途是为了解决类载入过程中的安全性问题。       假设有一个开发者自己编写了一个名为Java.lang.Object的类，想借此欺骗JVM。现在他要使用自定义ClassLoader来加载自己编写的java.lang.Object类。然而幸运的是，双亲委托模型不会让他成功。因为JVM会优先在Bootstrap ClassLoader的路径下找到java.lang.Object类，并载入它
+
+1、线上系统CPU，内存与磁盘IO暴增，你会如何调优？
+
+2、你们JVM线上使⽤的什么垃圾回收器？CMS还是G1？
+
+3、CMS的并发更新失败是怎么回事？如何优化？
+
+4、JVM是任何时刻都可以STW吗？为什么？
+
+5、线上系统GC问题如何快速定位与分析？阿里巴巴的Arthas用过吗？
+
+6、单机几十万并发的系统JVM如何优化？
+
+7、高并发系统为何建议选择G1垃圾收集器？
+
+8、能说说Mysql索引底层B+树结构与算法吗？
+
+9、聚集索引与覆盖索引与索引下推到底是什么？
+
+10、能说说Mysql并发支撑底层Buffer Pool机制吗？
+
+11、一线互联网公司的数据库架构是如何设计的?
+
+12、对线上千万级大表加字段时，性能极慢问题如何处理？
+
+*/
 
 ```
 
