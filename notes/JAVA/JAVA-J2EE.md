@@ -714,7 +714,7 @@ expression = "execution(* spring.ProductService.*(..)) "/>
 
 ### SpringMVC
 入口是Servlet。
-springmvc的请求流程，我们以一次用户的数据查询为例: 1，用户通过浏览器发送http请求，web容器接收到相关请求调用springmvc的核心控制器DispatcherServlet ，任何路径的映射都是如此；2，DispatcherServlet请求处理器映射器（HandlerMapping），处理器映射器根据 路径 对应的 配置或注解，找到最终要执行的Handler，并返回处理器执行链（HandlerExecutionChain）给DispatcherServlet。 3，DispatcherServlet接收到处理器执行链后请求处理器适配器,（HandlerAdapter）处理器适配器根据Handler规则执行不同的Handler，即我们编写的Controller，执行完成后返回一个ModelAndView对象给DispatcherServlet 5，DispatcherServlet接收数据并调用视图解析器（ViewResolver），视图解析器将逻辑视图解析成真正的物理视图，并返回View对象 6，DispatcherServlet接收到对应的View对象,对视图进行渲染，将model中的数据转为response响应。 7，DispatcherServlet响应用户的请求。
+springmvc的请求流程，我们以一次用户的数据查询为例: 1，用户通过浏览器发送 HTTP 请求，WEB 容器接收到相关请求调用 SpringMVC 的核心控制器 DispatcherServlet ，任何路径的映射都是如此；2，DispatcherServlet请求处理器映射器（HandlerMapping），处理器映射器根据 路径 对应的 配置或注解，找到最终要执行的Handler，并返回处理器执行链（HandlerExecutionChain）给DispatcherServlet。 3，DispatcherServlet接收到处理器执行链后请求处理器适配器,（HandlerAdapter）处理器适配器根据Handler规则执行不同的Handler，即我们编写的Controller，执行完成后返回一个ModelAndView对象给DispatcherServlet 5，DispatcherServlet接收数据并调用视图解析器（ViewResolver），视图解析器将逻辑视图解析成真正的物理视图，并返回View对象 6，DispatcherServlet接收到对应的View对象,对视图进行渲染，将model中的数据转为response响应。 7，DispatcherServlet响应用户的请求。
 
 ```xml
 web.xml

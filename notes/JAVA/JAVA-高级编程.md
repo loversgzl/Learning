@@ -4,11 +4,63 @@
 **JAVA - 高级编程**
 
 * <a href="#javaReflect">JAVA - 反射</a>
+* <a href="#泛型">JAVA - 泛型</a>
 * <a href="#javaIO">JAVA - I/O-NIO</a>
 * <a href="#javaThreat">JAVA - 多线程编程</a>
 * <a href="#javaJVM">JAVA - 虚拟机</a>
 * <a href="#javaGC">JAVA - 垃圾回收，内存优化机制</a>
 * <a href="#javaNet">JAVA - 网络编程</a>
+
+### 基础知识
+```java
+/**序列化**
+什么是序列化：https://www.cnblogs.com/douzi520/p/9497889.html
+问：序列化是干什么的？
+简单说就是为了保存在内存中的各种对象的状态，并且可以把保存的对象状态再读出来。虽然你可以用你自己的各种各样的
+方法来保存Object States，但是Java给你提供一种应该比你自己好的保存对象状态的机制,那就是序列化。
+  
+问：什么情况下需要序列化？
+当你想把内存中的对象保存到一个文件中或者数据库中时候，
+当你想用序列化在网络上传送对象的时候；
+当你想通过 RMI 传输对象的时候；
+
+问：当对一个对象实现序列化时，究竟发生了什么？
+Java 在序列化时不会实例化 static 变量和 transient 修饰的变量，因为 static 代表类的成员，transient 代表对象
+的临时数据，被声明这两种类型的数据成员不能被序列化。序列化保存的是对象的状态，静态变量属于类的状态，因此，序列
+化并不保存静态变量。 
+
+问：java类中serialVersionUID的作用？
+参考：https://www.cnblogs.com/duanxz/p/3511695.html
+实现Serializable接口的目的是为类可持久化，比如在网络传输或本地存储，为系统的分布和异构部署提供先决条件。若没有
+序列化，现在我们所熟悉的远程调用，对象数据库都不可能存在，serialVersionUID适用于java序列化机制。简单来说，
+JAVA序列化的机制是通过 判断类的serialVersionUID来验证的版本一致的。在进行反序列化时，JVM会把传来的字节流中的
+serialVersionUID于本地相应实体类的serialVersionUID进行比较。如果相同说明是一致的，可以进行反序列化，否则会出
+现反序列化版本一致的异常，即是InvalidCastException。
+
+具体序列化的过程是这样的：序列化操作时会把系统当前类的serialVersionUID写入到序列化文件中，当反序列化时系统会
+自动检测文件中的serialVersionUID，判断它是否与当前类中的serialVersionUID一致。如果一致说明序列化文件的版本与
+当前类的版本是一样的，可以反序列化成功，否则就失败；
+
+serialVersionUID有两种显示的生成方式：
+一是默认的1L，比如：private static final long serialVersionUID = 1L;        
+
+二是根据包名，类名，继承关系，非私有的方法和属性，以及参数，返回值等诸多因子计算得出的，极度复杂生成的一个64位的哈希字段。基本上计算出来的这个值是唯一的。比如：private static final long  serialVersionUID = xxxxL;
+注意：显示声明serialVersionUID可以避免对象不一致，
+
+相关注意事项：
+a）当一个父类实现序列化，子类自动实现序列化，不需要显式实现 Serializable 接口； 
+b）当一个对象的实例变量引用其他对象，序列化该对象时也把引用对象进行序列化； 
+c）并非所有的对象都可以序列化，,至于为什么不可以，有很多原因了　比如： 
+1.安全方面的原因，比如一个对象拥有private，public等field，对于一个要传输的对象，比如写到文件，或者进行rmi传
+输 等等，在序列化进行传输的过程中，这个对象的private等域是不受保护的。 
+2. 资源分配方面的原因，比如socket，thread类，如果可以序列化，进行传输或者保存，
+也无法对他们进行重新的资源分配，而且，也是没有必要这样实现把一个对象完全转成字节序列，方便传输。
+就像你寄一箱饼干，因为体积太大，就全压成粉末紧紧地一包寄出去，这就是序列化的作用。
+只不过JAVA的序列化是可以完全还原的。
+*/
+
+```
+
 
 ### JAVA - 反射
 <a name="javaReflect"></a>
@@ -147,10 +199,34 @@ ArrayList<? super Hero> heroList = new ArrayList<Object>();
 文 件 FileInputStream FileOutputStrean FileReader FileWriter 文件进行处理的节点流。
 
 ```java
-/*代码一：一般说来操作系统都会安装在C盘，所以会有一个 C:\WINDOWS目录。遍历这个目录下所有的文件(不用遍历子目录)，找出这些文件里，最大的和最小(非0)的那个文件，打印出他们的名。注: 最小的文件不能是 0 长度。
-知识点：1如何创建文件对象，2返回文件夹下所有子文件的函数，3一个文件的长度
+/**问：序列化有什么作用？java.io.Serializable,将此对象序列化为文件，并在另外一个 JVM 中读取文件，进行反序列
+化，请问此时读出的 Data0bject 对象中的 word 和 i 的值分别为："123"，0
+注意：序列化的是对象，不是类，类变量不会被序列化，Java 在序列化时不会实例化 static 变量和 transient 修饰的变
+量，因为 static 代表类的成员，transient代表对象的临时数据，被声明这两种类型的数据成员不能被序列化。
+*/
+public class DataObject implements Serializable{
+    private static int i=0;
+    private String word=" ";
+    public void setWord(String word){
+        this.word=word;
+    }
+    public void setI(int i){
+        Data0bject.i=I;
+     }
+}
+DataObject object=new Data0bject ( );
+object.setWord("123");
+object.setI(2);
+
+/*问：transient 关键字？
+序列化与反序列化：https://blog.csdn.net/SDDDLLL/article/details/92583968
+作用：将不需要序列化的属性前添加关键字transient，序列化对象的时候，这个属性就不会被序列化。
 */
 
+/*代码一：一般说来操作系统都会安装在C盘，所以会有一个 C:\WINDOWS目录。遍历这个目录下所有的文件(不用遍历子目
+录)，找出这些文件里，最大的和最小(非0)的那个文件，打印出他们的文件名。注: 最小的文件不能是 0 长度。
+知识点：1如何创建文件对象，2返回文件夹下所有子文件的函数，3一个文件的长度
+*/
 import java.io.File; //引入必要的包
 public class test{
 	public static void main(String args[]){
@@ -176,7 +252,7 @@ public class test{
 ```
 
 ```java
-//代码二、输出电子书文件夹下所有的PDF文件，并统计有多少文件。
+//代码二、输出电子书文件夹下所有的PDF文件，并统计有多少文件 。
 import java.io.File;
 public class Main{
 	public static int num = 0;
@@ -278,9 +354,7 @@ public class NIOBufferDemo {
 ![多线程方法](../../pics/java多线程.png)
 
 ```java
-/*
-实现的三种方法
-*/
+/*实现的三种方法*/
 //方法一：继承Thread类
 public class SimpleThread extends Thread{
     SimpleThread t = new SimpleThread();
@@ -302,8 +376,12 @@ public class SimpleThread{
 }
 
 /*常用方法：
-通过调用Thread类的start方法来启动一个线程，这是此线程处于就绪状态，并没有运行。当得到cpu时间片后，开始执行run方法。*/
-t1.start(); //启动线程是start()方法，run()并不能启动一个新的线程
+通过调用Thread类的start方法来启动一个线程，这是此线程处于就绪状态，并没有运行。当得到cpu时间片后，开始执行
+run方法。*/
+
+/*启动线程是start()方法，run()并不能启动一个新的线程，但是调用run会执行这个方法，和普通函数调用相同*/
+t1.start();
+t.close();
 Thread.sleep(1000); //线程阻塞 1 秒
 t1.join();//在主线程中加入该线程，一般是 main 嘛，当 t1 执行完后，才会继续执行主函数
 t1.yield(); //临时暂停，回到就绪状态，让位给同等优先级的其他线程。
@@ -313,8 +391,12 @@ t1.setDaemon(true); //如果一个进程只剩下守护线程，则该进程会�
 /*问：多线程问题
 多线程问题：sleep、wait、yield、join、volatile、并发、线程池、锁的实现
 
-问：调用后释放锁的只有wait+join。
-答：刚看到一个大佬写的，给大家参考一下，所谓的释放锁资源实际是通知对象内置的monitor对象进行释放，而只有所有对象都有内置的monitor对象才能实现任何对象的锁资源都可以释放。又因为所有类都继承自Object，所以wait(）就成了Object方法，也就是通过wait()来通知对象内置的monitor对象释放，而且事实上因为这涉及对硬件底层的操作，所以wait()方法是native方法，底层是用C写的。     其他都是Thread所有，所以其他3个是没有资格释放资源的    而join()有资格释放资源其实是通过调用wait()来实现的    
+问：调用后释放锁的只有 wait+join。
+答：刚看到一个大佬写的，给大家参考一下，所谓的释放锁资源实际是通知对象内置的monitor对象进行释放，而只有所有对
+象都有内置的monitor对象才能实现任何对象的锁资源都可以释放。又因为所有类都继承自Object，所以wait(）就成了
+Object方法，也就是通过wait()来通知对象内置的monitor对象释放，而且事实上因为这涉及对硬件底层的操作，所以
+wait()方法是native方法，底层是用C写的。其他都是Thread所有，所以其他3个是没有资格释放资源的,而join()有资格释
+放资源其实是通过调用wait()来实现的。
 
 Thread.sleep(100);
 作用：让当前正在运行的占用 cpu 的线程，阻塞 100 ms，其余线程自己竞争获取 cpu，如果被停止，会抛出 InterruptedException，需要的注意的是就算线程的睡眠时间到了，他也不是立即会被运行，只是从阻塞状态变为了就绪状态，是不会由阻塞状态直接变为运行状态的。
@@ -330,7 +412,7 @@ this.wait()
 ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问(通过get或set方法访问)时能保证各个线程里的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程的上下文。  可以总结为一句话：ThreadLocal的作用是提供线程内的局部变量，这种变量在线程的生命周期内起作用，减少同一个线程内多个函数或者组件之间一些公共变量的传递的复杂度。  举个例子，我出门需要先坐公交再做地铁，这里的坐公交和坐地铁就好比是同一个线程内的两个函数，我就是一个线程，我要完成这两个函数都需要同一个东西：公交卡（北京公交和地铁都使用公交卡），那么我为了不向这两个函数都传递公交卡这个变量（相当于不是一直带着公交卡上路），我可以这么做：将公交卡事先交给一个机构，当我需要刷卡的时候再向这个机构要公交卡（当然每次拿的都是同一张公交卡）。这样就能达到只要是我(同一个线程)需要公交卡，何时何地都能向这个机构要的目的。  有人要说了：你可以将公交卡设置为全局变量啊，这样不是也能何时何地都能取公交卡吗？但是如果有很多个人（很多个线程）呢？大家可不能都使用同一张公交卡吧(我们假设公交卡是实名认证的)，这样不就乱套了嘛。现在明白了吧？这就是ThreadLocal设计的初衷：提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。
 
 
-**比较：sleep 方法 和 wait 方法**
+**问：sleep 方法 和 wait 方法区别？**
 对于sleep()方法，我们首先要知道该方法是属于Thread类中的，而wait()方法，则是属于Object类中的。sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持着，当指定的时间到了又会自动恢复运行状态。
 在调用sleep()方法的过程中，线程不会释放对象锁。而当调用wait()方法的时候，线程会放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象调用notify()方法后本线程才进入对象锁定池准备获取对象锁进入运行状态。
 
@@ -350,31 +432,41 @@ synchronized关键字不能继承，所以在定义接口方法时不能使用sy
 
 
 **问：关于 volatile 的一些面试问题**
-参考博客1：https://blog.csdn.net/u011277123/article/details/72235927
+有关volatile的几个小面试题：https://blog.csdn.net/u011277123/article/details/72235927
 参考博客2：https://blog.csdn.net/u012723673/article/details/80682208
+面试官提问：https://blog.csdn.net/weixin_33726313/article/details/87976219
 
-问：volatile 关键字的作用？
-答：1、使得一个非原子操作变成原子操作，多线程访问中用 volatile 修饰 long和double 类型的变量。
-2、volatile 关键字用在多线程同步中，可保证读取的可见性
-3、JVM 保证从主存加载到线程工作内存的值是最新的
-4、volatile 能禁止进行指令重排序
+问：被 volatile 修饰的共享变量，具有以下两点特性？
+1 . 保证了不同线程对该变量操作的内存可见性;
+2 . 禁止指令重排序
+JMM 主要就是围绕着如何在并发过程中如何处理原子性、可见性和有序性这3个特征来建立的，通过解决这三个问题，可以解除缓存不一致的问题。而 volatile 跟可见性和有序性都有关。
 
+问：volatile 原理？
+当写一个 volatile 变量时，JMM 会把该线程对应的本地内存中的共享变量刷新到主内存；
+当读一个 volatile 变量时，JMM 会把该线程对应的本地内存置为无效，线程接下来将从主内存中读取共享变量；
+但是 volatile 不能保证原子性，也就不能保证线程安全。
 
-问：volatile原理？
-出于运行速率的考虑，java编译器会把经常经常访问的变量放到缓存（严格讲应该是工作内存）中，读取变量则从缓存中读。但是在多线程编程中,内存中的值和缓存中的值可能会出现不一致。volatile用于限定变量只能从内存中读取，保证对所有线程而言，值都是一致的。但是volatile不能保证原子性，也就不能保证线程安全。
-变量的值在使用之前总会从主内存中再读取出来。
-对变量值的修改总会在完成之后写回到主内存中。
+问：volatile 底层的实现机制？
+如果把加入 volatile 关键字的代码和未加入 volatile 关键字的代码都生成汇编代码，会发现加入 volatile 关键字的
+代码会多出一个 lock 前缀指令。lock 前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：
+1 . 重排序时不能把后面的指令重排序到内存屏障之前的位置 2 . 使得本 CPU 的 Cache 写入内存 
+3 . 写入动作也会引起别的 CPU 或者别的内核无效化其 Cache，相当于让新写入的值对别的线程可见。
 
 问：Java 中能创建 volatile 数组吗？修饰一个数组能否保证内存可见性？
-能，Java 中可以创建 volatile 类型数组，不过只是一个指向数组的引用，而不是整个数组。如果改变引用指向的数组，将会受到 volatile 的保护，但是如果多个线程同时改变数组的元素，volatile 标示符就不能起到之前的保护作用了。
+能，Java 中可以创建 volatile 类型数组，不过只是一个指向数组的引用，而不是整个数组。如果改变引用指向的数组，
+将会受到 volatile 的保护，但是如果多个线程同时改变数组的元素，volatile 标示符就不能起到之前的保护作用了。
 
-问：synchronized关键字和volatile关键字比较？
-   volatile关键字是线程同步的轻量级实现，所以volatile性能肯定比synchronized关键字要好。但是volatile关键字只能用于变量而synchronized关键字可以修饰方法以及代码块。synchronized关键字在JavaSE1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化之后执行效率有了显著提升，实际开发中使用 synchronized 关键字的场景还是更多一些。          
-   多线程访问volatile关键字不会发生阻塞，而synchronized关键字可能会发生阻塞          
-   volatile关键字能保证数据的可见性，但不能保证数据的原子性。synchronized关键字两者都能保证。                  volatile关键字主要用于解决变量在多个线程之间的可见性，而 synchronized关键字解决的是多个线程之间访问资源的同步性。
+问：synchronized 关键字和 volatile 关键字比较？
+1、volatile 关键字是线程同步的轻量级实现，所以 volatile 性能肯定比 synchronized 关键字要好。但是 volatile 
+关键字只能用于变量而 synchronized 关键字可以修饰方法以及代码块。synchronized 关键字在 JavaSE1.6 之后进行了
+主要包括为了减少获得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化之后执行效率有了显著提升，
+实际开发中使用 synchronized 关键字的场景还是更多一些。          
+2、多线程访问 volatile 关键字不会发生阻塞，而 synchronized 关键字可能会发生阻塞；         
+3、volatile 关键字能保证数据的可见性，但不能保证数据的原子性。synchronized 关键字两者都能保证。           
+4、volatile 关键字主要用于解决变量在多个线程之间的可见性，而 synchronized 关键字解决的是多个线程之间访问资
+源的同步性。
 
-问：synchronized 关键字和 lock 关键字比较？d
-
+问：synchronized 关键字和 lock 关键字比较？
 
 问：1、 HashMap和Hashtable的区别   
 2、StringBuffer和StringBuilder的区别   
@@ -384,8 +476,25 @@ synchronized关键字不能继承，所以在定义接口方法时不能使用sy
 
 问：ConcurrentHashMap如何保证线程安全？
 
-
-
+问：JAVA中常见的锁以及其特性？
+1、自旋锁
+2、自旋锁的其他种类
+3、阻塞锁
+4、可重入锁
+5、读写锁
+6、互斥锁
+7、悲观锁
+8、乐观锁
+9、公平锁
+10、非公平锁
+11、偏向锁
+12、对象锁
+13、线程锁
+14、锁粗化
+15、轻量级锁
+16、锁消除
+17、锁膨胀
+18、信号量
 */
 
 ```
@@ -519,28 +628,90 @@ JDK各个版本发布时间和版本名称
 JDK1.5，1.6，1.7，1.8，1.9，1.10，1.11的新特性整理
 参考链接：https://blog.csdn.net/J080624/article/details/85092655
 
-```java
-/*1.程序计数器是一个比较小的内存区域，用于指示当前线程所执行的字节码执行到了第几行，是线程隔离的.
-2.虚拟机栈描述的是Java方法执行的内存模型，用于存储局部变量，操作数栈，动态链接，方法出口等信息，是线程隔离的
-3.方法区用于存储JVM加载的类信息、常量、静态变量、以及编译器编译后的代码等数据，是线程之间贡献的
-4.原则上讲，所有的对象都在堆区上分配内存，是线程之间共享的
-*/
-```
 
 
-
-### JAVA - 垃圾回收机制与内存调优
+### JAVA - 垃圾回收机制
 <a name="javaGC"></a>
 
-```java
-/*JDK 中提供了三个 ClassLoader，根据层级从高到低为：           
-Bootstrap ClassLoader，主要加载JVM自身工作需要的类。          
-Extension ClassLoader，主要加载%JAVA_HOME%\lib\ext目录下的库类。          
-Application ClassLoader，主要加载Classpath指定的库类，一般情况下这是程序中的默认类加载器，也是ClassLoader.getSystemClassLoader() 的返回值。（这里的Classpath默认指的是环境变量中配置的Classpath，但是可以在执行Java命令的时候使用-cp 参数来修改当前程序使用的Classpath）              JVM加载类的实现方式，我们称为 双亲委托模型：          如果一个类加载器收到了类加载的请求，他首先不会自己去尝试加载这个类，而是把这个请求委托给自己的父加载器，每一层的类加载器都是如此，因此所有的类加载请求最终都应该传送到顶层的Bootstrap ClassLoader中，只有当父加载器反馈自己无法完成加载请求时，子加载器才会尝试自己加载。            双亲委托模型的重要用途是为了解决类载入过程中的安全性问题。       假设有一个开发者自己编写了一个名为Java.lang.Object的类，想借此欺骗JVM。现在他要使用自定义ClassLoader来加载自己编写的java.lang.Object类。然而幸运的是，双亲委托模型不会让他成功。因为JVM会优先在Bootstrap ClassLoader的路径下找到java.lang.Object类，并载入它
+![多线程方法](../../pics/JVM结构.png)
 
+```java
+/**Java 虚拟机内存结构**
+1.程序计数器是一个比较小的内存区域，用于指示当前线程下一条被执行指令的地址，因此也是也不存在OOM的情况，是线程
+隔离的，每个线程都有。
+2.虚拟机栈描述的是Java方法执行的内存模型，用于存储局部变量，操作数栈，动态链接，方法出口等信息，是线程隔离的，
+每个线程都有自己的私有内存，这也是多线程并发时造成数据不一致的原因。
+3.方法区用于存储JVM加载的类信息、常量、静态变量、以及编译器编译后的代码等数据，是线程之间共享的
+4.原则上讲，所有的对象都在堆区上分配内存，是线程之间共享的
+
+切入：综合来看，一个对象的创建需要存放多个区域。
+金句：new 出来的对象存在于堆区，而这些new出来对象的引用则存在于栈区。
+金句：类似 String a = "abc"; 之类的常量存在于常量池中，而常量池存在于方法区中。
+
+**Java 虚拟机内存分配和回收的机制**
+概括的说就是分代分配，分代回收，年轻代（Young Generation）、年老代（Old Generation）、永久代（Permanent Generation，也就是方法区）
+每次调整分区都会调用 轻量级回收 Minor GC；重量级的 Full GC 以下情况会触发：
+1、年老代或持久代被写满；2、程序员显示的调用 System.gc();方法；
+注意：在执行 Full GC 时，会导致 Stop the World，虚拟机会终止所有 Java 程序，专门执行 Full GC，这可能会导致程序一直卡在那；
+
+**判断对象可回收的依据**
+标准：当某个对象上没有强引用时，该对象就可以被回收了。
+早期版本采用“引用计数”，优点是简单，缺点是无法回收循环引用的对象，如 a=b; b=c; c = a;则无法回收；
+后续版本采用了“根搜索算法”，这个算法将从一个根节点开始，寻找它所对应的引用节点，找到这个节点后，继续寻找该节点的引用节点。主要从方法区的常量和静态变量，两个栈，开始搜索引用；
+
+**finalize 方法**
+当通过上述介绍的根搜索算法回收某个对象时，先判断该对象是否重写了 Object 的 finalize 方法，没有则直接回收。
+
+**虚拟机的类加载器**
+JDK 中提供了三个 ClassLoader，根据层级从高到低为：           
+启动类加载器：Bootstrap ClassLoader，主要加载JVM自身工作需要的类。          
+扩展类加载器：Extension ClassLoader，主要加载%JAVA_HOME%\lib\ext目录下的库类。          
+应用程序类加载器：Application ClassLoader，主要加载Classpath指定的库类，一般情况下这是程序中的默认类加载器，
+也是ClassLoader.getSystemClassLoader() 的返回值。（这里的Classpath默认指的是环境变量中配置的Classpath，但
+是可以在执行Java命令的时候使用-cp 参数来修改当前程序使用的Classpath）JVM加载类的实现方式，我们称为 双亲委托模
+型：如果一个类加载器收到了类加载的请求，他首先不会自己去尝试加载这个类，而是把这个请求委托给自己的父加载器，每
+一层的类加载器都是如此，因此所有的类加载请求最终都应该传送到顶层的Bootstrap ClassLoader中，只有当父加载器反馈
+自己无法完成加载请求时，子加载器才会尝试自己加载。双亲委托模型的重要用途是为了解决类载入过程中的安全性问题。 
+假设有一个开发者自己编写了一个名为Java.lang.Object的类，想借此欺骗JVM。现在他要使用自定义ClassLoader来加载自
+己编写的java.lang.Object类。然而幸运的是，双亲委托模型不会让他成功。因为JVM会优先在Bootstrap ClassLoader的
+路径下找到java.lang.Object类，并载入它
+
+**强、弱、软、虚四种引用**
+强引用：指向通过 new 得到的内存空间，如 String a = new String("123");
+软引用（SoftReference）：如果一个对象只具有软引用，而当前虚拟机堆内存空间足够，则不会回收，反之回收；
+应用场景：博客管理系统，将博客缓存到内存中，缩短响应时间，当内存不足时，将暂时每人看的博客缓存清除；
+弱引用（WeakRefernce）：如果某块内存上只有弱引用，则一定会回收；
+应用场景：优惠券，某个优惠券强引用小时，使用的用户自动更新；
+虚引用（PhantomReference）：1.虚引用必须和引用队列（ReferenceQueue）一起使用；2.始终无法通过虚引用得到他所
+指向的值；
+
+**面试题**
+问：简述 Java 虚拟机的内存结构？
+1、回答五个分区；2、回答不同分区包含的数据；3、金句点题；
+问：简述 Java 垃圾回收的大致流程？
+1.回答三个分区；2.回答Minor GC和Full GC；3.垃圾回收的算法；
+
+
+
+```
+
+### 内存调优
+
+```java
+/**基本概念**
+Stop-the-world意味着从应用中停下来并进入到GC执行过程中去。一旦Stop-the-world发生，除了GC所需的线程外，其他线
+程都将停止工作，中断了的线程直到GC任务结束才继续它们的任务。GC调优通常就是为了改善stop-the-world的时间。
+
+
+
+**下面太难了**
 1、线上系统CPU，内存与磁盘IO暴增，你会如何调优？
 
-2、你们JVM线上使⽤的什么垃圾回收器？CMS还是G1？
+问：你们JVM线上使的什么垃圾回收器？CMS还是G1？
+https://blog.csdn.net/gui694278452/article/details/104781237/
+CMS收集器是一种以获取最短回收停顿时间为目标的收集器，CMS是一款优秀的收集器，它的主要优点是：并发收集、低停顿，
+就是与用户线程共同运行，但他有以下3个明显的缺点：1、CMS收集器对CPU资源非常敏感，降低运行效率；
+G1(Garbage First)是一款面向服务端应用的垃圾收集器。
 
 3、CMS的并发更新失败是怎么回事？如何优化？
 

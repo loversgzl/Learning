@@ -42,13 +42,14 @@ primary key(column) #主键
 engine=InnoDB default charset=utf8; #设置引擎和编码
 #设置外键，将产品 cid，绑定到 Category 的主键 id上
 constraint fk_product_category foreign key (cid) references category (id);
+varchar(n) #4.0版本的表示字节，但是5.0版本就开始改为字符，即不管中英文，n 表示 n 个字符，不管中英文。
 
 #注意字段上的点，叫间隔号,建删表时不可省略，查询等操作可省略。
 drop table if exists `students`; 
 create table `students`(
     `id` int not null auto_increment,
     `name` varchar(20) not null,
-    `sex` smallint not null,
+    `sex` smallint default 1 comment '性别',
     `age` int not null,
     `in_time` datetime not null,
     primary key(`id`)
@@ -63,6 +64,18 @@ ALTER TABLE students CHANGE col_name new_name VARCHAR(36); # 修改某一列的�
 #修改表格主键
 ALTER TABLE police_org DROP PRIMARY KEY;
 
+# 字段
+/*时间*/
+[9个时间函数获取时间](https://baijiahao.baidu.com/s?id=1608326786755050044&wfr=spider&for=pc)
+日期：DATE（YYYY-MM-DD） //比较常用 使用 CURDATE（）
+时间：TIME（HH:MM:SS） //比较常用 使用CURTIME（）
+年份：YEAR（YYYY）
+最全时间：DATETIME（YYYY-MM-DD HH:MM:SS） //使用  NOW（）
+
+/*varchar(36) 可以保存多少中英文字符？*/
+答：具体还是要看版本的，自己在数据库中建个表测试下可以放多少个汉字。
+4.0 版本以下，varchar(100)，指的是 100 字节，如果存放UTF8汉字时，只能存33个（每个汉字3字节） 
+5.0 版本以上，varchar(100)，指的是 100 字符，无论存放的是数字、字母还是UTF8汉字（每个汉字3字节），都可以存放100个。
 ```
 
 ### 在一个表中查询
@@ -277,5 +290,16 @@ GROUP BY d.dept_no*
 * **问：查找两个表的交集？**
 两个要求交集的表（列）的结构要一致,对应的字段数，字段类型都应该相同；将两个数据的数据列用 UNION ALL 关键字合并；将上面的所有需要比较的列 GROUP BY ；最后 HAVING COUNT(任意一列，不能多列)>1,那么就是交集。
 ```mysql
+#多次关联一个表，如这个表记录了多种单位，重量的 weight_type, 长度的 length_type
 
+SELECT
+        b.type_name,
+	    c.type_name,
+        a.birth,
+        a.ethinic
+FROM
+	household_info a INNER JOIN type_def b 
+		ON b.type_class = 'weight_type' and a.household_type = b.type_code
+	INNER JOIN type_def c 
+		ON c.type_class='length_type' and a.household_status = c.type_code
 ```
