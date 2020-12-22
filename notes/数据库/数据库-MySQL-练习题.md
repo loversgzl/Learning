@@ -113,6 +113,12 @@ select length(filename) from tablename; #查看某个字段的数据长度，字
 #日期+时间，日期，时间
 now();curdate();curtime();
 
+# 查找空值 阿里推荐使用 ISNULL(exp)
+SELECT * FROM household_info WHERE ISNULL(org_rank)
+# 虽然这种也可以，但是上面效率更好一些，是一个整体
+SELECT * FROM household_info WHERE org_rank IS NULL
+
+# 当某一列的值全是 NULL 时，count(col)的返回结果为 0，但 sum(col)的返回结果为 NULL
 ```
 
 * **问：查找年龄最大的学生的所有信息？**
@@ -120,10 +126,22 @@ now();curdate();curtime();
 SELECT MAX(age) from students;
 SELECT * FROM students WHERE age = (SELECT MAX(age) from students);
 ```
+* **问：更新最新的一条数据，mysql 不能直接选择查询的数据，中间需要再嵌套一层过度表？**
+```mysql
+UPDATE household_borrow SET backer = '1', memo = '1' WHERE id = 
+(SELECT a.id FROM 
+(SELECT id FROM household_borrow WHERE household_id = '6141c9d1-8213-4c54-aa00-1d2ed56b30c0'
+ORDER BY create_time DESC LIMIT 1) a)
+```
 
 * **问：查找年龄在 20-23 岁的学生？**
 ```mysql
 SELECT * FROM students WHERE age>=20 and age<=23;
+```
+
+* **问：查找 id 在 另一张表里的学生？**
+```mysql
+SELECT * FROM household_record WHERE household_id NOT IN (SELECT id FROM household_info)
 ```
 
 * **问：统计表中男女学生的人数？**

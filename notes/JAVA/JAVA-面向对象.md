@@ -102,11 +102,18 @@ public static final int BOXWIDTH = 10; // 声明一个常量
 
 ```java
 /*问：不能用来修饰 接口 里 方法的有哪些关键字？
-答：不能用 private、protected，常用 public static final 修饰属性，public abstract 修饰方法，当然 java8 新增 default、static 修饰方法。
-(1)增加 default 方法。对已有的接口，如果想对接口增加一个新方法，那么需要对实现该接口的所有类进行修改，如果接口的实现类很多，就会带来很大的工作量，而且还很容易破坏以前的代码，带来一些问题。如果把新的方法定义为 default 方法，就可以避免对其他实现类的修改。Default 方法是非常有用的，通过在接口定义的方法的访问修饰符前加上关键字default，那么实现类就无需提供该方法的实现了。
-但是，这样也会有一个问题：如果接口 A 和接口 B 里有一个名字相同并且参数列表也相同的方法都被定义为了default方法，那么当类 C 实现接口 A 和接口 B 的时候就会在编译时报错。由于是编译时报错，这个完全可以接受，当类 C 成功实现了接口 A 和接口 B 以后（没有冲突），类 C 的实例就可以调用接口 A 和接口 B 里的 default 方法了。
+答：不能用 private、protected，常用 public static final 修饰属性，public abstract 修饰方法，当然 java8 新
+增 default、static 修饰方法。
+(1)增加 default 方法。对已有的接口，如果想对接口增加一个新方法，那么需要对实现该接口的所有类进行修改，如果接口
+的实现类很多，就会带来很大的工作量，而且还很容易破坏以前的代码，带来一些问题。如果把新的方法定义为 default 方
+法，就可以避免对其他实现类的修改。Default 方法是非常有用的，通过在接口定义的方法的访问修饰符前加上关键字
+default，那么实现类就无需提供该方法的实现了。
+但是，这样也会有一个问题：如果接口 A 和接口 B 里有一个名字相同并且参数列表也相同的方法都被定义为了default方
+法，那么当类 C 实现接口 A 和接口 B 的时候就会在编译时报错。由于是编译时报错，这个完全可以接受，当类 C 成功实现
+了接口 A 和接口 B 以后（没有冲突），类 C 的实例就可以调用接口 A 和接口 B 里的 default 方法了。
 
-(2)新增了 static 函数。static 修饰的方法也是非抽象方法，有自己的方法体，在接口中定义一个静态方法，该方法可以直接用 接口名.方法名() 的形式来调用。相当于调用类的静态方法一样，给方法的调用带来了方便。
+(2)新增了 static 函数。static 修饰的方法也是非抽象方法，有自己的方法体，在接口中定义一个静态方法，该方法可以
+直接用 接口名.方法名() 的形式来调用。相当于调用类的静态方法一样，给方法的调用带来了方便。
 
 问：为什么是 public static final？
 为什么是 public：因为接口必然是要被实现的，如果不是 public，这个属性就没有意义了；
@@ -114,7 +121,8 @@ public static final int BOXWIDTH = 10; // 声明一个常量
 为什么是 final：这是为了体现 Java 的开闭原则，因为接口是一种模板，既然是模板，那就对修改关闭，对扩展开放。
 
 问：接口和抽象类有什么区别？
-答：抽象类是对概念的归纳，接口是对功能的归纳。继承抽象类可以先完成一个总体需求，再增加一个额外的功能，而接口则是强调对需求用户提供服务。需求不同，选择也会不一样。抽象方法不能定义方法体。*/
+答：抽象类是对概念的归纳，接口是对功能的归纳。继承抽象类可以先完成一个总体需求，再增加一个额外的功能，而接口则
+是强调对需求用户提供服务。需求不同，选择也会不一样。抽象方法不能定义方法体。*/
 
 /*接口之间应该也是继承，而不是实现 implements 且可以是多继承*/
 public interface interfaceOne extends interfaceTwo,interfaceThree,interfaceFour{}
@@ -311,8 +319,10 @@ public class test{
 }
 
 /*问：以下代码可以正常编译并运行么？
-是可以的！即使 Test test = null;也会加载静态方法，所以test包含Test类中的初始化数据，静态的，构造的，成员属性。额外，就算不是静态方法，编译也是可以通过的，只有在运行的时候才会报错。
-如果一个成员被声明为static，它就能够在它的类的任何对象创建之前被访问，而不必引用任何对象（跟类是否有static修饰无关）。*/
+是可以的！即使 Test test = null;也会加载静态方法，所以test包含Test类中的初始化数据，静态的，构造的，成员属
+性。额外，就算不是静态方法，编译也是可以通过的，只有在运行的时候才会报错。
+如果一个成员被声明为static，它就能够在它的类的任何对象创建之前被访问，而不必引用任何对象
+（跟类是否有static修饰无关）。*/
 class Test{
 	public static void hello(){
         System.out.println("hello");
@@ -429,4 +439,16 @@ public class TestObj{
         System.out.println(o.equals(“Fred”));
     }
 } 
+
+/*静态内部类*/
+public class Single{
+	private Single(){}
+	private static class SingleHandler{
+        // 这里为什么是 private 类型的
+		private static final Single INSTANCE = new Single();
+	}
+	public static final Single getInstance(){
+		return SingleHandler.INSTANCE;
+	}
+}
 ```

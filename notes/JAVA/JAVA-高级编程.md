@@ -11,40 +11,31 @@
 * <a href="#javaGC">JAVA - 垃圾回收，内存优化机制</a>
 * <a href="#javaNet">JAVA - 网络编程</a>
 
-### 基础知识
+### 序列化
 ```java
 /**序列化**
 什么是序列化：https://www.cnblogs.com/douzi520/p/9497889.html
-问：序列化是干什么的？
-简单说就是为了保存在内存中的各种对象的状态，并且可以把保存的对象状态再读出来。虽然你可以用你自己的各种各样的
-方法来保存Object States，但是Java给你提供一种应该比你自己好的保存对象状态的机制,那就是序列化。
-  
+程序羊实例讲解：https://www.zhihu.com/question/26475281?sort=created
+
 问：什么情况下需要序列化？
-当你想把内存中的对象保存到一个文件中或者数据库中时候，
+当你想把内存中的对象保存到一个文件中或者数据库中时候，需要自己编写代码进行序列化和反序列化，不是自动的；
 当你想用序列化在网络上传送对象的时候；
 当你想通过 RMI 传输对象的时候；
 
-问：当对一个对象实现序列化时，究竟发生了什么？
+问：当对一个对象实现序列化时，哪些变量不会被序列化？
 Java 在序列化时不会实例化 static 变量和 transient 修饰的变量，因为 static 代表类的成员，transient 代表对象
 的临时数据，被声明这两种类型的数据成员不能被序列化。序列化保存的是对象的状态，静态变量属于类的状态，因此，序列
 化并不保存静态变量。 
 
-问：java类中serialVersionUID的作用？
-参考：https://www.cnblogs.com/duanxz/p/3511695.html
-实现Serializable接口的目的是为类可持久化，比如在网络传输或本地存储，为系统的分布和异构部署提供先决条件。若没有
-序列化，现在我们所熟悉的远程调用，对象数据库都不可能存在，serialVersionUID适用于java序列化机制。简单来说，
-JAVA序列化的机制是通过 判断类的serialVersionUID来验证的版本一致的。在进行反序列化时，JVM会把传来的字节流中的
-serialVersionUID于本地相应实体类的serialVersionUID进行比较。如果相同说明是一致的，可以进行反序列化，否则会出
-现反序列化版本一致的异常，即是InvalidCastException。
-
-具体序列化的过程是这样的：序列化操作时会把系统当前类的serialVersionUID写入到序列化文件中，当反序列化时系统会
-自动检测文件中的serialVersionUID，判断它是否与当前类中的serialVersionUID一致。如果一致说明序列化文件的版本与
-当前类的版本是一样的，可以反序列化成功，否则就失败；
+问：java类中 serialVersionUID 的作用？
+如果没有，系统会自动生成，如果以后你不动这个类了，其实没有也没关系，但是一旦你修改了这个类，再把已经序列化的文
+件反序列化回来，不好意思，回不来了，因为两者产生的 serialVersionUID 不同了，生成方式就是下面的第二种方式。
 
 serialVersionUID有两种显示的生成方式：
 一是默认的1L，比如：private static final long serialVersionUID = 1L;        
 
-二是根据包名，类名，继承关系，非私有的方法和属性，以及参数，返回值等诸多因子计算得出的，极度复杂生成的一个64位的哈希字段。基本上计算出来的这个值是唯一的。比如：private static final long  serialVersionUID = xxxxL;
+二是根据包名，类名，继承关系，非私有的方法和属性，以及参数，返回值等诸多因子计算得出的，极度复杂生成的一个64位
+的哈希字段。基本上计算出来的这个值是唯一的。比如：private static final long  serialVersionUID = xxxxL;
 注意：显示声明serialVersionUID可以避免对象不一致，
 
 相关注意事项：
@@ -78,11 +69,11 @@ Hero 是一个类，在一个JVM中，一种类，只会有一个类对象存在
 答：有，用的最多的应该就是JDBC装载数据库驱动的时候，通过Class.forName("com.mysql.jdbc.Driver");
 
 问：Class类有什么作用？你用过其中的什么方法？
-答：反射的实现基础是Class类，可以查看某个类的属性和方法。当一个类或接口被装入Java虚拟机时，变会产生一个与它相关联的java.lang.Class对象。
+答：反射的实现基础是Class类，可以查看某个类的属性和方法。当一个类或接口被装入Java虚拟机时，便会产生一个与它相关联的java.lang.Class对象。
 通过Class类的forName方法，我们能得到一个指定类型的Class对象，通过newInstance方法，可以加载指定的类。
 
-问：如果我要看一个class文件中的属性和方法，该怎么看？
-上面一行，加上，可以通过Field类，得到类中的属性。通过Method类，调用类中的方法，通过Constructor类，得到类的构造函数。
+问：如果我要看一个 class 文件中的属性和方法，该怎么看？
+上面一行，加上，可以通过 Field 类，得到类中的属性。通过 Method 类，调用类中的方法，通过 Constructor 类，得到类的构造函数。
 */
 
 
@@ -99,8 +90,9 @@ class Student{
 public class Main {
     public static void main(String[] args){
     	try {
-    		Class<?> clazz = Class.forName("Student");	
-    		Field[] fields = clazz.getDeclaredFields();//获取类的字段
+            // 这里不能只有一个类名，需要包括包名，是绝对路径
+    		Class<?> clazz = Class.forName("Student");
+    		Field[] fields = clazz.getDeclaredFields();// 获取类的字段
     		for(Field field : fields) 
     			System.out.println(field.getName());
     	}catch(Exception e){
@@ -109,9 +101,10 @@ public class Main {
     }
 }
 
-
 /*知识点：getClass() ？
-SubClass 和 SuperClass 的 getClass() 都没有重写，他们都是调用Object的getClass，而Object的getClass作用是返回的是运行时的类的名字。这个运行时的类就是当前类，所以下面的代码并不是获取父类的名字，而是当前类的名字。*/
+SubClass 和 SuperClass 的 getClass() 都没有重写，他们都是调用 Object 的 getClass，而 Object 的 getClass
+作用是返回的是运行时的类的名字。这个运行时的类就是当前类，所以下面的代码并不是获取父类的名字，而是当前类的名
+字。*/
 super.getClass().getName(); //当前类的名称
 super.getClass().getSuperclass(); //真正获取父类的名称的方法
 
@@ -350,10 +343,22 @@ public class NIOBufferDemo {
 1、继承线程类（需要重写 run 方法）：创建一个对象就是一个线程。
 2、实现 Runnable 接口（需要重写 run 方法）：一般会问如果已经继承了一个类，该如何实现多线程。
 3、匿名类（不需要额外增加一个类）：和匿名函数相似，在用的时候才写，而且直接写在主函数里面。
-注： 创建线程是start()方法，run()并不能创建一个新的线程
+注： 创建线程是start()方法，run()并不能创建一个新的线程//
 ![多线程方法](../../pics/java多线程.png)
 
 ```java
+/*
+问：进程与线程的异同？
+A.子进程得到的是除了代码段是与父进程共享以外，其他所有的都是得到父进程的一个副本，子进程的所有资源都继承父
+进程，得到父进程资源的副本，子进程可获得父进程的所有堆和栈的数据，但二者并不共享地址空间。两个是单独的进程，继
+承了以后二者就没有什么关联了，子进程单独运行；进程的线程之间共享由进程获得的资源，但线程拥有属于自己的一小部分
+资源，就是栈空间，保存其运行状态和局部自动变量的。
+B.线程之间共享进程获得的数据资源，所以开销小，但不利于资源的管理和保护；而进程执行开销大，但是能够很好的进行
+资源管理和保护。
+C.线程的通信速度更快，切换更快，因为他们共享同一进程的地址空间。
+D.一个进程可以有多个线程，线程是进程的一个实体，是CPU调度的基本单位。
+*/
+
 /*实现的三种方法*/
 //方法一：继承Thread类
 public class SimpleThread extends Thread{
