@@ -21,8 +21,11 @@ JDBC[ java数据库连接（java DataBase Connectivity）]：由一组使用java
 * **问：MySQL 与 SQL Server 的区别？**  
 [MySQL 与 SQL Server 的区别](https://www.cnblogs.com/hhx626/p/6010369.html)
 
-* **问：如何优化数据库、如何实现乐观锁、三个范式、主键 超键 候选键 外键、
-drop、delete 与 truncate分别在什么场景之下使用？**
+* **问：drop、delete 与 truncate分别在什么场景之下使用？**
+    这三个字段都和删除表有关，首先 drop 是删除整个表格，delete 是删除表中的数据，truncate 是还原表。
+有这样一个场景，需要删除表中的说有数据，我们可以 delete from tableName; 效果是一条一条删除表中的数据，且 id 不会重置，不是我们想要的效果。那么我们就会想到使用 truncate tableName; 相当于 drop table，然后create table。但这时又有一种清空，truncate 不能使用，公司线上规定不能使用 drop 表相关的操作，包括 truncate，这个时候我们就只能使用 delete from tableName; 然后再加一条 alter table tableName auto_increment=1;
+
+* **问：如何优化数据库、如何实现乐观锁、三个范式、主键 超键 候选键 外键、drop、delete 与 truncate分别在什么场景之下使用？**
 
 
 
