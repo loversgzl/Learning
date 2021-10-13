@@ -302,8 +302,8 @@ LinkedList 不是同步的，如果多个线程同时访问一个链接链表，
 （LinkedList 是一个双向链表）
 
 问：为什么 ArrayList 常用，Vector 不常用？
-答：Vector 是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector 需要一定开销来维护线程安全，而大多数的程序都运行在单线程环境下，
-无须考虑线程安全问题，所以大多数的单线程环境下 ArrayList 的性能要优于 Vector。
+答：Vector 是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector 需要一定开销来维护线程安全，
+而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下 ArrayList 的性能要优于 Vector。
 
 问：为什么 ArrayList 继承了 abstractList 还要继承 List 接口（接口已经被抽象类继承了）
 可能为了实现代理功能而设计的：https://www.cnblogs.com/bluejavababy/p/4320545.html
