@@ -12,19 +12,26 @@
 ## 0、简介
 <a name="简介"></a>
 **公司**：由 SUN 公司 詹姆斯-高斯林 开发，后被 甲骨文（Oracle）收购。  
-**应用**：开发桌面应用的 Java SE（Java Platform，Standard Edition）  
-开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
-Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）  
-[Java SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
+
 **知名作品**：我的世界、淘宝网、Android 操作系统。  
+
 **Java 容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如Tomcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到整个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。  
-**JDK**：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  
-[Java 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
+
+**Java SE，EE，ME 三者的区别**
+1、开发桌面应用的 Java SE（Java Platform，Standard Edition）  
+2、开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
+3、Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）  
+4、参考连接：[Java SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
+
 **JAR**： Java 类库的 class 文件。  
-[JDK 和 JRE 的区别](https://blog.csdn.net/shaochenshuo/article/details/78507132)
+**JDK，JRE，JVM 三者的区别**
+总的来说，JDK 中包含 JRE，因为开发总要运行嘛，而 JRE 又包含 JVM。具体可以打开我们下载的JDK文件夹，里面又包含了一个JRE文件夹。[参考CSDN](https://blog.csdn.net/shaochenshuo/article/details/78507132)
+1、JDK：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  
+2、[JDK 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
+3、JRE： JRE（Java Runtime Envirnment）运行java程序的环境，JRE里面只有client运行环境，安装过程中，会自动添加PATH。
+4、JVM：
 
 **Java和C++的区别**：
-
 1. Java是解释型语言，所谓的解释型语言，就是源码会先经过一次编译，成为中间码，中间码再被解释器解释成机器码。对于Java而言，中间码就是字节码(.class)，而解释器在JVM中内置了。
 2. C++是编译型语言，所谓编译型语言，就是源码一次编译，直接在编译的过程中链接了，形成了机器码。
 3. C++比Java执行速度快，但是Java可以利用JVM跨平台。
@@ -1150,5 +1157,4 @@ public class GenericMethodTest
 
 
 ```
-
 
