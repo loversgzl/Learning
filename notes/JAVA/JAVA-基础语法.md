@@ -24,7 +24,9 @@
 4、参考连接：[Java SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
 
 **JAR**： Java 类库的 class 文件。  
+
 **JDK，JRE，JVM 三者的区别**：  
+
 总的来说，JDK 中包含 JRE，因为开发总要运行嘛，而 JRE 又包含 JVM。具体可以打开我们下载的JDK文件夹，里面又包含了一个JRE文件夹。[参考CSDN](https://blog.csdn.net/shaochenshuo/article/details/78507132)  
 1、JDK：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  [JDK 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
 2、JRE： JRE（Java Runtime Envirnment）运行java程序的环境，JRE里面只有client运行环境，安装过程中，会自动添加PATH。  
