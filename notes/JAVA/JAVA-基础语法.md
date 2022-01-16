@@ -24,14 +24,15 @@
 4、参考连接：[Java SE EE ME具体区别](https://blog.csdn.net/qq_29611345/article/details/102384776)  
 
 **JAR**： Java 类库的 class 文件。  
-**JDK，JRE，JVM 三者的区别**
-总的来说，JDK 中包含 JRE，因为开发总要运行嘛，而 JRE 又包含 JVM。具体可以打开我们下载的JDK文件夹，里面又包含了一个JRE文件夹。[参考CSDN](https://blog.csdn.net/shaochenshuo/article/details/78507132)
+**JDK，JRE，JVM 三者的区别**：  
+总的来说，JDK 中包含 JRE，因为开发总要运行嘛，而 JRE 又包含 JVM。具体可以打开我们下载的JDK文件夹，里面又包含了一个JRE文件夹。[参考CSDN](https://blog.csdn.net/shaochenshuo/article/details/78507132)  
 1、JDK：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  
 2、[JDK 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
-3、JRE： JRE（Java Runtime Envirnment）运行java程序的环境，JRE里面只有client运行环境，安装过程中，会自动添加PATH。
-4、JVM：
+3、JRE： JRE（Java Runtime Envirnment）运行java程序的环境，JRE里面只有client运行环境，安装过程中，会自动添加PATH。  
+4、JVM：Java 虚拟机（Java Virtual Machine），面试考的很频繁，就不多说了。
 
 **Java和C++的区别**：
+
 1. Java是解释型语言，所谓的解释型语言，就是源码会先经过一次编译，成为中间码，中间码再被解释器解释成机器码。对于Java而言，中间码就是字节码(.class)，而解释器在JVM中内置了。
 2. C++是编译型语言，所谓编译型语言，就是源码一次编译，直接在编译的过程中链接了，形成了机器码。
 3. C++比Java执行速度快，但是Java可以利用JVM跨平台。
@@ -40,6 +41,24 @@
 6. C++支持多继承，Java中类都是单继承的。但是继承都有传递性，同时Java中的接口是多继承，类对接口的实现也是多实现。
 7. C++中，开发需要自己去管理内存，但是Java中JVM有自己的GC机制，虽然有自己的GC机制，但是也会出现OOM和内存泄漏的问题。C++中有析构函数，Java中Object的finalize方法
 8. C++运算符可以重载，但是Java中不可以。同时C++中支持强制自动转型，Java中不行，会出现ClassCastException（类型不匹配）。
+
+**Linux、Windows与MAC OS下的换行符**
+
+我使用的是 Windows，提交上来的文档总是不能够换行，导致格式很糟糕，于是就去查了一下，是不是提交上来的换行符有问题。[参考连接](https://ganzhixiong.com/p/fcbdca0f/)
+
+> 历史：为了保证打字机换行时消耗的时间内不会有其它字符进来，主动添加了两个无效字符（回车 换行）。
+> 计算机出现后，开始讨论加一个还是两个的问题，注意了 Typora 的软换行在 GitHub 中是无效的，在 Typora 中按下 Shift + Enter 是软换行，按下此组合键后，可以看到换了一行，但是推送到 GitHub 上后，你会发现换行是无效的。要解决这问题，你就要搞清楚空格、软换行、硬换行、换段的在 Typora 中的概念。
+>
+> Typora 在空格与换行部分主要是使用 [CommonMark](http://www.commonmark.cn/w/) 作为标注规范。与前文提到的 GFM 一样，CommonMark 也是比较流行的 Markdown 语言规范（解析器）之一。
+>
+> - **空格：**在输入连续的空格后，Typora 会在编辑器视图里为你保留这些空格，但当你打印或导出时，这些空格会被省略成一个。
+>   你可以在源代码模式下，为每个空格前加一个 `\` 转义符，或者直接使用 HTML 风格的 `&nbps;` 来保持连续的空格。
+> - **软换行：** 需要说明的是，在 Markdown 语法中，换行（line break）与换段是不同的。且换行分为软换行和硬换行。在 Typora 中，你可以通过 `Shift + Enter` 完成一次软换行。软换行只在编辑界面可见，当文档被导出时换行会被省略。
+> - **硬换行：** 你可以通过 `空格 + 空格 + Shift + Enter` 完成一次硬换行，而这也是许多 Markdown 编辑器所原生支持的。硬换行在文档被导出时将被保留，且没有换段的段后距。
+> - **换段：** 你可以通过 `Enter` 完成一次换段。Typora 会自动帮你完成两次 `Shift + Enter` 的软换行，从而完成一次换段。这也意味着在 Markdown 语法下，换段是通过在段与段之间加入空行来实现的。
+> - **Windows 风格（CR+LF）与 Unix 风格（CR）的换行符：** CR 表示回车 `\r` ，即回到一行的开头，而 LF 表示换行 `\n` ，即另起一行。
+>   所以 Windows 风格的换行符本质是「回车 + 换行」，而 Unix 风格的换行符是「换行」。这也是为什么 Unix / Mac 系统下的文件，如果在 Windows 系统直接打开会全部在同一行内。 你可以在 `文件 - 偏好设置 - 编辑器 - 默认换行符` 中对此进行切换。
+
 ****
 ## 1、第一个 Java 程序
 
