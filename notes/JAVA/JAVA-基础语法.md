@@ -17,7 +17,7 @@
 
 **Java 容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如Tomcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到整个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。  
 
-**Java SE，EE，ME 三者的区别**
+**Java SE，EE，ME 三者的区别**  
 1、开发桌面应用的 Java SE（Java Platform，Standard Edition）  
 2、开发 Web 应用的 Java EE（Java Platform，Enterprise Edition）  
 3、Android 开发移动应用 和 嵌入式 的 Java ME（Java Platform，Micro Edition）  
