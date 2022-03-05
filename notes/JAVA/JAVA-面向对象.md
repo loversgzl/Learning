@@ -46,7 +46,7 @@
 
 访问范围：【public】> 【protected】> 【default 】> 【private】
 
-![访问修饰符](../../pics/java访问修饰符.png) ![访问修饰符](../../pics/UML用例图.png) 
+![访问修饰符](pics/java访问修饰符.png) ![访问修饰符](pics/UML用例图.png) 
 
 ## 2.2、非访问控制修饰符：static、final、interface、abstract
 为了实现一些其他的功能，Java 也提供了许多非访问修饰符（所有成员都肯定有访问控制修饰符，而非访问控制修饰符是可选的，可有可无）。
@@ -426,7 +426,7 @@ class Test {
 ```
 
 # 5、内部类
-![内部类定义](../../pics/内部类.png)
+![内部类定义](pics/内部类.png)
 
 特点：静态内部类才可以声明静态方法，静态方法不可以使用非静态变量。
 ```java

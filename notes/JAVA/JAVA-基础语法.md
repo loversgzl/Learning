@@ -19,7 +19,7 @@
 
 **知名作品**：我的世界、淘宝网、Android 操作系统。  
 
-**Java 容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如Tomcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到整个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。  
+**Java 容器**：很多繁琐又重复的工作我们可以提前做好，然后调用，但谁来做呢，有个组织出来定义了接口，谁家都可以造轮子，用户想用哪家的都可以，各家自己造的轮子（如Tomcat、GlassFish、IBM WebSphere）就叫做 Java 容器。随着越来越多的企业加入到这个阵营，官方给出的规范组件并不是最受欢迎的，反而一些企业的组件在实际开发中更让人喜欢。  
 
 **Java SE，EE，ME 三者的区别**  
 1、开发桌面应用的 Java SE（Java Platform，Standard Edition）  
@@ -32,11 +32,11 @@
 **JDK，JRE，JVM 三者的区别**：  
 
 总的来说，JDK 中包含 JRE，因为开发总要运行嘛，而 JRE 又包含 JVM。具体可以打开我们下载的JDK文件夹，里面又包含了一个JRE文件夹。[参考CSDN](https://blog.csdn.net/shaochenshuo/article/details/78507132)  
-1、JDK：JDK（Java Development Kit）称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE（Java Runtime Envirnment），JVM 和 Java 的核心类库（Java API）。  [JDK 各个版本的新增特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
+1、JDK：JDK(Java Development Kit)称为 Java 开发包 或 Java 开发工具，是一个编写 Java 的 Applet 小程序和应用程序的程序开发环境。JDK 是整个 Java 的核心，包括了 Java 运行环境 JRE(Java Runtime Envirnment)，JVM 和 Java 的核心类库(Java API)。  [JDK 不同版本特性](https://blog.csdn.net/qq_22194659/article/details/86134443)  
 2、JRE： JRE（Java Runtime Envirnment）运行java程序的环境，JRE里面只有client运行环境，安装过程中，会自动添加PATH。  
 3、JVM：Java 虚拟机（Java Virtual Machine），面试考的很频繁，就不多说了。
 
-**Java和C++的区别****：
+**Java和C++的区别**：
 
 1. Java是解释型语言，所谓的解释型语言，就是源码会先经过一次编译，成为中间码，中间码再被解释器解释成机器码。对于Java而言，中间码就是字节码(.class)，而解释器在JVM中内置了。
 2. C++是编译型语言，所谓编译型语言，就是源码一次编译，直接在编译的过程中链接了，形成了机器码。
@@ -54,9 +54,9 @@
 > 历史：为了保证打字机换行时消耗的时间内不会有其它字符进来，主动添加了两个无效字符（回车 换行）。
 > 计算机出现后，开始讨论加一个还是两个的问题，注意了 Typora 的软换行在 GitHub 中是无效的，在 Typora 中按下 Shift + Enter 是软换行，按下此组合键后，可以看到换了一行，但是推送到 GitHub 上后，你会发现换行是无效的。要解决这问题，你就要搞清楚空格、软换行、硬换行、换段的在 Typora 中的概念。
 >
-> Typora 在空格与换行部分主要是使用 [CommonMark](http://www.commonmark.cn/w/) 作为标注规范。与前文提到的 GFM 一样，CommonMark 也是比较流行的 Markdown 语言规范（解析器）之一。
+> Typora 在空格与换行部分主要是使用 [CommonMark](https://commonmark.org/) 作为标注规范。与前文提到的 GFM 一样，CommonMark 也是比较流行的 Markdown 语言规范（解析器）之一。
 >
-> - **空格：**在输入连续的空格后，Typora 会在编辑器视图里为你保留这些空格，但当你打印或导出时，这些空格会被省略成一个。
+> - **空格**：在输入连续的空格后，Typora 会在编辑器视图里为你保留这些空格，但当你打印或导出时，这些空格会被省略成一个。
 >   你可以在源代码模式下，为每个空格前加一个 `\` 转义符，或者直接使用 HTML 风格的 `&nbps;` 来保持连续的空格。
 > - **软换行：** 需要说明的是，在 Markdown 语法中，换行（line break）与换段是不同的。且换行分为软换行和硬换行。在 Typora 中，你可以通过 `Shift + Enter` 完成一次软换行。软换行只在编辑界面可见，当文档被导出时换行会被省略。
 > - **硬换行：** 你可以通过 `空格 + 空格 + Shift + Enter` 完成一次硬换行，而这也是许多 Markdown 编辑器所原生支持的。硬换行在文档被导出时将被保留，且没有换段的段后距。
@@ -85,8 +85,7 @@ public class test {
 }
 /*1.创建源文件 .java
   2.javac 将 .java 源代码转换为 JVM 能够识别的字节码 .class
-  3.通过 JVM 执行 .class 文件
-  编译原理可参考简书：https://www.jianshu.com/p/af78a314c6fc */
+  3.通过 JVM 执行 .class 文件*/
 
 
 ```
@@ -97,32 +96,17 @@ public class test {
 **方法名**：lowerCamelCase，第一个首字母小写  
 **源文件名**：源文件名必须和类名相同，文件名的后缀为 .java。（如果文件名和类名不相同则会导致编译错误）。  
 **关键字与保留字**：Java 保留字是指现在 Java 版本尚未使用，但以后版本可能会作为关键字使用。所以注意 false、true、null 等都是保留字。  
-**Java标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。  
+**Java 标识符**：字母、数字、下划线、美元符（$）、数字不能作为首位。  
 
 ****
 **问：switch(x) 语句中，x 可以是哪些类型？**  
 **答**：包括：byte/short/int/char（包括它们的封装类）、enum枚举、Java7 后开始支持 String；  
-**注意事项**  
-1、case 语句中的值的数据类型必须与变量的数据类型相同；  
-2、case 语句开始执行，直到 break 语句出现才会跳出 switch 语句，匹配到哪一个case就从哪一个位置向下执行，直到遇到了 break 或者整体结束为止；  
-3、多个 case 后面的数值不可以重复；  
-4、注意：查找相当于映射，而不是遍历的查找，因此，case 和 deault 语句顺序无所谓；但是当匹配后，无 break 语句，则会从当前位置往后执行，从这里开始遍历了；  
+[更多细节](https://blog.csdn.net/qq_29611345/article/details/123292913)
+
+**问：枚举类？**
+**答**：你要使用类的时候就得 new 一个对象出来，而当你创建一个枚举类型时，在使用时是不需要再 new 的，它本身就创建好了几个对象在其内部，这也就是枚举和类的最大区别。代码中第一行就是枚举的对象了，所以一个枚举类，已经实例化好了；
 
 ```java
-/*switch：return 比 break 效果更强，直接退出。示例：枚举调用*/ 
-switch(demo.success.getCode()) {
-    case 1: System.out.println(1);return;
-    case 2: System.out.println(2);return;
-    case 3: System.out.println(3);return;
-    case 4: System.out.println(4);return;
-    // default 语句放在第一行也是可以的。
-    default:System.out.println("default");return; 
-}
-
-/*枚举：你要使用这个类就得 new 一个对象出来，而当你用ecplise创建一个枚举类型时，
-在使用时是不需要再new的，它本身就创建好了几个对象在其内部，这也就是枚举和类的最大区别。
-第一行就是枚举的对象了，所以一个枚举类，已经实例化好了；
-*/
 enum demo{
     success(1,"成功"),error(-1,"失败"),failed(0,"错误");
     private int code;
@@ -139,18 +123,19 @@ enum demo{
     }
 }
 
-// 逻辑运算符
-&：不管&的左边是 true 还是 false ，右边都会进行运算 
-&&： 只要左边是 false ，右边就不会进行运算 
-一般情况下都会选择 &&，因为这样可以提高效率，也可以进行异常处理，当右边产生异常的时候，同样可以跳过。
 
 ```
+
+**问：逻辑运算符？**
+&：不管 & 的左边是 true 还是 false ，右边都会进行运算 
+&&： 只要左边是 false ，右边就不会进行运算，一般情况下都会选择 &&，因为这样可以提高效率，也可以进行异常处理，当右边产生异常的时候，同样可以跳过。
+
 ****
 
 ## 3、输入输出
 <a name="输入输出"></a>
 ```java
-//输入
+/*输入*/
 import java.util.Scanner;
 Scanner scan = new Scanner(System.in);
 int one = scan.nextInt();            //一个一个读，中间的空格和回车视为一次输入的结束，所以纯数字输入优先。
@@ -163,13 +148,13 @@ if(scan.hasNext()){
 	String str1 = scan.next();      //读取字符串
 }
 
-// 输出
+/*输出*/
 //输出带换行，且输出的是字符串，如果不是，默认调用toString()方法。如果是基本数据类型，则会先进行装箱，再调用。
 System.out.println(); 
 
 // 某些需要有格式的输出，优先使用 C++ 的方式。%d 十进制，%s 字符串，%.2f 浮点数控制精度
 System.out.format("%d %d",1,2); 
-System.out.print("front" + variable + "end");              // 输出不带换行
+System.out.print("front " + variable + " end");              // 输出不带换行
 System.out.format("x:%d,y:%d,radius:%d",x,y,radius);       // %d 十进制，%s 字符串
 System.out.format("%.2f", pi);           // 浮点数控制精度的方法，最后一位会自动四舍五入。
 System.out.printf();                                       // C 格式输出
@@ -178,7 +163,8 @@ System.out.printf();                                       // C 格式输出
 
 ## 4、集合框架
 <a name="集合框架"></a>
-![集合框架](../../pics/集合框架.jpg)
+![集合框架](pics/集合框架.jpg)
+
 由图可见，集合框架主要包括两种类型的容器，以 Collection 为基类的线性表、以 Map 为基类的键值对类，前者存储一类元素，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。  
 
 * List 具体实现类有：ArrayList、LinkedList、Vector、Stack；

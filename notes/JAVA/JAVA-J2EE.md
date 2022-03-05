@@ -159,7 +159,7 @@ JTA事务管理则由 JTA容器实现，JTA容器对当前加入事务的众多C
 ****
 ### Servlet
 <a name="Servlet"></a>
-<img src="../../pics/servlet.png" align="center">
+<img src="pics/servlet.png" align="center">
 [ 参考博客](https://learner.blog.csdn.net/article/details/81091580)
 
 简介：Servlet用于处理用户提交的数据，熟悉 request 和 response 两种方法，了解不同的跳转方式。熟悉 servlet 对数据库的基本操作。
@@ -413,7 +413,7 @@ JSP 全称 （Java Server Pages），叫 Java 服务器页面，服务端的网�
 强调的是：学了JSP，不会用 Java BEAN 并进行整合，等于没学。大家多花点力气在 JSP+BEAN 上。
 **常见容器**：Tomcat, Jetty, resin, Oracle Application server, WebLogic Server, Glassfish, Websphere, JBoss 等等。（提供了 Servlet 功能的服务器，叫做 Servlet 容器。对 web 程序来说，Servlet 容器的作用就相当于桌面程序里操作系统的作用，都是提供一些编程基础设施）
 
-![JSP语法 ](../../pics/jsp语法.png)
+![JSP语法 ](pics/jsp语法.png)
 
 ```jsp
 <%-- 一、JSP 四大作用域： page (作用范围最小)、request、session、application（作用范围最大）。
@@ -609,7 +609,7 @@ IOC是反转控制 (Inversion Of Control)的缩写，就像控制权从本来在
 依赖注入强调类的注入是由Spring容器在运行时完成，而控制反转强调类之间的关系是由Spring容器控制。
 
 **Spring Scope（作用域）的范围**
-![springScope作用域](../../pics/springScope作用域.jpg)
+![springScope作用域](pics/springScope作用域.jpg)
 
 ```java
 public static void main(String[] args) {
