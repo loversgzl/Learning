@@ -289,139 +289,20 @@ int[][] array = ans.toArray(new int[ans.size()][]);
 ```
 
 ### List
-```java
-/**源码解析**
-size：记录元素个数
-elementData：Object 数组，存储元素
 
-构造函数：
-如果不加参数，会设置空为：DEFAULTCAPACITY_EMPTY_ELEMENTDATA，add 时初始扩容为 10；
-就是新建一个大小为 10 的数组，
-如果初始化时收到设置参数为 0，设置空为：EMPTY_ELEMENTDATA，add 时扩容为 1
+**简介：List 具体实现类有：ArrayList、LinkedList、Vector、Stack**
+由图可知，ArrayList、LinkedList、Vector 继承自 List，Stack 继承自 Vector。
+都是 java.util.* 包下的类。
 
-add 函数：
-先判断数组容量是否足够，如果不够则将空间扩容至1.5倍；（扩容多了会降低系统性能）
-说是动态添加，底层还不是 array 数组，只是自动帮助我们扩容了而已。
+**问：ArrayList 与 LinkedList 有什么区别，分别有什么适用场景（高频考点）**
+答：不同：类似于动态数组和链表，前者定位，修改快，后者插入，删除快。
+相同：都是继承自 List 接口。（LinkedList 是一个双向链表）
 
-Vector 线程安全是的方式就是在方法前加上 synchronized，因此效率低，很少使用。
-Vector 和 ArrayList 一样都是基于数组的。
-
-**多线程**
-LinkedList 不是同步的，如果多个线程同时访问一个链接链表，而其中至少一个线程从结构上修改了该列表（结构修改指添
-加或删除一个或多个元素的任何操作，仅修改元素不是结构修改），则它必须保持外部同步，这一般通过对自然封装该列表的
-对象进行同步操作来完成，如果没有，则使用 Collections.synchronizedList 方法来 “包装” 该列表，最好在创建时就
-完成这一操作。 List list = Collections.synchronizedList(new LinkedList());
-
-*/
-
-
-/*集合列表 List：ArrayList、LinkedList、Vector、Stack*
-问：ArrayList 与 LinkedList 有什么区别，分别有什么适用场景（高频考点）
-答：类似于动态数组和链表，前者定位，修改快，后者插入，删除快。相同：都是继承自 List 接口。
-（LinkedList 是一个双向链表）
-
-问：为什么 ArrayList 常用，Vector 不常用？
+**问：为什么 ArrayList 常用，Vector 不常用？**
 答：Vector 是线程安全的， Arraylist 是线程不安全的 所以在插入等操作中， Vector 需要一定开销来维护线程安全，
 而大多数的程序都运行在单线程环境下，无须考虑线程安全问题，所以大多数的单线程环境下 ArrayList 的性能要优于 Vector。
 
-问：为什么 ArrayList 继承了 abstractList 还要继承 List 接口（接口已经被抽象类继承了）
-可能为了实现代理功能而设计的：https://www.cnblogs.com/bluejavababy/p/4320545.html
-*/
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-
-ArrayList list = new ArrayList(); // 这种方式存储的是 Object 对象，很难维护，知道即可
-
-/*通过泛型，约定存放同类数据,李氏替换原则，这里需要注意：list 可以使用 List 接口定义的方法，
-但子类 ArrayList的某些方法，如 removeLast() 就不能用了。如果想使用，则以 ArrayList 声明*/
-List<String> list = new ArrayList<>();
-//四个基本方法：get,set,add,remove;
-
-/*查：获取某个位置的对象、某个对象的位置、返回元素个数、返回是否包含元素x、输出字符串形式的数组*/
-get(index);  indexOf(obj);  size();  contains(x); toString();
-
-/*增：末尾添加、指定位置添加、添加另一个列表*/
-add(object);  add(index,object);  addAll(list);
-
-/*删：删下标，删对象、清空*/
-remove(index); remove((Object)index); clear();
-
-/*改：修改某个位置的值、转换为数组*/
-set(index,obj); toArray();
-/*改：将 ArrayList 转换为普通数组，但是只能是 String，int 数组类型*/
-String[] array = (String[])list.toArray(new String[size]);
-/*改：数组转 ArrayList*/
-List<String> list = Arrays.asList(array); 
-
-
-/*LinkedList
-基于双向链表，拥有队列和栈中的所有方法
-*/
-import java.util.LinkedList; 
-LinkedList<String> sts =new LinkedList<>();
-add(object); poll();
-
-sts.addLast("last1"); //增，在末尾插入，
-sts.addFirst("first1");//增，在首部插入
-sts.removeLast();sts.removeFirst();//删
-sts.getLast(); sts.getFirst();//查
-
-
-
-/*三种遍历方式*/
-for(String str : list)
-    System.out.println(str);
-
-for(int i=0; i<strArray.length; i++)
-    System.out.println(strArray[i]);
-
-/*第三种：这种其实才是被推荐使用的，但感觉用的不多。
-注意：如果这种方式边遍历边修改，则会出错，在实际项目中也会增加出错的风险。*/
-Iterator<String> it = list.iterator();
-while(it.hasNext())
-    System.out.println(it.next());
-
-
-/*动态二维列表*/
-List<List<Integer>> triangle = new ArrayList<List<Integer>>(); 
-
-/*查：获取第一个数组的第一个值、动态数组的大小，注意和静态数组长度的区分*/
-triangle.get(0).get(0); 
-triangle.size(); 
-
-/*增：添加一个数组元素、给第一个数组添加一个元素、*/
-triangle.add(new ArrayList<>()); 
-triangle.get(0).add(1); 
-
-/*改：修改第一个数组的第一个值为 99*/
-triangle.get(0).set(0,99);
-
-/*栈 Stack 继承 Vector*/
-// 源码只有五个基本方法+一个构造函数
-Stack stack = new Stack(); //初始化，对象默认是 Obejct
-Stack<Integer> stack1 = new Stack<Integer>();  //指定类型的初始化
-stack.empty(); //判断是否为空，返回true/false
-stack.peek(); //取栈顶值（不出栈），返回 Object
-stack.push(Object);//进栈，返回 Object
-stack.pop();//出栈，返回的是 Object 对象，需要类型转换
-
-/*队列 queue 一个接口，被 LinkedList 继承，Deque 为双端队列*/
-import java.util.Queue;
-Queue<String> q = new LinkedList<>();//也实现了队列的接口
-q.offer("inQueue");//入队列
-q.poll();//出队
-q.isEmpty();//判断是否队空
-q.peek();//查看队首，但不取出
-
-/**PriorityQueue**
-通过二叉小顶堆实现，可以用一棵完全二叉树表示，是一个无界队列，不允许null值，入队和出队的时间复杂度是
-O（log(n)）
-
-**LinkedBlockingQueue**
-是一个可选有界队列，不允许null值
-*/
-```
+[更多请参考我的博客](https://blog.csdn.net/qq_29611345/article/details/123294780)
 
 ### Set
 ```java
