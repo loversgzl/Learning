@@ -163,7 +163,7 @@ System.out.printf();                                       // C 格式输出
 
 ## 4、集合框架
 <a name="集合框架"></a>
-![集合框架](pics/集合框架.jpg)
+![集合框架](pics/collection.jpg)
 
 由图可见，集合框架主要包括两种类型的容器，以 Collection 为基类的线性表、以 Map 为基类的键值对类，前者存储一类元素，后者存储键/值对映射。集合又有三种子类型，List、Set、Queue。  
 
