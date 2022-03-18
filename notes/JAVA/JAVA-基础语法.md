@@ -456,7 +456,7 @@ String one = new String("abc"); //堆中
 String two = "abc"; //常量池中
 
 问：String是最基本的数据类型么？能不能被继承？
-String不能被继承，它是一个对象。
+String不能被继承，它是一个对象，且被final修饰。
 
 问：Java 字符串如何比较是否相等？
 1、== 是比较地址，equals 比较值。
